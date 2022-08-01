@@ -65,7 +65,7 @@ const BrandPage: CustomNextPage = ()=>{
 
     const searchForm = useForm<CategoryQueryInputs>();
     //========ReactQuery============
-    const getAllBrandQuery = useQuery(["getAllCategory", {limit:pagination.limit, offset:pagination.offset}], ()=>getAllCategoryRequest({
+    const getAllBrandQuery = useQuery(["getAllCategory", pagination], ()=>getAllCategoryRequest({
         categoryName: searchForm.getValues("categoryName"),
         limit: pagination.limit,
         offset: pagination.offset
@@ -110,7 +110,7 @@ const BrandPage: CustomNextPage = ()=>{
                 <Stack direction={"column"} spacing={2} width={"475px"}>
                     <TextField fullWidth label="Tên thể loại" variant="outlined" {...searchForm.register("categoryName")}></TextField>
                     <LoadingButton
-                        loading={getAllBrandQuery.isLoading || getAllBrandQuery.isRefetching}
+                        loading={getAllBrandQuery.isLoading}
                         variant="contained" type="submit"
                     >Tìm kiếm</LoadingButton>
                 </Stack>
@@ -118,7 +118,7 @@ const BrandPage: CustomNextPage = ()=>{
             <Box sx={{marginTop:"55px"}}>
                 <CustomDataGrid
                     columns={columns}
-                    rows={getAllBrandQuery.data?.data || []}
+                    rows={getAllBrandQuery.data?.data ?? []}
                     pagination={pagination}
                     error={getAllBrandQuery.isError}
                     loading={getAllBrandQuery.isLoading}

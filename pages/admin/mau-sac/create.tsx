@@ -5,13 +5,12 @@ import Link from "next/link";
 import MuiLink from "@mui/material/Link";
 import { CustomNextPage } from "../../_app";
 import { useSession } from "next-auth/react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Stack from "@mui/material/Stack";
-import {ChromePicker, ColorResult } from "react-color";
-import { useState } from "react";
+import { ChromePicker } from "react-color";
 import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
@@ -21,41 +20,43 @@ import createColorRequest from "../../../api/color/createColorRequest";
 
 type CreateColorFormInputs = {
     colorName: string,
+    colorHex: string,
 }
 
 const CreateColorPage: CustomNextPage = () => {
     const session = useSession();
     const router = useRouter();
 
-    const {enqueueSnackbar} = useSnackbar();
+    const { enqueueSnackbar } = useSnackbar();
 
-    const [color, setColor] = useState("#FF4B4B");
-    const createColorForm = useForm<CreateColorFormInputs>();
-    
+    const createColorForm = useForm<CreateColorFormInputs>({
+        defaultValues: {
+            colorHex: "#FD2B50",
+            colorName: ""
+        }
+    });
+
     //=======Queries==================
-    const createColorQuery = useMutation((data: {colorName: string, colorHex: string}) => createColorRequest({
+    const createColorQuery = useMutation((data: { colorName: string, colorHex: string }) => createColorRequest({
         colorHex: data.colorHex,
         colorName: data.colorName,
         accessToken: session.data?.user?.accessToken
     }), {
-        onSuccess: ()=>{
-            enqueueSnackbar("Thêm thành công", {variant:"success"});
+        onSuccess: () => {
+            enqueueSnackbar("Thêm thành công", { variant: "success" });
             router.back();
         },
-        onError: (error:ApiRequestError)=>{
-            if(error.response!==undefined){
+        onError: (error: ApiRequestError) => {
+            if (error.response !== undefined) {
                 const response = error.response.data;
-                enqueueSnackbar(response.message[0], {variant:"error"});
+                enqueueSnackbar(response.message[0], { variant: "error" });
             }
         }
     });
 
     //========Callbacks===============
-    const handleColorChange = (color:ColorResult)=>{
-        setColor(color.hex);
-    }
-    const handleFormSubmit:SubmitHandler<CreateColorFormInputs> = (data)=>{
-        createColorQuery.mutate({colorHex: color, colorName: data.colorName});
+    const handleFormSubmit: SubmitHandler<CreateColorFormInputs> = (data) => {
+        createColorQuery.mutate({ colorHex: data.colorHex, colorName: data.colorName });
     }
     //=================================
     return (
@@ -72,21 +73,36 @@ const CreateColorPage: CustomNextPage = () => {
             <Typography variant="h4" sx={{ fontWeight: "bold", marginBottom: "25px" }}>Thêm Màu sắc</Typography>
             <form onSubmit={createColorForm.handleSubmit(handleFormSubmit)}>
                 <Stack direction={"column"} spacing={3} width={"475px"}>
-                    <FormControl>
-                        <TextField fullWidth label="Tên màu" {...createColorForm.register("colorName")} required></TextField>
-                    </FormControl>  
-                    <Stack direction={"row"} width={"100%"} justifyContent={"space-between"} alignItems={"center"}>
-                        <ChromePicker 
-                            color={color}
-                            onChange={handleColorChange}
-                            disableAlpha
-                        ></ChromePicker>
-                        <Stack sx={{flex:1}} alignItems="center" spacing={1}>
-                            <Box sx={{backgroundColor: color, width: "75px", height: "75px"}}></Box>
-                            <Typography fontSize={"18px"} fontWeight={"bold"}>Mã màu</Typography>
-                        </Stack>
-                    </Stack>
-                    <LoadingButton 
+                    <Controller
+                        name="colorName"
+                        control={createColorForm.control}
+                        render={
+                            ({ field }) =>
+                                <FormControl>
+                                    <TextField fullWidth label="Tên màu" required {...field}></TextField>
+                                </FormControl>
+                        }
+                    />
+                    <Controller
+                        name="colorHex"
+                        control={createColorForm.control}
+                        render={({ field }) =>
+                        (
+                            <Stack direction={"row"} width={"100%"} justifyContent={"space-between"} alignItems={"center"}>
+                                <ChromePicker
+                                    color={field.value}
+                                    onChange={(e) => { field.onChange(e.hex) }}
+                                    disableAlpha
+                                ></ChromePicker>
+                                <Stack sx={{ flex: 1 }} alignItems="center" spacing={1}>
+                                    <Box sx={{ backgroundColor: field.value, width: "75px", height: "75px" }}></Box>
+                                    <Typography fontSize={"18px"} fontWeight={"bold"}>Mã màu</Typography>
+                                </Stack>
+                            </Stack>
+                        )
+                        }
+                    />
+                    <LoadingButton
                         loading={createColorQuery.isLoading}
                         variant={"contained"} type="submit"
                     >Khởi tạo</LoadingButton>

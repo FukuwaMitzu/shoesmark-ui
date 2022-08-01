@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { CustomNextPage } from "../../../_app";
 import MuiLink from "@mui/material/Link";
-import { useForm } from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useState } from "react";
 import { useSnackbar } from "notistack";
 import Stack from "@mui/material/Stack";
@@ -20,6 +20,9 @@ import extractDiff from "../../../../util/extractDiff";
 import getBrandByIdRequest from "../../../../api/brand/getBrandByIdRequest";
 import editBrandRequest from "../../../../api/brand/editBrandRequest";
 
+type EditBrandFormInputs = {
+    brandName: string,
+}
 
 
 const DetailColorPage: CustomNextPage = ()=>{
@@ -27,10 +30,13 @@ const DetailColorPage: CustomNextPage = ()=>{
     const router = useRouter();
 
     const {enqueueSnackbar} = useSnackbar();
-    const [brandName, setBrandName] = useState("");
 
     const [editMode, setEditMode] = useState(false); 
-    const editBrandForm = useForm();
+    const editBrandForm = useForm<EditBrandFormInputs>({
+        defaultValues:{
+            brandName:""
+        }
+    });
     
     //=====Queries============
     const getBrandByIdQuery = useQuery(["getBrandById"], ()=>getBrandByIdRequest(router.query.id as string)
@@ -39,7 +45,7 @@ const DetailColorPage: CustomNextPage = ()=>{
             return data.data;
         },
         onSuccess: (data)=>{
-            setBrandName(data.data.brandName);
+            editBrandForm.setValue("brandName",data.data.brandName);
         },
         enabled: !!router.query.id
     });
@@ -63,12 +69,12 @@ const DetailColorPage: CustomNextPage = ()=>{
     const handleBrandEditDenied = ()=>{
         setEditMode(false)
         if(getBrandByIdQuery.data){
-            setBrandName(getBrandByIdQuery.data.data.brandName);
+            editBrandForm.setValue("brandName",getBrandByIdQuery.data.data.brandName);
         }
     }
-    const handleFormSubmit = ()=>{
+    const handleFormSubmit:SubmitHandler<EditBrandFormInputs> = (formData)=>{
         if(getBrandByIdQuery.data){
-            const data = extractDiff(getBrandByIdQuery.data.data, {brandName: brandName});
+            const data = extractDiff(getBrandByIdQuery.data.data, {brandName: formData.brandName});
             editColorQuery.mutate({...data, brandId:getBrandByIdQuery.data.data.brandId});
         }
     }
@@ -87,9 +93,15 @@ const DetailColorPage: CustomNextPage = ()=>{
             <Typography variant="h4" sx={{ fontWeight: "bold", marginBottom: "25px" }}>Thông tin Thương hiệu</Typography>
             <form onSubmit={editBrandForm.handleSubmit(handleFormSubmit)}>
                 <Stack direction={"column"} spacing={3} width={"475px"}>
-                    <FormControl>
-                        <TextField disabled={!editMode} fullWidth label="Tên thương hiệu" required value={brandName} onChange={(e)=>{setBrandName(e.target.value)}}></TextField>
-                    </FormControl>  
+                    <Controller
+                        name="brandName"
+                        control={editBrandForm.control}
+                        render={({field})=>(
+                            <FormControl>
+                                <TextField disabled={!editMode} fullWidth label="Tên thương hiệu" required {...field}></TextField>
+                            </FormControl>  
+                        )}
+                    />
                     <Box>
                         {
                             !editMode?

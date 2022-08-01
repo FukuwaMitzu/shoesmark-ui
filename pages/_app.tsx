@@ -44,6 +44,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: CustomAppPro
       <SessionProvider
         session={session}
         refetchInterval={5 * 60}
+        refetchOnWindowFocus
       >
         <ThemeProvider theme={theme}>
           <SnackbarProvider>  

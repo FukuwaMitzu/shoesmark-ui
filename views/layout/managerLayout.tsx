@@ -47,6 +47,7 @@ export const ManagerLayout: React.FC<ManagerLayoutProps> = ({ children }) => {
                 <List sx={{ width: "100%" }}>
                     <ListItem sx={{ padding: 0 }}>
                         <Accordion
+                            defaultExpanded
                             sx={{
                                 boxShadow: "none",
                                 width: "100%"
@@ -79,6 +80,7 @@ export const ManagerLayout: React.FC<ManagerLayoutProps> = ({ children }) => {
                     </ListItem>
                     <ListItem sx={{ padding: 0 }}>
                         <Accordion
+                            defaultExpanded
                             sx={{
                                 boxShadow: "none",
                                 width: "100%"
@@ -108,6 +110,7 @@ export const ManagerLayout: React.FC<ManagerLayoutProps> = ({ children }) => {
                     </ListItem>
                     <ListItem sx={{ padding: 0 }}>
                         <Accordion
+                            defaultExpanded
                             sx={{
                                 boxShadow: "none",
                                 width: "100%"

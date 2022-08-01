@@ -21,6 +21,7 @@ interface CustomDataGridProps{
     rows: GridRowsProp
     error?: boolean
     loading?: boolean
+    rowHeight?: number
     getRowId?: GridRowIdGetter,
     onPageChange?: (e: ChangeEvent<any>, page:number) => void
     onDeleteDenied?: MouseEventHandler<HTMLButtonElement>
@@ -80,6 +81,7 @@ const CustomDataGrid: React.FC<CustomDataGridProps> = (props) => {
                         loading={props.loading}
                         checkboxSelection
                         disableSelectionOnClick
+                        rowHeight={props.rowHeight}
                         onSelectionModelChange={handleSelectionChange}
                         components={{
                             Pagination: () => (

@@ -9,19 +9,19 @@ interface AuthProps{
     auth?: AuthOptions
 }
 const Auth: React.FC<AuthProps> = ({ children, auth }) => {
-    const ses = useSession({required: auth!==null && auth!==undefined});
+    const session = useSession({required: auth!==null && auth!==undefined});
     useEffect(() => {
-        if(ses.status == "loading") return;
+        if(session.status == "loading") return;
         if (auth && auth.role && auth.role.length > 0) {
-            if (ses.data && ses.data.user) {
-                if (auth.role.indexOf(ses.data.user.role) == -1) {signIn()}
+            if (session.data && session.data.user) {
+                if (auth.role.indexOf(session.data.user.role) == -1) {signIn()}
             }
-            if(ses.data?.error){signIn()}
+            if(session.data?.error){signIn()}
         }
-    }, [ses]);
+    }, [session, auth]);
     return (
         <>{
-            ses.status == "loading" || (auth && ses.data?.error)?
+            session.status == "loading" || (auth && session.data?.error)?
             <></>
             :
             children

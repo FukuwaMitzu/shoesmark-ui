@@ -59,7 +59,7 @@ const CreateCategoryPage: CustomNextPage = () => {
                 <Link href="/admin/dashboard" passHref>
                     <MuiLink underline="hover" color="inherit">Dashboard</MuiLink>
                 </Link>
-                <Link href="/admin/thuong-hieu" passHref>
+                <Link href="/admin/the-loai" passHref>
                     <MuiLink underline="hover" color="inherit">Thể loại</MuiLink>
                 </Link>
                 <Typography color="text.primary">Thêm Thể loại</Typography>

@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   images: {
-    domains: ['assets.adidas.com'],
+    domains: ['localhost'],
   },
   redirects: async function(){
     return [{

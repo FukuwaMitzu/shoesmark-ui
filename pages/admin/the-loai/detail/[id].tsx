@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { CustomNextPage } from "../../../_app";
 import MuiLink from "@mui/material/Link";
-import { useForm } from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useState } from "react";
 import { useSnackbar } from "notistack";
 import Stack from "@mui/material/Stack";
@@ -21,61 +21,68 @@ import FormLabel from "@mui/material/FormLabel";
 import editCategoryRequest from "../../../../api/category/editCategoryRequest";
 import getCategoryByIdRequest from "../../../../api/category/getCategoryByIdRequest";
 
+type EditCateogryFormInputs = {
+    categoryName: string,
+    description: string
+}
 
 
-const DetailColorPage: CustomNextPage = ()=>{
+
+const DetailColorPage: CustomNextPage = () => {
     const session = useSession();
     const router = useRouter();
 
-    const {enqueueSnackbar} = useSnackbar();
-    const [categoryName, setCategoryName] = useState("");
-    const [description, setDescription] = useState("");
+    const { enqueueSnackbar } = useSnackbar();
 
-    const [editMode, setEditMode] = useState(false); 
-    
-    const editBrandForm = useForm();
-    
-    //=====Queries============
-    const getCategoryByIdQuery = useQuery(["getCategoryById"], ()=>getCategoryByIdRequest(router.query.id as string)
-    ,{
-        select: (data)=>{
-            return data.data;
-        },
-        onSuccess: (data)=>{
-            setDescription(data.data.description);
-            setCategoryName(data.data.categoryName);
-        },
-        enabled: !!router.query.id
+    const [editMode, setEditMode] = useState(false);
+    const editCategoryForm = useForm<EditCateogryFormInputs>({
+        defaultValues:{
+            categoryName:"",
+            description:""
+        }
     });
-    const editColorQuery = useMutation((data: {categoryId: string, categoryName?: string, description?:string})=>editCategoryRequest({
+
+    //=====Queries============
+    const getCategoryByIdQuery = useQuery(["getCategoryById"], () => getCategoryByIdRequest(router.query.id as string)
+        , {
+            select: (data) => {
+                return data.data;
+            },
+            onSuccess: (data) => {
+                editCategoryForm.setValue("categoryName", data.data.categoryName);
+                editCategoryForm.setValue("description", data.data.description);
+            },
+            enabled: !!router.query.id
+        });
+    const editCategoryQuery = useMutation((data: { categoryId: string, categoryName?: string, description?: string }) => editCategoryRequest({
         categoryId: data.categoryId,
         categoryName: data.categoryName,
-        description: description,
+        description: data.description,
         accessToken: session.data?.user?.accessToken
-    }),{
-        onSuccess:(data)=>{
-            enqueueSnackbar("Lưu thành công", {variant:"success"});
+    }), {
+        onSuccess: (data) => {
+            enqueueSnackbar("Lưu thành công", { variant: "success" });
             router.back();
         },
-        onError: (error: ApiRequestError)=>{
-            if(error.response?.data)
-            enqueueSnackbar(error.response?.data.message[0], {variant:"error"});
+        onError: (error: ApiRequestError) => {
+            if (error.response?.data)
+                enqueueSnackbar(error.response?.data.message[0], { variant: "error" });
         }
     });
     //======Effects============
 
     //======CallBacks===========
-    const handleCategoryEditDenied = ()=>{
+    const handleCategoryEditDenied = () => {
         setEditMode(false)
-        if(getCategoryByIdQuery.data){
-            setCategoryName(getCategoryByIdQuery.data.data.categoryName);
-            setDescription(getCategoryByIdQuery.data.data.description);
+        if (getCategoryByIdQuery.data) {
+            editCategoryForm.setValue("categoryName", getCategoryByIdQuery.data.data.categoryName);
+            editCategoryForm.setValue("description", getCategoryByIdQuery.data.data.description);
         }
     }
-    const handleFormSubmit = ()=>{
-        if(getCategoryByIdQuery.data){
-            const data = extractDiff(getCategoryByIdQuery.data.data, {categoryName: categoryName});
-            editColorQuery.mutate({...data, categoryId:getCategoryByIdQuery.data.data.categoryId});
+    const handleFormSubmit: SubmitHandler<EditCateogryFormInputs> = (formData) => {
+        if (getCategoryByIdQuery.data) {
+            const data = extractDiff(getCategoryByIdQuery.data.data, { categoryName: formData.categoryName });
+            editCategoryQuery.mutate({ ...data, categoryId: getCategoryByIdQuery.data.data.categoryId });
         }
     }
     //==========================
@@ -91,34 +98,45 @@ const DetailColorPage: CustomNextPage = ()=>{
                 <Typography color="text.primary">Chi tiết</Typography>
             </Breadcrumbs>
             <Typography variant="h4" sx={{ fontWeight: "bold", marginBottom: "25px" }}>Thông tin Thể loại</Typography>
-            <form onSubmit={editBrandForm.handleSubmit(handleFormSubmit)}>
+            <form onSubmit={editCategoryForm.handleSubmit(handleFormSubmit)}>
                 <Stack direction={"column"} spacing={3} width={"475px"}>
-                    <FormControl>
-                        <TextField disabled={!editMode} fullWidth label="Tên thể loại" required value={categoryName} onChange={(e)=>{setCategoryName(e.target.value)}}></TextField>
-                    </FormControl> 
-                    <FormControl>
-                        <FormLabel htmlFor="description">Mô tả</FormLabel>
-                        <TextField
-                            id="description"
-                            disabled={!editMode}
-                            multiline
-                            maxRows={20}
-                            rows={10}
-                            value={description}
-                            onChange={(e)=>{setDescription(e.target.value)}}
-                        />
-                    </FormControl> 
-                    <Box>
-                        {
-                            !editMode?
-                            <Button variant="contained" onClick={()=>{setEditMode(true)}}>Sửa</Button>
-                            :
-                            <Stack direction={"row"} spacing={1}>
-                                <Button color="error" onClick={handleCategoryEditDenied}>Huỷ</Button>
-                                <LoadingButton loading={editColorQuery.isLoading} type={"submit"}>Lưu</LoadingButton>
-                            </Stack>
-                        }
-                    </Box>
+                    <Controller
+                        name="categoryName"
+                        control={editCategoryForm.control}
+                        render={({ field }) => (
+                            <FormControl>
+                                <TextField disabled={!editMode} fullWidth label="Tên thể loại" required {...field}></TextField>
+                            </FormControl>
+                        )}
+                    />
+                    <Controller
+                        name="description"
+                        control={editCategoryForm.control}
+                        render={({ field }) => (
+                            <FormControl>
+                                <FormLabel htmlFor="description">Mô tả</FormLabel>
+                                <TextField
+                                    id="description"
+                                    disabled={!editMode}
+                                    multiline
+                                    maxRows={20}
+                                    rows={10}
+                                    {...field}
+                                />
+                            </FormControl>
+                        )}
+                    />
+                        <Box>
+                            {
+                                !editMode ?
+                                    <Button variant="contained" onClick={() => { setEditMode(true) }}>Sửa</Button>
+                                    :
+                                    <Stack direction={"row"} spacing={1}>
+                                        <Button color="error" onClick={handleCategoryEditDenied}>Huỷ</Button>
+                                        <LoadingButton loading={editCategoryQuery.isLoading} type={"submit"}>Lưu</LoadingButton>
+                                    </Stack>
+                            }
+                        </Box>
                 </Stack>
             </form>
         </Box>

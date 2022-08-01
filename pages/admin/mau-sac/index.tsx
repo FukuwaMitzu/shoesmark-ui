@@ -60,7 +60,7 @@ const ColorPage: CustomNextPage = () => {
 
     const searchForm = useForm<ColorQueryInputs>();
     //========ReactQuery============
-    const getAllColorQuery = useQuery(["getAllColor", {limit:pagination.limit, offset:pagination.offset}], ()=>getAllColorRequest({
+    const getAllColorQuery = useQuery(["getAllColor", pagination], ()=>getAllColorRequest({
         colorName: searchForm.getValues("colorName"),
         limit: pagination.limit,
         offset: pagination.offset
@@ -106,7 +106,7 @@ const ColorPage: CustomNextPage = () => {
                 <Stack direction={"column"} spacing={2} width={"475px"}>
                     <TextField fullWidth label="Tên màu" variant="outlined" {...searchForm.register("colorName")}></TextField>
                     <LoadingButton
-                        loading={getAllColorQuery.isLoading || getAllColorQuery.isRefetching}
+                        loading={getAllColorQuery.isLoading}
                         variant="contained" type="submit"
                     >Tìm kiếm</LoadingButton>
                 </Stack>
@@ -114,7 +114,7 @@ const ColorPage: CustomNextPage = () => {
             <Box sx={{marginTop:"55px"}}>
                 <CustomDataGrid
                     columns={columns}
-                    rows={getAllColorQuery.data?.data || []}
+                    rows={getAllColorQuery.data?.data ?? []}
                     pagination={pagination}
                     error={getAllColorQuery.isError}
                     loading={getAllColorQuery.isLoading}
