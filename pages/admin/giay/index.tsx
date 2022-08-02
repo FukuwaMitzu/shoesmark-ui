@@ -13,10 +13,15 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import useCustomPagination from "../../../components/CustomPagination/hooks/useCustomPagination";
 import getAllShoesRequest from "../../../api/shoes/getAllShoesRequest";
-import {useQuery} from "@tanstack/react-query";
+import {useMutation, useQuery} from "@tanstack/react-query";
 import Image from "next/image";
 import { SHOESMARK_API_DOMAIN } from "../../../config/domain";
 import dayjs from "dayjs";
+import deleteManyShoesRequest from "../../../api/shoes/deleteManyShoesRequest";
+import { useSnackbar } from "notistack";
+import { SubmitHandler, useForm } from "react-hook-form";
+import TextField from "@mui/material/TextField";
+import LoadingButton from "@mui/lab/LoadingButton";
 
 
 const columns: GridColDef[] = [
@@ -76,11 +81,22 @@ const columns: GridColDef[] = [
     }
 ]
 
+interface ShoesFormInputs{
+    shoesName: string
+}
 
 const ShoesPage: CustomNextPage = () => {
     const session = useSession();
     const router = useRouter();
-    
+    const {enqueueSnackbar} = useSnackbar();
+
+    const searchForm = useForm<ShoesFormInputs>({
+        defaultValues:{
+            shoesName: ""
+        }
+    });
+
+
     const {handlePagination, pagination,setPagination} = useCustomPagination({limit: 32, offset:0, total:0});
     //=========Queries=========================
     const getAllShoesQuery = useQuery(["getAllShoes", pagination], ()=>getAllShoesRequest({
@@ -89,16 +105,31 @@ const ShoesPage: CustomNextPage = () => {
         shoesName: ""
     }),{
         select:(data)=>data.data,
-        onSuccess: (data)=>{
-
+        onSuccess: (data) => {
+            setPagination({ ...pagination, total: data.total });
+        }
+    });
+    const deleteSelectedQuery = useMutation((ids: string[])=>deleteManyShoesRequest({
+        ids: ids,
+        accessToken: session.data?.user?.accessToken
+    }), {
+        onSuccess: (data, variables) => { 
+            getAllShoesQuery.refetch();
+            enqueueSnackbar(`Đã xoá ${variables.length} phần tử`, {variant:"success"});
+        },
+        onError: (error)=>{
+            enqueueSnackbar(`Xoá thất bại`, {variant:"error"});
         }
     });
     const handleCreateShoes = () => {
         router.push(router.pathname + "/create");
     }
     const handleDeleteShoes = (e: React.MouseEvent<HTMLButtonElement>, selectedRows: Array<GridRowId>) => {
-        // if (deleteSelectedQuery.isLoading) return;
-        // deleteSelectedQuery.mutate(selectedRows.map((row) => row.toString()));
+        if (deleteSelectedQuery.isLoading) return;
+        deleteSelectedQuery.mutate(selectedRows.map((row) => row.toString()));
+    }
+    const handleSearchForm: SubmitHandler<ShoesFormInputs> = () => {
+        getAllShoesQuery.refetch();
     }
     return (
         <Box>
@@ -109,6 +140,15 @@ const ShoesPage: CustomNextPage = () => {
                 <Typography color="text.primary">Giày</Typography>
             </Breadcrumbs>
             <Typography variant="h4" sx={{ fontWeight: "bold", marginBottom: "25px" }}>Quản lý Giày</Typography>
+            <form onSubmit={searchForm.handleSubmit(handleSearchForm)}>
+                <Stack direction={"column"} spacing={2} width={"475px"}>
+                    <TextField fullWidth label="Tên giày" variant="outlined" {...searchForm.register("shoesName")}></TextField>
+                    <LoadingButton
+                        loading={getAllShoesQuery.isLoading}
+                        variant="contained" type="submit"
+                    >Tìm kiếm</LoadingButton>
+                </Stack>
+            </form>
             <Box sx={{ marginTop: "55px" }}>
                 <CustomDataGrid
                     columns={columns}

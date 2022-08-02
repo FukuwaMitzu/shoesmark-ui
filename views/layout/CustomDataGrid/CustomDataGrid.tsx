@@ -81,7 +81,7 @@ const CustomDataGrid: React.FC<CustomDataGridProps> = (props) => {
                         loading={props.loading}
                         checkboxSelection
                         disableSelectionOnClick
-                        rowHeight={props.rowHeight}
+                        rowHeight={props.rowHeight?? 52}
                         onSelectionModelChange={handleSelectionChange}
                         components={{
                             Pagination: () => (
