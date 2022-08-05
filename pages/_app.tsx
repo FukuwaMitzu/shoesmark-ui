@@ -10,6 +10,7 @@ import Auth, { AuthOptions } from '../components/Auth';
 import { createTheme } from '@mui/material/styles';
 import { SnackbarProvider } from 'notistack';
 
+import  ClientLayout  from '../views/clientlayout/clientLayout';
 
 //Day js setup
 import dayjs from "dayjs";
@@ -34,8 +35,19 @@ type CustomAppProps = AppProps & {
 }
 
 
-
-const theme = createTheme();
+const {palette} = createTheme ();
+const theme = createTheme({
+  palette: { 
+    client: {
+      main: '#ffffff',
+    },
+    search: palette.augmentColor({
+      color:{
+        main: '#000000'
+      }
+    })
+  }
+});
 const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: CustomAppProps) {
@@ -57,7 +69,9 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: CustomAppPro
                 </Auth>
                 :
                 <Auth auth={Component.auth}>
-                  <Component {...pageProps} />
+                  <ClientLayout>
+                    <Component {...pageProps} />
+                  </ClientLayout>
                 </Auth>
             }
           </SnackbarProvider>
