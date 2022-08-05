@@ -10,8 +10,8 @@ export interface Shoes{
   UPC: string;
   SKU: string;
   categories: Category[];
-  brand: Brand;
-  color: Color;
+  brand?: Brand;
+  color?: Color;
   size: number;
   price: number;
   importPrice: number;

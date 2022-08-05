@@ -6,5 +6,5 @@ import { Brand } from "./brand";
 
 
 
-const getBrandByIdRequest: ApiRequestHandler<string, JsonEntity<Brand>> = (id) => axios.get(SHOESMARK_API_DOMAIN + `/brand/${id}`);
-export default getBrandByIdRequest;
+const getBrandRequest: ApiRequestHandler<string, JsonEntity<Brand>> = (id) => axios.get(SHOESMARK_API_DOMAIN + `/brand/${id}`);
+export default getBrandRequest;

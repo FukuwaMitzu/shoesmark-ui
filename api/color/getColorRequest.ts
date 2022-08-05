@@ -6,5 +6,5 @@ import { Color } from "./color";
 
 
 
-const getColorByIdRequest: ApiRequestHandler<string, JsonEntity<Color>> = (id) => axios.get(SHOESMARK_API_DOMAIN + `/color/${id}`);
-export default getColorByIdRequest;
+const getColorRequest: ApiRequestHandler<string, JsonEntity<Color>> = (id) => axios.get(SHOESMARK_API_DOMAIN + `/color/${id}`);
+export default getColorRequest;

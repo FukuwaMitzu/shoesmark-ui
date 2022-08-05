@@ -60,7 +60,7 @@ const ColorPage: CustomNextPage = () => {
 
     const searchForm = useForm<ColorQueryInputs>();
     //========ReactQuery============
-    const getAllColorQuery = useQuery(["getAllColor", pagination], ()=>getAllColorRequest({
+    const getAllColorQuery = useQuery(["getAllColor", pagination.offset, pagination.limit], ()=>getAllColorRequest({
         colorName: searchForm.getValues("colorName"),
         limit: pagination.limit,
         offset: pagination.offset

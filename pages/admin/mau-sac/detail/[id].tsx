@@ -15,7 +15,7 @@ import TextField from "@mui/material/TextField";
 import { ChromePicker } from "react-color";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import getColorByIdRequest from "../../../../api/color/getColorByIdRequest";
+import getColorRequest from "../../../../api/color/getColorRequest";
 import Button from "@mui/material/Button";
 import editColorRequest from "../../../../api/color/editColorRequest";
 import { ApiRequestError } from "../../../../interfaces/ApiRequestError";
@@ -43,14 +43,13 @@ const DetailColorPage: CustomNextPage = () => {
 
 
     //=====Queries============
-    const getColorByIdQuery = useQuery(["getColorById"], () => getColorByIdRequest(router.query.id as string)
+    const getColorQuery = useQuery(["getColorById"], () => getColorRequest(router.query.id as string)
         , {
             select: (data) => {
                 return data.data;
             },
-            onSuccess: (data) => {
-                editColorForm.setValue("colorHex", data.data.colorHex);
-                editColorForm.setValue("colorName", data.data.colorName);
+            onSuccess: ({data}) => {
+                editColorForm.reset(data);
             },
             enabled: !!router.query.id
         });
@@ -71,15 +70,14 @@ const DetailColorPage: CustomNextPage = () => {
     });
     const handleColorEditDenied = () => {
         setEditMode(false)
-        if (getColorByIdQuery.data) {
-            editColorForm.setValue("colorName", getColorByIdQuery.data.data.colorName);
-            editColorForm.setValue("colorHex", getColorByIdQuery.data.data.colorHex);
+        if (getColorQuery.data) {
+            editColorForm.reset();
         }
     }
     const handleFormSubmit: SubmitHandler<EditColorFormInputs> = (formData) => {
-        if (getColorByIdQuery.data) {
-            const data = extractDiff(getColorByIdQuery.data.data, { colorId: getColorByIdQuery.data.data.colorId as string, colorName: formData.colorName, colorHex: formData.colorHex });
-            editColorQuery.mutate({ ...data, colorId: getColorByIdQuery.data.data.colorId });
+        if (getColorQuery.data) {
+            const data = extractDiff(getColorQuery.data.data, { colorId: getColorQuery.data.data.colorId as string, colorName: formData.colorName, colorHex: formData.colorHex });
+            editColorQuery.mutate({ ...data, colorId: getColorQuery.data.data.colorId });
         }
     }
     //==========================

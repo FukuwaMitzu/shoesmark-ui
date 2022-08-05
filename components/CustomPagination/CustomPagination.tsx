@@ -6,7 +6,6 @@ interface CustomPaginationProps{
     offset: number,
     total: number,
     onPageChange?: (e:ChangeEvent<any>, page: number)=>void,
-    children?: React.ReactNode
 }
 
 const CustomPagination: React.FC<CustomPaginationProps> = ({limit, offset, total, onPageChange})=>{

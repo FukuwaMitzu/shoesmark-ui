@@ -17,7 +17,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import Button from "@mui/material/Button";
 import { ApiRequestError } from "../../../../interfaces/ApiRequestError";
 import extractDiff from "../../../../util/extractDiff";
-import getBrandByIdRequest from "../../../../api/brand/getBrandByIdRequest";
+import getBrandRequest from "../../../../api/brand/getBrandRequest";
 import editBrandRequest from "../../../../api/brand/editBrandRequest";
 
 type EditBrandFormInputs = {
@@ -39,13 +39,13 @@ const DetailColorPage: CustomNextPage = ()=>{
     });
     
     //=====Queries============
-    const getBrandByIdQuery = useQuery(["getBrandById"], ()=>getBrandByIdRequest(router.query.id as string)
+    const getBrandQuery = useQuery(["getBrandById"], ()=>getBrandRequest(router.query.id as string)
     ,{
         select: (data)=>{
             return data.data;
         },
-        onSuccess: (data)=>{
-            editBrandForm.setValue("brandName",data.data.brandName);
+        onSuccess: ({data})=>{
+            editBrandForm.reset(data);
         },
         enabled: !!router.query.id
     });
@@ -68,14 +68,14 @@ const DetailColorPage: CustomNextPage = ()=>{
     //======CallBacks===========
     const handleBrandEditDenied = ()=>{
         setEditMode(false)
-        if(getBrandByIdQuery.data){
-            editBrandForm.setValue("brandName",getBrandByIdQuery.data.data.brandName);
+        if(getBrandQuery.data){
+            editBrandForm.reset();
         }
     }
     const handleFormSubmit:SubmitHandler<EditBrandFormInputs> = (formData)=>{
-        if(getBrandByIdQuery.data){
-            const data = extractDiff(getBrandByIdQuery.data.data, {brandName: formData.brandName});
-            editColorQuery.mutate({...data, brandId:getBrandByIdQuery.data.data.brandId});
+        if(getBrandQuery.data){
+            const data = extractDiff(getBrandQuery.data.data, {brandName: formData.brandName});
+            editColorQuery.mutate({...data, brandId:getBrandQuery.data.data.brandId});
         }
     }
     //==========================

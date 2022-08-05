@@ -65,7 +65,7 @@ const BrandPage: CustomNextPage = ()=>{
 
     const searchForm = useForm<CategoryQueryInputs>();
     //========ReactQuery============
-    const getAllBrandQuery = useQuery(["getAllCategory", pagination], ()=>getAllCategoryRequest({
+    const getAllBrandQuery = useQuery(["getAllCategory", pagination.offset, pagination.limit], ()=>getAllCategoryRequest({
         categoryName: searchForm.getValues("categoryName"),
         limit: pagination.limit,
         offset: pagination.offset

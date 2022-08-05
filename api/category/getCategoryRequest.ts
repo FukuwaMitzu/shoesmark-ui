@@ -6,5 +6,5 @@ import { Category } from "./category";
 
 
 
-const getCategoryByIdRequest: ApiRequestHandler<string, JsonEntity<Category>> = (id) => axios.get(SHOESMARK_API_DOMAIN + `/category/${id}`);
-export default getCategoryByIdRequest;
+const getCategoryRequest: ApiRequestHandler<string, JsonEntity<Category>> = (id) => axios.get(SHOESMARK_API_DOMAIN + `/category/${id}`);
+export default getCategoryRequest;

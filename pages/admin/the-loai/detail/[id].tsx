@@ -19,7 +19,7 @@ import { ApiRequestError } from "../../../../interfaces/ApiRequestError";
 import extractDiff from "../../../../util/extractDiff";
 import FormLabel from "@mui/material/FormLabel";
 import editCategoryRequest from "../../../../api/category/editCategoryRequest";
-import getCategoryByIdRequest from "../../../../api/category/getCategoryByIdRequest";
+import getCategoryRequest from "../../../../api/category/getCategoryRequest";
 
 type EditCateogryFormInputs = {
     categoryName: string,
@@ -43,14 +43,13 @@ const DetailColorPage: CustomNextPage = () => {
     });
 
     //=====Queries============
-    const getCategoryByIdQuery = useQuery(["getCategoryById"], () => getCategoryByIdRequest(router.query.id as string)
+    const getCategoryQuery = useQuery(["getCategoryById"], () => getCategoryRequest(router.query.id as string)
         , {
             select: (data) => {
                 return data.data;
             },
-            onSuccess: (data) => {
-                editCategoryForm.setValue("categoryName", data.data.categoryName);
-                editCategoryForm.setValue("description", data.data.description);
+            onSuccess: ({data}) => {
+                editCategoryForm.reset(data);
             },
             enabled: !!router.query.id
         });
@@ -74,15 +73,15 @@ const DetailColorPage: CustomNextPage = () => {
     //======CallBacks===========
     const handleCategoryEditDenied = () => {
         setEditMode(false)
-        if (getCategoryByIdQuery.data) {
-            editCategoryForm.setValue("categoryName", getCategoryByIdQuery.data.data.categoryName);
-            editCategoryForm.setValue("description", getCategoryByIdQuery.data.data.description);
+        if (getCategoryQuery.data) {
+            editCategoryForm.setValue("categoryName", getCategoryQuery.data.data.categoryName);
+            editCategoryForm.setValue("description", getCategoryQuery.data.data.description);
         }
     }
     const handleFormSubmit: SubmitHandler<EditCateogryFormInputs> = (formData) => {
-        if (getCategoryByIdQuery.data) {
-            const data = extractDiff(getCategoryByIdQuery.data.data, { categoryName: formData.categoryName });
-            editCategoryQuery.mutate({ ...data, categoryId: getCategoryByIdQuery.data.data.categoryId });
+        if (getCategoryQuery.data) {
+            const data = extractDiff(getCategoryQuery.data.data, { categoryName: formData.categoryName });
+            editCategoryQuery.mutate({ ...data, categoryId: getCategoryQuery.data.data.categoryId });
         }
     }
     //==========================

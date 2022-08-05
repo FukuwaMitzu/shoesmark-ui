@@ -6,6 +6,8 @@ import { Shoes } from "./shoes";
 
 interface GetAllShoesParam extends RequestWithPagination{
     shoesName?: string
+    categoryIds?: string[]
+    colorId?:string
 }
 
 
