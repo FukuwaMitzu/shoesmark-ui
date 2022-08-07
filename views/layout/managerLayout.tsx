@@ -16,8 +16,7 @@ import SignalCellularAltOutlinedIcon from '@mui/icons-material/SignalCellularAlt
 import ListItem from "@mui/material/ListItem";
 import Container from "@mui/material/Container";
 
-interface ManagerLayoutProps {
-    children?: React.ReactNode
+interface ManagerLayoutProps extends React.PropsWithChildren{
 }
 
 

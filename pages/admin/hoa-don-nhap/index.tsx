@@ -182,11 +182,10 @@ const ImportOrderPage: CustomNextPage = () => {
                                 <RadioGroup
                                     defaultValue="others"
                                     name="radio-buttons-group"
-                                    row
                                     onChange={(data, value) => field.onChange(value)}
                                 >
-                                    <FormControlLabel value="me" control={<Radio />} label={"Của tôi"} />
-                                    <FormControlLabel value="others" control={<Radio />} label={"Của nhóm người"} />
+                                    <FormControlLabel value="me" control={<Radio />} label={"Chỉ mình tôi"} />
+                                    <FormControlLabel value="others" control={<Radio />} label={"Của người khác"} />
                                 </RadioGroup>
                             </FormControl>
                         )}
