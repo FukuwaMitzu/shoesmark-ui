@@ -75,6 +75,7 @@ const CreateShoesPage: CustomNextPage = () => {
         for (var key in data) {
             form.append(key, (data as any)[key]);
         }
+        form.append("categories", JSON.stringify(data.categories));
         createShoesQuery.mutate(form);
     }
     function onFileSelected(event: ChangeEvent<HTMLInputElement>) {
