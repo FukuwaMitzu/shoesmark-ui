@@ -25,7 +25,7 @@ type EditBrandFormInputs = {
 }
 
 
-const DetailColorPage: CustomNextPage = ()=>{
+const DetailBrandPage: CustomNextPage = ()=>{
     const session = useSession();
     const router = useRouter();
 
@@ -119,9 +119,9 @@ const DetailColorPage: CustomNextPage = ()=>{
     )
 }
 
-DetailColorPage.layout = "manager";
-DetailColorPage.auth = {
+DetailBrandPage.layout = "manager";
+DetailBrandPage.auth = {
     role: ["admin", "employee"]
 }
 
-export default DetailColorPage;
+export default DetailBrandPage;

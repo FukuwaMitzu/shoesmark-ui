@@ -73,6 +73,7 @@ export const ManagerLayout: React.FC<ManagerLayoutProps> = ({ children }) => {
                                     <CustomListItemButton href="/admin/thuong-hieu">Thương hiệu</CustomListItemButton>
                                     <CustomListItemButton href="/admin/mau-sac">Màu sắc</CustomListItemButton>
                                     <CustomListItemButton href="/admin/the-loai">Thể loại</CustomListItemButton>
+                                    <CustomListItemButton href="/admin/nguoi-dung">Người dùng</CustomListItemButton>
                                     <CustomListItemButton href="/admin/thong-bao">Thông báo</CustomListItemButton>
                                 </List>
                             </AccordionDetails>
@@ -102,8 +103,8 @@ export const ManagerLayout: React.FC<ManagerLayoutProps> = ({ children }) => {
                             </AccordionSummary>
                             <AccordionDetails>
                                 <List>
-                                    <CustomListItemButton href="/admin/hoa-don-xuat">Hoá đơn xuất</CustomListItemButton>
                                     <CustomListItemButton href="/admin/hoa-don-nhap">Hoá đơn nhập</CustomListItemButton>
+                                    <CustomListItemButton href="/admin/hoa-don-xuat">Hoá đơn xuất</CustomListItemButton>
                                 </List>
                             </AccordionDetails>
                         </Accordion>

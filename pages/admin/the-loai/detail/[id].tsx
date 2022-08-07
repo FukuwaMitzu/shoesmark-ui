@@ -28,7 +28,7 @@ type EditCateogryFormInputs = {
 
 
 
-const DetailColorPage: CustomNextPage = () => {
+const DetailCategoryPage: CustomNextPage = () => {
     const session = useSession();
     const router = useRouter();
 
@@ -142,9 +142,9 @@ const DetailColorPage: CustomNextPage = () => {
     )
 }
 
-DetailColorPage.layout = "manager";
-DetailColorPage.auth = {
+DetailCategoryPage.layout = "manager";
+DetailCategoryPage.auth = {
     role: ["admin", "employee"]
 }
 
-export default DetailColorPage;
+export default DetailCategoryPage;

@@ -17,19 +17,36 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { GridColDef, GridRenderCellParams, GridRowId } from "@mui/x-data-grid";
 import IconButton from "@mui/material/IconButton";
 import LaunchOutlinedIcon from "@mui/icons-material/LaunchOutlined";
-import getAllCategoryRequest from "../../../api/category/getAllCategoryRequest";
-import deleteManyCategoryRequest from "../../../api/category/deleteManyCategoryRequest";
+import getAllUserRequest from "../../../api/user/getAllUserRequest";
 import dayjs from "dayjs";
+import deleteManyUserRequest from "../../../api/user/deleteManyUserRequest";
+import { ApiRequestError } from "../../../interfaces/ApiRequestError";
+
 const columns: GridColDef[] = [
     {
-        field: "categoryName",
-        headerName: "Tên thể loại",
+        field: "lastName",
+        headerName: "Tên đệm",
         width: 200
+    },
+    {
+        field: "firstName",
+        headerName: "Tên",
+        width: 150
+    },
+    {
+        field: "gender",
+        headerName: "Giới tính",
+        width: 100
+    },
+    {
+        field: "role",
+        headerName: "Vai trò",
+        width: 100
     },
     {
         field: "createdAt",
         headerName: "Ngày khởi tạo",
-        flex: 1,
+        width: 250,
         renderCell: (params: GridRenderCellParams<string>)=>(
             <Typography>{dayjs(params.value).format("LLL")}</Typography>
         )
@@ -37,7 +54,7 @@ const columns: GridColDef[] = [
     {
         field: "updatedAt",
         headerName: "Cập nhật gần đây",
-        flex:1,
+        width: 150,
         renderCell: (params: GridRenderCellParams<string>)=>(
             <Typography>{dayjs(params.value).fromNow()}</Typography>
         )
@@ -48,25 +65,26 @@ const columns: GridColDef[] = [
         sortable: false,
         renderCell: (params: GridRenderCellParams<string>) => (
             <Stack>
-                <Link href={`/admin/the-loai/detail/${params.id}`} passHref><IconButton><LaunchOutlinedIcon></LaunchOutlinedIcon></IconButton></Link>
+                <Link href={`/admin/nguoi-dung/detail/${params.id}`} passHref><IconButton><LaunchOutlinedIcon></LaunchOutlinedIcon></IconButton></Link>
             </Stack>
         )
     },
 ]
-type CategoryQueryInputs = {
-    categoryName: string
+type UserQueryInputs = {
+    fullName: string
 }
-const CategoryPage: CustomNextPage = ()=>{
+const UserPage: CustomNextPage = ()=>{
     const session = useSession();
     const router = useRouter();
     const {enqueueSnackbar} = useSnackbar();
 
     const { handlePagination, pagination, setPagination } = useCustomPagination({ limit: 32, offset: 0, total: 0 });
 
-    const searchForm = useForm<CategoryQueryInputs>();
+    const searchForm = useForm<UserQueryInputs>();
     //========ReactQuery============
-    const getAllBrandQuery = useQuery(["getAllCategory", pagination.offset, pagination.limit], ()=>getAllCategoryRequest({
-        categoryName: searchForm.getValues("categoryName"),
+    const getAllUserQuery = useQuery(["getAllUser", pagination.offset, pagination.limit], ()=>getAllUserRequest({
+        fullName: searchForm.getValues("fullName"),
+        accessToken: session.data?.user?.accessToken,
         limit: pagination.limit,
         offset: pagination.offset
     }), {
@@ -75,27 +93,28 @@ const CategoryPage: CustomNextPage = ()=>{
             setPagination({ ...pagination, total: data.total });
         }
     });
-    const deleteSelectedQuery = useMutation((ids: string[]) => deleteManyCategoryRequest({
+    const deleteManyUser = useMutation((ids:string[])=>deleteManyUserRequest({
         ids: ids,
         accessToken: session.data?.user?.accessToken
     }), {
-        onSuccess: (data, variables) => { 
-            getAllBrandQuery.refetch();
-            enqueueSnackbar(`Đã xoá ${variables.length} phần tử`, {variant:"success"});
+        onSuccess: (data, variables)=>{
+            enqueueSnackbar(`Xoá thành công ${variables.length} phần tử`, {variant: "success"});
+            getAllUserQuery.refetch();
         },
-        onError: (error)=>{
-            enqueueSnackbar(`Xoá thất bại`, {variant:"error"});
+        onError: (error: ApiRequestError)=>{
+            enqueueSnackbar(error.response?.data.message[0], {"variant":"error"});
         }
     });
-    const handleCreateBrand = () => {
+    //======Callbacks=====================
+    const handleCreateUser = () => {
         router.push(router.pathname + "/create");
     }
-    const handleDeleteBrand = (e: React.MouseEvent<HTMLButtonElement>, selectedRows: Array<GridRowId>) => {
-        if (deleteSelectedQuery.isLoading) return;
-        deleteSelectedQuery.mutate(selectedRows.map((row) => row.toString()));
+    const handleDeleteUser = (e: React.MouseEvent<HTMLButtonElement>, selectedRows: Array<GridRowId>) => {
+        if (deleteManyUser.isLoading) return;
+        deleteManyUser.mutate(selectedRows.map((row) => row.toString()));
     }
-    const handleSearchForm: SubmitHandler<CategoryQueryInputs> = () => {
-        getAllBrandQuery.refetch();
+    const handleSearchForm: SubmitHandler<UserQueryInputs> = () => {
+        getAllUserQuery.refetch();
     }
     return (
         <Box>
@@ -103,14 +122,14 @@ const CategoryPage: CustomNextPage = ()=>{
                 <Link href="/admin/dashboard" passHref>
                     <MuiLink underline="hover" color="inherit">Dashboard</MuiLink>
                 </Link>
-                <Typography color="text.primary">Thể loại</Typography>
+                <Typography color="text.primary">Người dùng</Typography>
             </Breadcrumbs>
-            <Typography variant="h4" sx={{ fontWeight: "bold", marginBottom: "25px" }}>Quản lý Thể loại</Typography>
+            <Typography variant="h4" sx={{ fontWeight: "bold", marginBottom: "25px" }}>Quản lý Người dùng</Typography>
             <form onSubmit={searchForm.handleSubmit(handleSearchForm)}>
                 <Stack direction={"column"} spacing={2} width={"475px"}>
-                    <TextField fullWidth label="Tên thể loại" variant="outlined" {...searchForm.register("categoryName")}></TextField>
+                    <TextField fullWidth label="Tên người dùng" variant="outlined" {...searchForm.register("fullName")}></TextField>
                     <LoadingButton
-                        loading={getAllBrandQuery.isLoading}
+                        loading={getAllUserQuery.isLoading}
                         variant="contained" type="submit"
                     >Tìm kiếm</LoadingButton>
                 </Stack>
@@ -118,22 +137,22 @@ const CategoryPage: CustomNextPage = ()=>{
             <Box sx={{marginTop:"55px"}}>
                 <CustomDataGrid
                     columns={columns}
-                    rows={getAllBrandQuery.data?.data ?? []}
+                    rows={getAllUserQuery.data?.data ?? []}
                     pagination={pagination}
-                    error={getAllBrandQuery.isError}
-                    loading={getAllBrandQuery.isLoading}
-                    getRowId={(row)=>row.categoryId}
+                    error={getAllUserQuery.isError}
+                    loading={getAllUserQuery.isLoading}
+                    getRowId={(row)=>row.userId}
                     onPageChange={handlePagination}
-                    onCreate={handleCreateBrand}
-                    onDeleteConfirmed={handleDeleteBrand}
+                    onCreate={handleCreateUser}
+                    onDeleteConfirmed={handleDeleteUser}
                 />
             </Box>
         </Box>
     )   
 }
 
-CategoryPage.layout="manager";
-CategoryPage.auth = {
+UserPage.layout="manager";
+UserPage.auth = {
     role: ["admin", "employee"]
 }
-export default CategoryPage;
+export default UserPage;
