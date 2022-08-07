@@ -45,7 +45,7 @@ type EditShoesFormInputs = {
     quantity: number;
 }
 
-const editShoesPage: CustomNextPage = () => {
+const DetailShoesPage: CustomNextPage = () => {
     const session = useSession();
     const router = useRouter();
 
@@ -365,8 +365,8 @@ const editShoesPage: CustomNextPage = () => {
     )
 }
 
-editShoesPage.layout = "manager";
-editShoesPage.auth = {
+DetailShoesPage.layout = "manager";
+DetailShoesPage.auth = {
     role: ["admin", "employee"]
 }
-export default editShoesPage;
+export default DetailShoesPage;
