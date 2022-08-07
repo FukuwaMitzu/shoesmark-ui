@@ -206,7 +206,7 @@ export default function PrimarySearchAppBar() {
           </Search>
             <IconButton
               size="large"
-              aria-label="show 4 new mails"
+              aria-label="cart"
               color="inherit"
             >
               <Badge badgeContent={4} color="error">
