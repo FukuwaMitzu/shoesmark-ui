@@ -35,19 +35,7 @@ type CustomAppProps = AppProps & {
 }
 
 
-const {palette} = createTheme ();
-const theme = createTheme({
-  palette: { 
-    client: {
-      main: '#ffffff',
-    },
-    search: palette.augmentColor({
-      color:{
-        main: '#000000'
-      }
-    })
-  }
-});
+const theme = createTheme();
 const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: CustomAppProps) {
