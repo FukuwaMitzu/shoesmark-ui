@@ -1,23 +1,56 @@
+import React from "react"
 import Stack from "@mui/material/Stack"
 import AppBar from "@mui/material/AppBar"
-import React from "react"
+import Box from "@mui/material/Box"
 import Toolbar from "@mui/material/Toolbar"
-import { Typography } from "@mui/material"
+import Typography from "@mui/material/Typography"
 import { useSession } from "next-auth/react"
 import Searchbar from "./SearchBar/searchBar"
+import CartButton from "./CartButton/cartButton"
+import NotificationButton from "./NotificationButton/notificationButton"
+import Link from "next/link"
+import MuiLink from "@mui/material/Link"
+import { styled } from "@mui/material/styles"
+import MobileMenu from "./MobileMenu/mobileMenu"
+import Container from "@mui/material/Container";
 
-const ClientLayout: React.FC<React.PropsWithChildren> = ({children})=>{
+const DesktopButtons = styled(Toolbar)(({ theme }) => ({
+    [theme.breakpoints.down("md")]: {
+        display: "none"
+    }
+}));
+
+
+const ClientLayout: React.FC<React.PropsWithChildren> = ({ children }) => {
     const session = useSession();
 
-    return(
+    return (
         <Stack direction={'column'}>
             <AppBar>
-                <Toolbar>
-                    <Typography variant="h6">ShoesMark</Typography>
+                <Toolbar sx={{gap:1}}>
+                    <Link href="/" passHref>
+                        <MuiLink color={"inherit"} sx={{ textDecoration: "none" }}>
+                            <Typography variant="h6">ShoesMark</Typography>
+                        </MuiLink>
+                    </Link>
                     <Searchbar></Searchbar>
+                    <Box sx={{ flex: 1 }}></Box>                
+                    <DesktopButtons>
+                        <Stack direction={"row"} spacing={3}>
+                            <CartButton></CartButton>
+                            {
+                                session.status == "authenticated" &&
+                                <NotificationButton></NotificationButton>
+                            }
+                        </Stack>
+                    </DesktopButtons>
+                    <MobileMenu></MobileMenu>
                 </Toolbar>
             </AppBar>
-            {children}
+            <Toolbar></Toolbar>
+            <Container maxWidth="lg" sx={{padding:5}}>
+                {children}
+            </Container>
         </Stack>
     )
 }

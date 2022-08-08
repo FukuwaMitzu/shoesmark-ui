@@ -44,7 +44,7 @@ export const ManagerLayout: React.FC<ManagerLayoutProps> = ({ children }) => {
 
             >
                 <List sx={{ width: "100%" }}>
-                    <ListItem sx={{ padding: 0 }}>
+                    <ListItem disablePadding>
                         <Accordion
                             defaultExpanded
                             sx={{
@@ -78,7 +78,7 @@ export const ManagerLayout: React.FC<ManagerLayoutProps> = ({ children }) => {
                             </AccordionDetails>
                         </Accordion>
                     </ListItem>
-                    <ListItem sx={{ padding: 0 }}>
+                    <ListItem disablePadding>
                         <Accordion
                             defaultExpanded
                             sx={{
@@ -108,7 +108,7 @@ export const ManagerLayout: React.FC<ManagerLayoutProps> = ({ children }) => {
                             </AccordionDetails>
                         </Accordion>
                     </ListItem>
-                    <ListItem sx={{ padding: 0 }}>
+                    <ListItem disablePadding>
                         <Accordion
                             defaultExpanded
                             sx={{
@@ -138,7 +138,6 @@ export const ManagerLayout: React.FC<ManagerLayoutProps> = ({ children }) => {
                             </AccordionDetails>
                         </Accordion>
                     </ListItem>
-
                 </List>
             </Drawer>
             <Box component={"main"} sx={{ flexGrow: 1, p: 3}}>

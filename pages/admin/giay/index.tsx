@@ -24,7 +24,7 @@ import TextField from "@mui/material/TextField";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Autocomplete from "@mui/material/Autocomplete";
 import getAllCategoryRequest from "../../../api/category/getAllCategoryRequest";
-import getAllColorRequest from "../../../api/color/getAllColorRequest";
+import getAllColorRequest, { GetAllColorQueryKey } from "../../../api/color/getAllColorRequest";
 
 const columns: GridColDef[] = [
     {
@@ -39,6 +39,12 @@ const columns: GridColDef[] = [
         renderCell: (params: GridRenderCellParams<string>) => (
             <Image width={150} height={150} src={SHOESMARK_API_DOMAIN + "/" + params.value}></Image>
         )
+    },
+    {
+        field: "size",
+        headerName: "Cỡ",
+        width: 50,
+        align: "center"
     },
     {
         field: "quantity",
@@ -58,7 +64,7 @@ const columns: GridColDef[] = [
     {
         field: "createdAt",
         headerName: "Ngày khởi tạo",
-        flex: 1,
+        width: 240,
         renderCell: (params: GridRenderCellParams<string>) => (
             <Typography>{dayjs(params.value).format("LLL")}</Typography>
         )
@@ -66,7 +72,7 @@ const columns: GridColDef[] = [
     {
         field: "updatedAt",
         headerName: "Cập nhật gần đây",
-        flex: 1,
+        width: 150,
         renderCell: (params: GridRenderCellParams<string>) => (
             <Typography>{dayjs(params.value).fromNow()}</Typography>
         )
@@ -132,7 +138,7 @@ const ShoesPage: CustomNextPage = () => {
     const getAllCategory = useQuery(["getAllCategory"], () => getAllCategoryRequest({}), {
         select: (data) => data.data
     });
-    const getAllColor = useQuery(["getAllColor"], () => getAllColorRequest({}), {
+    const getAllColor = useQuery([GetAllColorQueryKey], () => getAllColorRequest({}), {
         select: (data) => data.data
     });
 

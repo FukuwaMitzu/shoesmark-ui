@@ -4,6 +4,8 @@ import { ApiRequestHandler, RequestWithPagination } from "../../interfaces/ApiRe
 import { JsonCollection } from "../../interfaces/JsonCollection";
 import { Category } from "./category";
 
+export const GetAllCategoryQueryKey = "GetAllCategory";
+
 interface GetAllCategoryParam extends RequestWithPagination{
     categoryName?: string
 }

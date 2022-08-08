@@ -28,6 +28,7 @@ import extractDiff from "../../../../util/extractDiff";
 import { Category } from "../../../../api/category/category";
 import { Brand } from "../../../../api/brand/brand";
 import { Color } from "../../../../api/color/color";
+import sizeList from "../../../../util/sizeFilterList";
 
 type EditShoesFormInputs = {
     shoesName: string;
@@ -283,7 +284,7 @@ const DetailShoesPage: CustomNextPage = () => {
                                     filterSelectedOptions
                                     {...field}
                                     getOptionLabel={(option) => option.toString()}
-                                    options={[37, 38, 39, 40, 41, 42, 43, 44, 45]}
+                                    options={sizeList}
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}

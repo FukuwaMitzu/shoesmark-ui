@@ -10,7 +10,7 @@ import Auth, { AuthOptions } from '../components/Auth';
 import { createTheme } from '@mui/material/styles';
 import { SnackbarProvider } from 'notistack';
 
-import  ClientLayout  from '../views/clientlayout/clientLayout';
+import ClientLayout from '../views/clientlayout/clientLayout';
 
 //Day js setup
 import dayjs from "dayjs";
@@ -47,7 +47,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: CustomAppPro
         refetchOnWindowFocus
       >
         <ThemeProvider theme={theme}>
-          <SnackbarProvider>  
+          <SnackbarProvider>
             {
               Component.layout == "manager" ?
                 <Auth auth={Component.auth}>

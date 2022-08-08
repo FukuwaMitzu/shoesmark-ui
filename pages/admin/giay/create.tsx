@@ -21,6 +21,7 @@ import getAllBrandRequest from "../../../api/brand/getAllBrandRequest";
 import Autocomplete from "@mui/material/Autocomplete";
 import InputAdornment from "@mui/material/InputAdornment";
 import LoadingButton from "@mui/lab/LoadingButton";
+import sizeList from "../../../util/sizeFilterList";
 
 type CreateShoesFormInputs = {
     shoesName: string;
@@ -201,7 +202,7 @@ const CreateShoesPage: CustomNextPage = () => {
                                     <Autocomplete
                                         filterSelectedOptions
                                         getOptionLabel={(option) => option.toString()}
-                                        options={[37, 38, 39, 40, 41, 42, 43, 44, 45]}
+                                        options={sizeList}
                                         renderInput={(params) => (
                                             <TextField
                                                 {...params}

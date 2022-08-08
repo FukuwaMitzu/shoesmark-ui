@@ -4,6 +4,7 @@ import NextAuth from "next-auth/next";
 import Credentials from "next-auth/providers/credentials";
 import dayjs from "dayjs";
 import { SHOESMARK_API_DOMAIN } from "../../../config/domain";
+import { signOut } from "next-auth/react";
 
 function extractUserData(token:string){
     const {exp, userId, isActive, role}:any = jwt.decode(token);

@@ -8,14 +8,14 @@ import MuiLink from "@mui/material/Link";
 import { CustomNextPage } from "../../_app";
 import LoadingButton from "@mui/lab/LoadingButton";
 import CustomDataGrid from "../../../views/layout/CustomDataGrid/CustomDataGrid";
-import { GridColDef, GridRenderCellParams, GridValueGetterParams } from "@mui/x-data-grid";
+import { GridColDef, GridRenderCellParams, GridRowId, GridValueGetterParams } from "@mui/x-data-grid";
 import dayjs from "dayjs";
 import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import LaunchOutlinedIcon from "@mui/icons-material/LaunchOutlined";
 import { useSession } from "next-auth/react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import getManyImportOrderRequest from "../../../api/importOrder/getManyImportOrderRequest";
 import useCustomPagination from "../../../components/CustomPagination/hooks/useCustomPagination";
 import FormControl from "@mui/material/FormControl";
@@ -25,37 +25,12 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Radio from "@mui/material/Radio";
 import getAllUserRequest from "../../../api/user/getAllUserRequest";
 import { Autocomplete } from "@mui/material";
-import { ChangeEventHandler, useEffect } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
+import stringAvatar from "../../../util/stringAvatar";
+import deleteManyImportOrderRequest from "../../../api/importOrder/deleteManyImportOrderRequest";
+import { useSnackbar } from "notistack";
 
-function stringToColor(string: string) {
-    let hash = 0;
-    let i;
-
-    /* eslint-disable no-bitwise */
-    for (i = 0; i < string.length; i += 1) {
-        hash = string.charCodeAt(i) + ((hash << 5) - hash);
-    }
-
-    let color = '#';
-
-    for (i = 0; i < 3; i += 1) {
-        const value = (hash >> (i * 8)) & 0xff;
-        color += `00${value.toString(16)}`.slice(-2);
-    }
-    /* eslint-enable no-bitwise */
-
-    return color;
-}
-
-function stringAvatar(name: string) {
-    return {
-        sx: {
-            bgcolor: stringToColor(name),
-        },
-        children: `${name.split(' ')[0][0].charAt(0)}${name.split(' ')[1][0].charAt(0)}`,
-    };
-}
 
 const columns: GridColDef[] = [
     {
@@ -113,6 +88,7 @@ interface ImportOrderFormInputs {
 
 const ImportOrderPage: CustomNextPage = () => {
     const session = useSession();
+    const {enqueueSnackbar, closeSnackbar} = useSnackbar();
     const router = useRouter();
     const { handlePagination, pagination, setPagination } = useCustomPagination({ limit: 32, offset: 0, total: 0 });
     const { limit, offset } = pagination;
@@ -146,6 +122,18 @@ const ImportOrderPage: CustomNextPage = () => {
         enabled: searchForm.getValues("searchFor") == "others",
         select: (data) => data.data
     });
+    const deleteManyImportOrder = useMutation((ids: string[])=> deleteManyImportOrderRequest({
+        ids: ids,
+        accessToken: session.data?.user?.accessToken
+    }), {
+        onSuccess: (data, variables) => {
+            getManyImportOrderQuery.refetch();
+            enqueueSnackbar(`Đã xoá ${variables.length} phần tử`, { variant: "success" });
+        },
+        onError: (error) => {
+            enqueueSnackbar(`Xoá thất bại`, { variant: "error" });
+        }
+    });
     //========Callbacks==================
     const handleSearchForm: SubmitHandler<ImportOrderFormInputs> = (data) => {
         getManyImportOrderQuery.refetch();
@@ -153,8 +141,8 @@ const ImportOrderPage: CustomNextPage = () => {
     const handleCreateImportOrder = () => {
 
     }
-    const handleDeleteImportOrder = () => {
-
+    const handleDeleteImportOrder = (e: React.MouseEvent<HTMLButtonElement>, selectedRows: Array<GridRowId>) => {
+        deleteManyImportOrder.mutate(selectedRows.map((row)=>row.toString()));
     }
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {

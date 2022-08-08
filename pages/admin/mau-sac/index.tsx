@@ -19,7 +19,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import CustomDataGrid from "../../../views/layout/CustomDataGrid/CustomDataGrid";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
-import getAllColorRequest from "../../../api/color/getAllColorRequest";
+import getAllColorRequest, { GetAllColorQueryKey } from "../../../api/color/getAllColorRequest";
 import deleteManyColorRequest from "../../../api/color/deleteManyColorRequest";
 
 const columns: GridColDef[] = [
@@ -60,7 +60,7 @@ const ColorPage: CustomNextPage = () => {
 
     const searchForm = useForm<ColorQueryInputs>();
     //========ReactQuery============
-    const getAllColorQuery = useQuery(["getAllColor", pagination.offset, pagination.limit], ()=>getAllColorRequest({
+    const getAllColorQuery = useQuery([GetAllColorQueryKey, pagination.offset, pagination.limit], ()=>getAllColorRequest({
         colorName: searchForm.getValues("colorName"),
         limit: pagination.limit,
         offset: pagination.offset

@@ -1,4 +1,4 @@
-import { signIn, useSession } from "next-auth/react";
+import { signIn, signOut, useSession } from "next-auth/react";
 import React, { useEffect } from "react";
 
 export interface AuthOptions{
@@ -18,6 +18,7 @@ const Auth: React.FC<AuthProps> = ({ children, auth }) => {
             }
             if(session.data?.error){signIn()}
         }
+        else if(session.data?.error){signOut()}
     }, [session, auth]);
     return (
         <>{

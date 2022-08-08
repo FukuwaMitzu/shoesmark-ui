@@ -4,6 +4,9 @@ import { ApiRequestHandler, RequestWithPagination } from "../../interfaces/ApiRe
 import { JsonCollection } from "../../interfaces/JsonCollection";
 import { Color } from "./color";
 
+
+export const GetAllColorQueryKey = "GetAllColor";
+
 interface GetAllColorParam extends RequestWithPagination{
     colorName?: string
 }

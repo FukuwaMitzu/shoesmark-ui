@@ -36,10 +36,10 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
         paddingLeft: `calc(1em + ${theme.spacing(5)})`,
         transition: theme.transitions.create('width'),
         width: '100%',
-        [theme.breakpoints.up('md')]: {
-            width: '35ch',
-        },
     },
+    [theme.breakpoints.up("md")]:{
+        width: "37ch"
+    }
 }));
 interface SearchBarProps extends React.PropsWithChildren {
 }
