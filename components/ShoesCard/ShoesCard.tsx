@@ -30,7 +30,7 @@ const ShoesCard: React.FC<ShoesCardProps> = (data) => {
       });
 
     return (
-        <Card sx={{ maxWidth: "250px" }}>
+        <Card sx={{ maxWidth: "250px", width: "100%" }}>
             <CardHeader
                 action={
                     <IconButton aria-label="settings">
