@@ -168,7 +168,7 @@ const ShoesHome: NextPage = () => {
                         />
                     </Stack>
                 </form>
-                <Stack direction={"row"} flexWrap={"wrap"} spacing={2}>
+                <Stack direction={"row"} flexWrap={"wrap"} gap={2} marginTop={"75px"}>
                     {
                         !getAllShoesQuery.isLoading && getAllShoesQuery.data &&
                         getAllShoesQuery.data.map((shoes) => (

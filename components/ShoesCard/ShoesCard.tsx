@@ -23,6 +23,12 @@ interface ShoesCardProps {
 const ShoesCard: React.FC<ShoesCardProps> = (data) => {
     const niemYet = data.price;
     const khuyenMai = data.price * (100-data.sale)/100;
+
+    var formatter = new Intl.NumberFormat('vi', {
+        style: 'currency',
+        currency: 'VND',
+      });
+
     return (
         <Card sx={{ maxWidth: "250px" }}>
             <CardHeader
@@ -63,9 +69,9 @@ const ShoesCard: React.FC<ShoesCardProps> = (data) => {
                 src={`${SHOESMARK_API_DOMAIN}/${data.shoesImage}`}
             />
             <CardContent> 
-                <Typography color={"GrayText"} sx={{ textDecorationLine: "line-through" }}>{data.sale!=0 && `${niemYet} đ`}</Typography>
+                <Typography color={"GrayText"} sx={{ textDecorationLine: "line-through", opacity: data.sale!=0? 1 : 0 }}>{`${formatter.format(niemYet)}`}</Typography>
                 <Typography color={"error"} variant={"h6"}>
-                    {khuyenMai} đ   
+                    {formatter.format(khuyenMai)}   
                 </Typography>
             </CardContent>
         </Card>
