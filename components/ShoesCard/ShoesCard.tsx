@@ -28,7 +28,7 @@ const ShoesCard: React.FC<ShoesCardProps> = (data) => {
         style: 'currency',
         currency: 'VND',
       });
-
+      
     return (
         <Card sx={{ maxWidth: "250px" }}>
             <CardHeader
