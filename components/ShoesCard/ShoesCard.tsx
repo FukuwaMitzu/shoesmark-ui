@@ -28,7 +28,7 @@ const ShoesCard: React.FC<ShoesCardProps> = (data) => {
         style: 'currency',
         currency: 'VND',
       });
-      
+
     return (
         <Card sx={{ maxWidth: "250px" }}>
             <CardHeader
@@ -40,6 +40,7 @@ const ShoesCard: React.FC<ShoesCardProps> = (data) => {
                 title={
                     <Typography
                         sx={{
+                            height: "48px",
                             overflow: 'hidden',
                             textOverflow: 'ellipsis',
                             display: '-webkit-box',
@@ -49,7 +50,7 @@ const ShoesCard: React.FC<ShoesCardProps> = (data) => {
                     >{data.shoesName}</Typography>
                 }
                 subheader={
-                    <Stack direction={"row"} gap={3} alignItems="center">
+                    <Stack direction={"row"} gap={2} alignItems="center">
                         <Typography>Size: {data.size}</Typography>
                         {
                             data.color &&
