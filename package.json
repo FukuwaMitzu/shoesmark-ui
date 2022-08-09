@@ -15,12 +15,15 @@
     "@mui/lab": "^5.0.0-alpha.92",
     "@mui/material": "^5.9.2",
     "@mui/x-data-grid": "^5.15.0",
+    "@rehooks/local-storage": "^2.4.4",
     "@tanstack/react-query": "^4.0.10",
     "@types/axios": "^0.14.0",
     "@types/jsonwebtoken": "^8.5.8",
     "@types/qs": "^6.9.7",
     "@types/react-color": "^3.0.6",
+    "@types/uuid": "^8.3.4",
     "axios": "^0.27.2",
+    "class-validator": "^0.13.2",
     "dayjs": "^1.11.4",
     "framer-motion": "^6.5.1",
     "jsonwebtoken": "^8.5.1",
@@ -32,7 +35,8 @@
     "react-color": "^2.19.3",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.34.0",
-    "reflect-metadata": "^0.1.13"
+    "reflect-metadata": "^0.1.13",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/node": "18.6.1",

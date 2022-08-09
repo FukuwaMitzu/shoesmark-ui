@@ -20,6 +20,9 @@ import LoadingButton from '@mui/lab/LoadingButton'
 import getAllShoesRequest, { GetAllShoesQueryKey } from '../../api/shoes/getAllShoesRequest'
 import Button from '@mui/material/Button'
 import ShoesCard from '../../components/ShoesCard/ShoesCard'
+import useCustomPagination from '../../components/CustomPagination/hooks/useCustomPagination'
+import CustomPagination from '../../components/CustomPagination/CustomPagination'
+
 
 
 type SearchFormInputs = {
@@ -40,8 +43,9 @@ const ShoesHome: NextPage = () => {
             size: ""
         }
     });
+    const { handlePagination, pagination, setPagination } = useCustomPagination({ limit: 15, offset: 0, total: 0 });
     //========Queries===========
-    const getAllShoesQuery = useQuery([GetAllShoesQueryKey], () => {
+    const getAllShoesQuery = useQuery([GetAllShoesQueryKey, { limit: pagination.limit, offset: pagination.offset }], () => {
         const queryData = {
             categoryIds: searchForm.getValues("categoryIds"),
             shoesName: searchForm.getValues("shoesName"),
@@ -50,10 +54,15 @@ const ShoesHome: NextPage = () => {
             size: searchForm.getValues("size") != "" ? searchForm.getValues("size") : undefined
         }
         return getAllShoesRequest({
+            limit: pagination.limit,
+            offset: pagination.offset,
             ...queryData
         })
     }, {
-        select: ({ data }) => data.data
+        select: (data) => data.data,
+        onSuccess: (data) => {
+            setPagination({ ...pagination, total: data.total })
+        }
     });
     const getAllColorQuery = useQuery([GetAllColorQueryKey], () => getAllColorRequest({
     }), {
@@ -75,7 +84,7 @@ const ShoesHome: NextPage = () => {
                 </Link>
                 <Typography color="text.primary">Tìm kiếm sản phẩm</Typography>
             </Breadcrumbs>
-            <Typography variant='h5' fontWeight={"bold"} color="text.primary">Tìm kiếm sản phẩm</Typography>
+            <Typography variant="h4" fontWeight={"bold"} textTransform={"uppercase"} color="text.primary">Tìm kiếm sản phẩm</Typography>
             <Box sx={{ marginTop: "35px" }}>
                 <form onSubmit={searchForm.handleSubmit(handleSearchForm)} onReset={() => searchForm.reset()}>
                     <Stack direction="row" spacing={1}>
@@ -171,11 +180,22 @@ const ShoesHome: NextPage = () => {
                 <Stack direction={"row"} flexWrap={"wrap"} gap={2} marginTop={"75px"}>
                     {
                         !getAllShoesQuery.isLoading && getAllShoesQuery.data &&
-                        getAllShoesQuery.data.map((shoes) => (
+                        getAllShoesQuery.data.data.map((shoes) => (
                             <ShoesCard key={shoes.shoesId} {...shoes}></ShoesCard>
                         ))
                     }
                 </Stack>
+                {
+                    getAllShoesQuery.data &&
+                    <Stack alignItems={"center"} marginTop={"35px"}>
+                        <CustomPagination
+                            limit={pagination.limit}
+                            offset={pagination.offset}
+                            total={pagination.total}
+                            onPageChange={handlePagination}
+                        />
+                    </Stack>
+                }
             </Box>
         </Box>
     )

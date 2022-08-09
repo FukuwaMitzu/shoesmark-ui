@@ -4,6 +4,8 @@ import { ApiRequestHandler, RequestWithAuth } from "../../interfaces/ApiRequestH
 import { JsonEntity } from "../../interfaces/JsonEntity";
 import { User } from "./user";
 
+export const GetMeQueryKey = "GetMeQueryKey";
+
 interface GetMeParam extends RequestWithAuth{
 }
 

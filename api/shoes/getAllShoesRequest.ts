@@ -8,6 +8,7 @@ import * as qs from "qs";
 export const GetAllShoesQueryKey = "GetAllShoes";
 
 interface GetAllShoesParam extends RequestWithPagination{
+    ids?: string[]
     shoesName?: string
     categoryIds?: string[]
     colorId?:string

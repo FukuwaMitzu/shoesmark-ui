@@ -5,13 +5,13 @@ import Box from "@mui/material/Box"
 import Toolbar from "@mui/material/Toolbar"
 import Typography from "@mui/material/Typography"
 import { useSession } from "next-auth/react"
-import Searchbar from "./SearchBar/searchBar"
-import CartButton from "./CartButton/cartButton"
-import NotificationButton from "./NotificationButton/notificationButton"
+import Searchbar from "./SearchBar/SearchBar"
+import CartButton from "./CartButton/CartButton"
+import NotificationButton from "./NotificationButton/NotificationButton"
 import Link from "next/link"
 import MuiLink from "@mui/material/Link"
 import { styled } from "@mui/material/styles"
-import MobileMenu from "./MobileMenu/mobileMenu"
+import MobileMenu from "./MobileMenu/MobileMenu"
 import Container from "@mui/material/Container";
 
 const DesktopButtons = styled(Toolbar)(({ theme }) => ({

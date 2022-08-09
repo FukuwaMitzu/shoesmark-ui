@@ -72,10 +72,12 @@ const MobileMenu: React.FC = (props) => {
                         </>
                     }
                     <ListItem disablePadding>
-                        <ListItemButton>
-                            <ListItemIcon><LocalMallIcon /></ListItemIcon>
-                            <ListItemText>Giỏ hàng</ListItemText>
-                        </ListItemButton>
+                        <Link href={"/cart"} passHref>
+                            <ListItemButton>
+                                <ListItemIcon><LocalMallIcon /></ListItemIcon>
+                                <ListItemText>Giỏ hàng</ListItemText>
+                            </ListItemButton>
+                        </Link>
                     </ListItem>
                     {
                         session.status == "authenticated" &&

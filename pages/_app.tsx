@@ -10,7 +10,7 @@ import Auth, { AuthOptions } from '../components/Auth';
 import { createTheme } from '@mui/material/styles';
 import { SnackbarProvider } from 'notistack';
 
-import ClientLayout from '../views/clientlayout/clientLayout';
+import ClientLayout from '../views/clientlayout/ClientLayout';
 
 //Day js setup
 import dayjs from "dayjs";
