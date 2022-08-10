@@ -10,25 +10,31 @@ interface StepItem {
     name: string,
     label?: string,
     optional?: ReactNode,
+    status?: StepStatus,
     renderContent: () => ReactNode
 }
 interface CustomStepperProps {
     steps: StepItem[],
-    sticky?: boolean
+    sticky?: boolean,
+    onComplete?: (e:any[]) => void
 }
+export type StepStatus = "complete" | "valid" | "invalid";
 interface StepContext {
     name: string,
+    status: StepStatus
     data?: any
 }
 interface CustomStepperContextProps {
     initalContext: StepContext[]
     getContext: (contextName: string, defaultContext?: StepContext) => StepContext | undefined
     onContextUpdate: (contextName: string, data: any) => void
+    setStepStatus: (contextName:string, status: StepStatus)=>void
 }
 const CustomStepperContext = createContext<CustomStepperContextProps>({
     initalContext: [],
-    getContext: () => ({ name: "" }),
-    onContextUpdate: () => { }
+    getContext: () => ({ name: "", status: "invalid" }),
+    onContextUpdate: () => {},
+    setStepStatus: () => {}
 });
 
 const CustomStepper: React.FC<CustomStepperProps> = (data) => {
@@ -41,28 +47,48 @@ const CustomStepper: React.FC<CustomStepperProps> = (data) => {
         setActiveStep(activeStep - 1);
     }
     //=============Context===============
-    const [initalContext, setInitialContext] = useState<StepContext[]>(data.steps.map((step) => ({ name: step.name })));
+    const [initalContext, setInitialContext] = useState<StepContext[]>(data.steps.map((step) => ({ name: step.name, status: step.status ?? "invalid"})));
 
     const getContext = (contextName: string, defaultContext?: StepContext) => {
         return initalContext.find((context) => context.name == contextName) ?? defaultContext;
     }
 
-    const disabled = !Boolean(initalContext[activeStep].data);
-
+    //Stop going next step
+    const nextDisabled = initalContext[activeStep].status == "invalid";
+    //Stop going back step
+    const backDisabled = initalContext[activeStep].status == "complete" || (activeStep>0 ? initalContext[activeStep-1].status == "complete" : false);
     const onContextUpdate = (contextName: string, data: any) => {
         const context = initalContext.find((context) => context.name == contextName);
         if (context) {
-            context.data = data;
-            setInitialContext([...initalContext]);
+            if(context.status!="complete"){
+                context.data = data;
+                setInitialContext([...initalContext]);
+            }
+        }
+    }
+
+    const setStepStatus = (contextName:string, status: StepStatus)=>{
+        const context = initalContext.find((context) => context.name == contextName);
+        if (context) {
+            if(context.status!="complete")
+            {
+                context.status = status;
+                setInitialContext([...initalContext]);
+            }
+        }
+    }
+
+    const handleComplete = ()=>{
+        if(data.onComplete){
+            data.onComplete(initalContext);
         }
     }
     //========================================
 
     if (data.steps.length == 0) return <></>;
-    
 
     return (
-        <CustomStepperContext.Provider value={{ initalContext, getContext, onContextUpdate }}>
+        <CustomStepperContext.Provider value={{ initalContext, getContext, onContextUpdate, setStepStatus}}>
             <Box
                 sx={data.sticky ? {
                     marginTop: "15px",
@@ -93,7 +119,7 @@ const CustomStepper: React.FC<CustomStepperProps> = (data) => {
                     data.sticky &&
                     <Stack direction={"row"} spacing={2} marginTop="15px">
                         {
-                            activeStep > 0 &&
+                            activeStep > 0 && !backDisabled &&
                             <Button color="inherit" onClick={handleOnBack}>Back</Button>
                         }
                         <Box sx={{ flex: 1 }}></Box>
@@ -103,9 +129,9 @@ const CustomStepper: React.FC<CustomStepperProps> = (data) => {
                         }
                         {
                             activeStep == data.steps.length - 1 ?
-                                <Button>Complete</Button>
+                                <Button disabled={nextDisabled} onClick={handleComplete}>Complete</Button>
                                 :
-                                <Button disabled={disabled} onClick={handleNextStep}>Next</Button>
+                                <Button disabled={nextDisabled} onClick={handleNextStep}>Next</Button>
                         }
                     </Stack>
                 }
@@ -119,7 +145,7 @@ const CustomStepper: React.FC<CustomStepperProps> = (data) => {
                 !data.sticky &&
                 <Stack direction={"row"} spacing={2} marginTop="15px">
                     {
-                        activeStep > 0 &&
+                        activeStep > 0 && !backDisabled &&
                         <Button color="inherit" onClick={handleOnBack}>Back</Button>
                     }
                     <Box sx={{ flex: 1 }}></Box>
@@ -129,9 +155,9 @@ const CustomStepper: React.FC<CustomStepperProps> = (data) => {
                     }
                     {
                         activeStep == data.steps.length - 1 ?
-                            <Button>Complete</Button>
+                            <Button disabled={nextDisabled} onClick={handleComplete}>Complete</Button>
                             :
-                            <Button disabled={disabled} onClick={handleNextStep}>Next</Button>
+                            <Button disabled={nextDisabled} onClick={handleNextStep}>Next</Button>
                     }
                 </Stack>
             }

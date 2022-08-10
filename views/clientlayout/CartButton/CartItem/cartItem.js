@@ -1,17 +1,11 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-
-import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Image from "next/image";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
 import IconButton from "@mui/material/IconButton";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { TextField } from "@mui/material";
+import TextField from "@mui/material/TextField";
 
 export default function CartItem(data) {
   return (

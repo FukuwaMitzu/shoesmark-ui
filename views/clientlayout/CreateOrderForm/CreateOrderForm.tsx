@@ -31,22 +31,20 @@ interface CreateOrderFormInputs {
     orderDistrict: string;
     orderAddress: string;
 }
-
 const CreateOrderForm: React.FC = (data) => {
     const session = useSession();
-    const { context, Update, Reset } = useStepper("CreateOrder");
-
+    const currentStep = useStepper("CreateOrder");
     const createForm = useForm<CreateOrderFormInputs>({
         defaultValues: {
-            orderGender: context?.data?.orderGender ?? genderList[2].value,
-            orderAddress: context?.data?.orderAddress ?? "",
-            orderFirstName: context?.data?.orderFirstName ?? "",
-            orderLastName: context?.data?.orderLastName ?? "",
-            orderPhoneNumber: context?.data?.orderPhoneNumber ?? "",
-            orderEmail: context?.data?.orderEmail ?? "",
-            postCode: context?.data?.postCode ?? "",
-            orderCity: context?.data?.orderCity ?? "",
-            orderDistrict: context?.data?.orderDistrict ?? "",
+            orderGender: currentStep.context?.data?.orderGender ?? genderList[2].value,
+            orderAddress: currentStep.context?.data?.orderAddress ?? "",
+            orderFirstName: currentStep.context?.data?.orderFirstName ?? "",
+            orderLastName: currentStep.context?.data?.orderLastName ?? "",
+            orderPhoneNumber: currentStep.context?.data?.orderPhoneNumber ?? "",
+            orderEmail: currentStep.context?.data?.orderEmail ?? "",
+            postCode: currentStep.context?.data?.postCode ?? "",
+            orderCity: currentStep.context?.data?.orderCity ?? "",
+            orderDistrict: currentStep.context?.data?.orderDistrict ?? "",
         }
     });
     //========Queries==============
@@ -66,7 +64,6 @@ const CreateOrderForm: React.FC = (data) => {
         initialData: (): any => ({ data: [] }),
         enabled: !!createForm.watch("city")
     });
-
     const getMyProfile = useQuery([GetMeQueryKey], () => getMeRequest({
         accessToken: session.data?.user?.accessToken
     }), {
@@ -83,12 +80,13 @@ const CreateOrderForm: React.FC = (data) => {
                 orderGender: data.gender,
             }, { keepDefaultValues: true });
         },
-        enabled: session.status == "authenticated" && !isDefined(context?.data),
+        enabled: session.status == "authenticated" && !isDefined(currentStep.context?.data),
     });
     //========Callbacks===========
     const handleSubmit: SubmitHandler<CreateOrderFormInputs> = (data) => {
     }
     //========Effects=============
+    //Form validation
     useEffect(() => {
         const delay = setTimeout(() => {
             let flag = true;
@@ -100,9 +98,10 @@ const CreateOrderForm: React.FC = (data) => {
             flag = flag && isNotEmpty(createForm.watch("orderAddress"));
             flag = flag && isNotEmpty(createForm.watch("postCode"));
             flag = flag && isNotEmpty(createForm.watch("orderPhoneNumber"));
-            if (flag && isDefined(context)) Update(createForm.getValues());
-            else if (isDefined(context)) Reset();
-        }, 350);
+            if (flag) currentStep.changeStepStatus("valid");
+            else currentStep.changeStepStatus("invalid");
+            currentStep.update(createForm.getValues());
+        }, 150);
         return () => clearTimeout(delay);
     }, [
         createForm.watch("orderFirstName"),
@@ -163,7 +162,7 @@ const CreateOrderForm: React.FC = (data) => {
                             render={({ field }) => (
                                 <Autocomplete
                                     freeSolo
-                                    value={createForm.getValues("orderCity") ? { name: createForm.getValues("orderCity") } : null}
+                                    value={createForm.getValues("orderCity")!=="" ? { name: createForm.getValues("orderCity") } : null}
                                     getOptionLabel={(option: any) => option.name}
                                     options={getProvince.data}
                                     renderInput={(params) => (
@@ -174,7 +173,7 @@ const CreateOrderForm: React.FC = (data) => {
                                         />
                                     )
                                     }
-                                    onChange={(e, value: any) => { field.onChange(value); createForm.setValue("orderCity", value?.name) }}
+                                    onChange={(e, value: any) => { field.onChange(value); createForm.setValue("orderCity", value?.name ?? "") }}
                                 />
                             )}
                         />
@@ -184,7 +183,7 @@ const CreateOrderForm: React.FC = (data) => {
                             render={({ field }) => (
                                 <Autocomplete
                                     freeSolo
-                                    value={createForm.getValues("orderDistrict") ? { name: createForm.getValues("orderDistrict") } : null}
+                                    value={createForm.getValues("orderDistrict")!=="" ? { name: createForm.getValues("orderDistrict") } : null}
                                     getOptionLabel={(option: any) => option.name}
                                     options={getDistrict.data}
                                     renderInput={(params) => (
@@ -195,7 +194,7 @@ const CreateOrderForm: React.FC = (data) => {
                                         />
                                     )
                                     }
-                                    onChange={(e, value: any) => { field.onChange(value); createForm.setValue("orderDistrict", value?.name) }}
+                                    onChange={(e, value: any) => { field.onChange(value); createForm.setValue("orderDistrict", value?.name??"") }}
                                 />
                             )}
                         />

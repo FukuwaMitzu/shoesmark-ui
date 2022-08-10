@@ -9,9 +9,9 @@ import { ManagerLayout } from '../views/layout/managerLayout';
 import Auth, { AuthOptions } from '../components/Auth';
 import { createTheme } from '@mui/material/styles';
 import { SnackbarProvider } from 'notistack';
-
 import ClientLayout from '../views/clientlayout/ClientLayout';
-
+import { LocalizationProvider } from '@mui/x-date-pickers';
+import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 //Day js setup
 import dayjs from "dayjs";
 import "dayjs/locale/vi";
@@ -47,6 +47,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: CustomAppPro
         refetchOnWindowFocus
       >
         <ThemeProvider theme={theme}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
           <SnackbarProvider>
             {
               Component.layout == "manager" ?
@@ -63,6 +64,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: CustomAppPro
                 </Auth>
             }
           </SnackbarProvider>
+          </LocalizationProvider>
         </ThemeProvider>
       </SessionProvider>
     </QueryClientProvider>

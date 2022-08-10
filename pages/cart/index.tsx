@@ -7,6 +7,7 @@ import MuiLink from "@mui/material/Link";
 import CustomStepper, { StepItem } from "../../components/CustomStepper/CustomStepper";
 import CartCustomize from "../../views/clientlayout/CartCustomize/CartCustomize";
 import CreateOrderForm from "../../views/clientlayout/CreateOrderForm/CreateOrderForm";
+import PaymentForm from "../../views/clientlayout/PaymentForm/PaymentForm";
 
 const steps:StepItem[] = [
     {
@@ -27,7 +28,7 @@ const steps:StepItem[] = [
         name: "Payment",
         label: "Thanh toán",
         renderContent: ()=>(
-            <Box>Hi there again</Box>
+            <PaymentForm></PaymentForm>
         )
     },
     {
@@ -39,8 +40,7 @@ const steps:StepItem[] = [
     }
 ];
 
-const CartPage: CustomNextPage = () => {
-    
+const CartPage: CustomNextPage = () => { 
     return (
         <Box>
             <Breadcrumbs sx={{ marginBottom: "15px" }}>
