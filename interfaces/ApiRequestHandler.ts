@@ -8,3 +8,6 @@ export interface RequestWithPagination{
     limit?: number,
     offset?: number
 }
+export interface RequestWithOrderSession{
+    orderSessionToken: string
+}

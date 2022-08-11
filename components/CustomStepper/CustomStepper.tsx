@@ -4,7 +4,7 @@ import Button from "@mui/material/Button";
 import Step from "@mui/material/Step";
 import StepLabel from "@mui/material/StepLabel";
 import Stepper from "@mui/material/Stepper";
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useEffect, useState } from "react";
 
 interface StepItem {
     name: string,
@@ -12,6 +12,15 @@ interface StepItem {
     optional?: ReactNode,
     status?: StepStatus,
     renderContent: () => ReactNode
+}
+type StepConditional = {
+    next: boolean | null
+    back: boolean | null
+}
+export type StepRequestCallBack = ()=>void
+type StepRequest = {
+    next: StepRequestCallBack
+    back: StepRequestCallBack
 }
 interface CustomStepperProps {
     steps: StepItem[],
@@ -25,62 +34,122 @@ interface StepContext {
     data?: any
 }
 interface CustomStepperContextProps {
-    initalContext: StepContext[]
+    initialContext: StepContext[]
+    onlyBackWhen: (contextName: string, value: boolean | null) => void
+    onlyNextWhen: (contextName: string, value: boolean | null) => void
     getContext: (contextName: string, defaultContext?: StepContext) => StepContext | undefined
     onContextUpdate: (contextName: string, data: any) => void
     setStepStatus: (contextName:string, status: StepStatus)=>void
+    onBackRequest: (contextName: string, callback: StepRequestCallBack)=>void
+    onNextRequest: (contextName: string, callback: StepRequestCallBack)=>void
 }
 const CustomStepperContext = createContext<CustomStepperContextProps>({
-    initalContext: [],
+    initialContext: [],
+    onlyBackWhen: ()=> undefined,
+    onlyNextWhen: ()=> undefined,
     getContext: () => ({ name: "", status: "invalid" }),
     onContextUpdate: () => {},
-    setStepStatus: () => {}
+    setStepStatus: () => {},
+    onBackRequest: ()=>undefined,
+    onNextRequest: ()=>undefined
 });
 
 const CustomStepper: React.FC<CustomStepperProps> = (data) => {
     const [activeStep, setActiveStep] = useState(0);
 
+    
+    //=============Context===============
+    const [initialContext, setInitialContext] = useState<StepContext[]>(data.steps.map((step) => ({ name: step.name, status: step.status ?? "invalid"})));
+    const [conditional, setConditional] = useState<StepConditional[]>(data.steps.map((step) => ({ next: null, back: null})));
+    const [requestCallBack, setRequestCallBack] = useState<StepRequest[]>(data.steps.map((step) => ({ next: ()=>{}, back: ()=>{}})));
+    const getContext = (contextName: string, defaultContext?: StepContext) => {
+        return initialContext.find((context) => context.name == contextName) ?? defaultContext;
+    }
+    //Check nextList condition
+    useEffect(()=>{
+        if(conditional[activeStep].next && activeStep < initialContext.length){
+            requestCallBack[activeStep].next();
+            setActiveStep(activeStep => activeStep + 1);
+        }
+    }, [conditional,requestCallBack, activeStep, initialContext.length]);
+
+    //Check backList condition
+    useEffect(()=>{
+        if(conditional[activeStep].back && activeStep > 0){
+            requestCallBack[activeStep].back();
+            setActiveStep(activeStep => activeStep- 1);
+        }
+    }, [conditional, requestCallBack , activeStep]);
+
+    //Handle steps
     const handleNextStep = () => {
-        setActiveStep(activeStep + 1);
+        if(conditional[activeStep].next == null){
+            requestCallBack[activeStep].next();
+            setActiveStep(activeStep=> activeStep + 1);
+        }
     }
     const handleOnBack = () => {
-        setActiveStep(activeStep - 1);
-    }
-    //=============Context===============
-    const [initalContext, setInitialContext] = useState<StepContext[]>(data.steps.map((step) => ({ name: step.name, status: step.status ?? "invalid"})));
-
-    const getContext = (contextName: string, defaultContext?: StepContext) => {
-        return initalContext.find((context) => context.name == contextName) ?? defaultContext;
-    }
-
-    //Stop going next step
-    const nextDisabled = initalContext[activeStep].status == "invalid";
-    //Stop going back step
-    const backDisabled = initalContext[activeStep].status == "complete" || (activeStep>0 ? initalContext[activeStep-1].status == "complete" : false);
-    const onContextUpdate = (contextName: string, data: any) => {
-        const context = initalContext.find((context) => context.name == contextName);
-        if (context) {
-            if(context.status!="complete"){
-                context.data = data;
-                setInitialContext([...initalContext]);
-            }
+        if(conditional[activeStep].back == null){
+            requestCallBack[activeStep].back();
+            setActiveStep(activeStep=> activeStep - 1);
         }
     }
 
+    //Stop going next step
+    const nextDisabled = initialContext[activeStep].status == "invalid";
+    //Stop going back step
+    const backDisabled = initialContext[activeStep].status == "complete" || (activeStep>0 ? initialContext[activeStep-1].status == "complete" : false);
+    const onContextUpdate = (contextName: string, data: any) => {
+        const context = initialContext.find((context) => context.name == contextName);
+        if (context) {
+            if(context.status!="complete"){
+                context.data = data;
+                setInitialContext(initialContext=>[...initialContext]);
+            }
+        }
+    }
+    const onlyNextWhen = (contextName:string, value: boolean | null)=>{
+        const index =  initialContext.findIndex((data)=>data.name==contextName);
+        if(index!=-1){
+            conditional[index].next = value;
+            setConditional(conditional=>[...conditional]);
+        }
+    }
+    const onlyBackWhen = (contextName:string, value: boolean | null)=>{
+        const index =  initialContext.findIndex((data)=>data.name==contextName);
+        if(index!=-1){
+            conditional[index].back = value;
+            setConditional(conditional=>[...conditional]);
+        }
+    }
+    const onNextRequest = (contextName: string, callback: StepRequestCallBack)=>{
+        const index =  initialContext.findIndex((data)=>data.name==contextName);
+        if(index!=-1){
+            requestCallBack[index].next = callback;
+            setRequestCallBack(conditional=>[...requestCallBack]);
+        }
+    }
+    const onBackRequest = (contextName: string, callback: StepRequestCallBack)=>{
+        const index =  initialContext.findIndex((data)=>data.name==contextName);
+        if(index!=-1){
+            requestCallBack[index].back = callback;
+            setRequestCallBack(conditional=>[...requestCallBack]);
+        }
+    }
     const setStepStatus = (contextName:string, status: StepStatus)=>{
-        const context = initalContext.find((context) => context.name == contextName);
+        const context = initialContext.find((context) => context.name == contextName);
         if (context) {
             if(context.status!="complete")
             {
                 context.status = status;
-                setInitialContext([...initalContext]);
+                setInitialContext(initialContext=>[...initialContext]);
             }
         }
     }
 
     const handleComplete = ()=>{
         if(data.onComplete){
-            data.onComplete(initalContext);
+            data.onComplete(initialContext);
         }
     }
     //========================================
@@ -88,7 +157,7 @@ const CustomStepper: React.FC<CustomStepperProps> = (data) => {
     if (data.steps.length == 0) return <></>;
 
     return (
-        <CustomStepperContext.Provider value={{ initalContext, getContext, onContextUpdate, setStepStatus}}>
+        <CustomStepperContext.Provider value={{ initialContext, onlyNextWhen, onlyBackWhen, getContext, onNextRequest, onBackRequest,  onContextUpdate, setStepStatus}}>
             <Box
                 sx={data.sticky ? {
                     marginTop: "15px",

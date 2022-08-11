@@ -1,10 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormLabel from "@mui/material/FormLabel";
 import Radio from "@mui/material/Radio";
 import RadioGroup from "@mui/material/RadioGroup";
-import { useSession } from "next-auth/react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import FormControl from "@mui/material/FormControl";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -34,10 +34,7 @@ interface PaymentFormInputs {
     cardNumber: string
 }
 const PaymentForm: React.FC<PaymentFormProps> = (data) => {
-    const session = useSession();
-
     const currentStep = useStepper("Payment");
-    const cartStep = useStepper("CartCustomize");
 
     const [openSuccessDialog, setOpenSuccessDialog] = useState(false);
 
@@ -52,6 +49,13 @@ const PaymentForm: React.FC<PaymentFormProps> = (data) => {
         }
     });
 
+    //Run callbacks when request triggered
+    useEffect(()=>{
+        currentStep.onNextRequest(()=>{
+            currentStep.changeStepStatus("complete");
+        });
+    },[]);
+
     //==========Queries===============
     const fakeOnlinePayment = useMutation(() => new Promise((ex, rej) => {
         setTimeout(() => {
@@ -60,11 +64,10 @@ const PaymentForm: React.FC<PaymentFormProps> = (data) => {
     }), {
         onSuccess: (data: any) => {
             paymentForm.setValue("onlinePaymentId", data);
-            currentStep.changeStepStatus("complete");
             setOpenSuccessDialog(true);
         }
     })
-
+    //=========Effects===============
     useEffect(() => {
         const delay = setTimeout(() => {
             if (paymentForm.getValues("paymentMethod") == "credit_card") {
@@ -80,21 +83,22 @@ const PaymentForm: React.FC<PaymentFormProps> = (data) => {
                 else if (currentStep.context?.status == "valid") currentStep.changeStepStatus("invalid");
             }
             else if (currentStep.context?.status == "invalid") currentStep.changeStepStatus("valid");
-            currentStep.update(paymentForm.getValues());
+            currentStep.updateData(paymentForm.getValues());
         }, 150);
         return () => clearTimeout(delay);
     }, [
         paymentForm.watch("paymentMethod"),
-        paymentForm.getValues("onlinePaymentId"),
-        paymentForm.getValues("cardExpiredDate"),
-        paymentForm.getValues("cardFullName"),
-        paymentForm.getValues("CVV"),
+        paymentForm.watch("onlinePaymentId"),
+        paymentForm.watch("cardExpiredDate"),
+        paymentForm.watch("cardFullName"),
+        paymentForm.watch("CVV"),
     ]);
 
     //=========Callbacks==============
     const handleClose = ()=>{
-        setOpenSuccessDialog(false)
+        setOpenSuccessDialog(false);
     }
+
     const handleSubmit: SubmitHandler<PaymentFormInputs> = (data) => {
         fakeOnlinePayment.mutate();
     }

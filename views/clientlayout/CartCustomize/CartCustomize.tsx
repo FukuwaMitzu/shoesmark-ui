@@ -22,14 +22,14 @@ const CartCustomize: React.FC = (data) => {
         select: ({ data }) => data.data,
         enabled: cart.length > 0,
         onSuccess: (data) => {
-            currentStep.update(cart);
+            currentStep.updateData(cart);
         }
     });
 
     useEffect(()=>{
         if(cart.length==0)currentStep.changeStepStatus("invalid");
         else if (currentStep.context?.status=="invalid") currentStep.changeStepStatus("valid");
-    }, [cart.length]);
+    }, [cart.length, currentStep]);
     
     return (
         <>

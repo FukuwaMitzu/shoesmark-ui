@@ -45,6 +45,7 @@ const CreateOrderForm: React.FC = (data) => {
             postCode: currentStep.context?.data?.postCode ?? "",
             orderCity: currentStep.context?.data?.orderCity ?? "",
             orderDistrict: currentStep.context?.data?.orderDistrict ?? "",
+            note: currentStep.context?.data?.note ?? "",
         }
     });
     //========Queries==============
@@ -100,19 +101,11 @@ const CreateOrderForm: React.FC = (data) => {
             flag = flag && isNotEmpty(createForm.watch("orderPhoneNumber"));
             if (flag) currentStep.changeStepStatus("valid");
             else currentStep.changeStepStatus("invalid");
-            currentStep.update(createForm.getValues());
+            currentStep.updateData(createForm.getValues());
         }, 150);
         return () => clearTimeout(delay);
     }, [
-        createForm.watch("orderFirstName"),
-        createForm.watch("orderLastName"),
-        createForm.watch("orderGender"),
-        createForm.watch("orderDistrict"),
-        createForm.watch("orderCity"),
-        createForm.watch("orderAddress"),
-        createForm.watch("postCode"),
-        createForm.watch("postCode"),
-        createForm.watch("orderPhoneNumber"),
+        createForm.watch(),
     ]);
 
     return (
