@@ -18,7 +18,7 @@ import Radio from "@mui/material/Radio";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import getManyOrderRequest from "../../../api/order/getManyOrderRequest";
 import getAllUserRequest from "../../../api/user/getAllUserRequest";
 import { useEffect } from "react";
@@ -26,6 +26,7 @@ import CustomDataGrid from "../../../views/layout/CustomDataGrid/CustomDataGrid"
 import {
   GridColDef,
   GridRenderCellParams,
+  GridRowId,
   GridValueGetterParams,
 } from "@mui/x-data-grid";
 import Avatar from "@mui/material/Avatar";
@@ -34,7 +35,7 @@ import LaunchOutlinedIcon from "@mui/icons-material/LaunchOutlined";
 import stringAvatar from "../../../util/stringAvatar";
 import dayjs from "dayjs";
 import currencyFormater from "../../../util/currencyFormater";
-
+import deleteManyOrderRequest from "../../../api/order/deleteManyOrderRequest";
 
 const columns: GridColDef[] = [
   {
@@ -56,7 +57,9 @@ const columns: GridColDef[] = [
     headerName: "Phương thức thanh toán",
     width: 200,
     valueGetter: (data: GridValueGetterParams) => {
-      return data.row.paymentMethod == "credit_card"? "Thanh toán trực tuyến" : "Thanh toán khi nhận hàng" ;
+      return data.row.paymentMethod == "credit_card"
+        ? "Thanh toán trực tuyến"
+        : "Thanh toán khi nhận hàng";
     },
   },
   {
@@ -74,7 +77,10 @@ const columns: GridColDef[] = [
     headerName: "Số lượng mua",
     width: 150,
     valueGetter: (data: GridValueGetterParams) => {
-      return data.row.details.reduce((pre: number, current:any)=> pre + current.quantity, 0);
+      return data.row.details.reduce(
+        (pre: number, current: any) => pre + current.quantity,
+        0
+      );
     },
   },
   {
@@ -82,7 +88,9 @@ const columns: GridColDef[] = [
     headerName: "Thành tiền",
     width: 150,
     renderCell: (params: GridRenderCellParams<string>) => (
-      <Typography>{currencyFormater.format(parseFloat(params.value ?? "0"))}</Typography>
+      <Typography>
+        {currencyFormater.format(parseFloat(params.value ?? "0"))}
+      </Typography>
     ),
   },
   {
@@ -121,11 +129,10 @@ interface OrderFormInputs {
   ownerIds: string[];
   searchFor: string;
   fullName: string;
+  orderFullName: string;
 }
 
 const ImportOrderPage: CustomNextPage = () => {
-
-
   const session = useSession();
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   const router = useRouter();
@@ -139,20 +146,27 @@ const ImportOrderPage: CustomNextPage = () => {
     defaultValues: {
       ownerIds: [],
       fullName: "",
-      searchFor: "others",
+      searchFor: "any",
+      orderFullName: "",
     },
   });
 
   //========Queries====================
   const getManyOrderQuery = useQuery(
-    ["getManyOrder", { limit, offset }],
+    ["getManyOrder", { limit, offset }, searchForm.getValues("searchFor")],
     () => {
-      let ids = [];
+      let ids: string[] = [];
       if (searchForm.getValues("searchFor") == "me")
         ids.push(session.data?.user?.id ?? "");
-      else ids = searchForm.getValues("ownerIds");
+      else if (searchForm.getValues("searchFor") == "others")
+        ids = searchForm.getValues("ownerIds");
       return getManyOrderRequest({
-        ownerIds: ids,
+        ownerIds: ids.length > 0 ? ids : undefined,
+        onlyAnonymous: searchForm.getValues("searchFor") == "anonymous" ? true : undefined,
+        fullName:
+          searchForm.getValues("searchFor") == "any"
+            ? searchForm.getValues("orderFullName")
+            : undefined,
         limit: pagination.limit,
         offset: pagination.offset,
         accessToken: session.data?.user?.accessToken,
@@ -175,12 +189,39 @@ const ImportOrderPage: CustomNextPage = () => {
       select: (data) => data.data,
     }
   );
-
+  const deleteManyQuery = useMutation(
+    (ids: string[]) =>
+      deleteManyOrderRequest({
+        ids: ids,
+        accessToken: session.data?.user?.accessToken,
+      }),
+    {
+      onSuccess: (data, variables) => {
+        getManyOrderQuery.refetch();
+        enqueueSnackbar(`Đã xoá ${variables.length} phần tử`, {
+          variant: "success",
+        });
+      },
+      onError: (error) => {
+        enqueueSnackbar(`Xoá thất bại`, { variant: "error" });
+      },
+    }
+  );
   //========Callbacks==================
   const handleSearchForm: SubmitHandler<OrderFormInputs> = (data) => {
     getManyOrderQuery.refetch();
   };
-  const handleCreateImportOrder = () => {};
+  const handleCreateImportOrder = () => {
+    router.push(router.pathname + "/create");
+  };
+
+  const handleDeleteOrder = (
+    e: React.MouseEvent<HTMLButtonElement>,
+    selectedRows: Array<GridRowId>
+  ) => {
+    if (deleteManyQuery.isLoading) return;
+    deleteManyQuery.mutate(selectedRows.map((row) => row.toString()));
+  };
 
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
@@ -213,9 +254,9 @@ const ImportOrderPage: CustomNextPage = () => {
             control={searchForm.control}
             render={({ field }) => (
               <FormControl>
-                <FormLabel>Tìm kiếm hoá đơn:</FormLabel>
+                <FormLabel>Đối tượng tìm kiếm:</FormLabel>
                 <RadioGroup
-                  defaultValue="others"
+                  defaultValue="any"
                   name="radio-buttons-group"
                   onChange={(data, value) => field.onChange(value)}
                 >
@@ -225,9 +266,19 @@ const ImportOrderPage: CustomNextPage = () => {
                     label={"Chỉ mình tôi"}
                   />
                   <FormControlLabel
+                    value="anonymous"
+                    control={<Radio />}
+                    label={"Không là thành viên"}
+                  />
+                  <FormControlLabel
                     value="others"
                     control={<Radio />}
-                    label={"Của người khác"}
+                    label={"Của nhóm người"}
+                  />
+                  <FormControlLabel
+                    value="any"
+                    control={<Radio />}
+                    label={"Bất kỳ"}
                   />
                 </RadioGroup>
               </FormControl>
@@ -271,6 +322,13 @@ const ImportOrderPage: CustomNextPage = () => {
               )}
             />
           )}
+          {searchForm.watch("searchFor") == "any" && (
+            <Controller
+              name="orderFullName"
+              control={searchForm.control}
+              render={({ field }) => <TextField {...field} label="Tên" />}
+            />
+          )}
           <LoadingButton
             loading={getManyOrderQuery.isLoading}
             variant="contained"
@@ -290,6 +348,7 @@ const ImportOrderPage: CustomNextPage = () => {
           getRowId={(row) => row.orderId}
           onPageChange={handlePagination}
           onCreate={handleCreateImportOrder}
+          onDeleteConfirmed={handleDeleteOrder}
         />
       </Box>
     </Box>

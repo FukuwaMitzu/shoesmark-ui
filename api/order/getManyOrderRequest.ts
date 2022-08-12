@@ -9,6 +9,8 @@ export const GetManyOrderQueryKey = "GetManyOrderKey";
 
 interface GetManyOrderParam extends RequestWithPagination, RequestWithAuth{
     ownerIds?: string[]
+    fullName?: string
+    onlyAnonymous?: boolean
 }
 
 const getManyOrderRequest: ApiRequestHandler<GetManyOrderParam, JsonCollection<Order>> = ({accessToken,...data}) => axios.get(SHOESMARK_API_DOMAIN + "/order", {
@@ -17,7 +19,7 @@ const getManyOrderRequest: ApiRequestHandler<GetManyOrderParam, JsonCollection<O
     },
     headers: {
         "Authorization": `Bearer ${accessToken}`
-    } 
+    },
 });
 
 export default getManyOrderRequest;
