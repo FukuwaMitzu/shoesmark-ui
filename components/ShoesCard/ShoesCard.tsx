@@ -16,6 +16,8 @@ import WatchLaterIcon from '@mui/icons-material/WatchLater';
 import ListItemIcon from '@mui/material/ListItemIcon'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
 import CartModal from '../CartModal/CartModal'
+import Big from 'big.js'
+import currencyFormater from '../../util/currencyFormater'
 
 interface ShoesCardProps {
     shoesId: string,
@@ -35,13 +37,13 @@ const ShoesCard: React.FC<ShoesCardProps> = (shoes) => {
 
     const openMore = Boolean(moreAnchor);
 
-    const niemYet = shoes.price;
-    const khuyenMai = shoes.price * (100 - shoes.sale) / 100;
 
-    var formatter = new Intl.NumberFormat('vi', {
-        style: 'currency',
-        currency: 'VND',
-    });
+    const price = new Big(shoes.price);
+    const sale = new Big(shoes.sale);
+
+
+    const niemYet = price;
+    const khuyenMai = price.mul((new Big(100)).minus(sale).div(100));
 
     //=========CallBacks====================
     const handleMoreOption: MouseEventHandler<HTMLButtonElement> = (event) => {
@@ -130,14 +132,14 @@ const ShoesCard: React.FC<ShoesCardProps> = (shoes) => {
                     {
                         shoes.quantity > 0 ?
                             <>
-                                <Typography color="GrayText" sx={{ textDecorationLine: "line-through", opacity: shoes.sale != 0 ? 1 : 0 }}>{`${formatter.format(niemYet)}`}</Typography>
+                                <Typography color="GrayText" sx={{ textDecorationLine: "line-through", opacity: shoes.sale != 0 ? 1 : 0 }}>{`${currencyFormater.format(niemYet.toNumber())}`}</Typography>
                                 <Typography color={"error"} variant={"h6"}>
-                                    {formatter.format(khuyenMai)}
+                                    {currencyFormater.format(khuyenMai.toNumber())}
                                 </Typography>
                             </>
                             :
                             <>
-                                <Typography color="GrayText" sx={{ textDecorationLine: "line-through", opacity: 0 }}>{`${formatter.format(niemYet)}`}</Typography>
+                                <Typography color="GrayText" sx={{ textDecorationLine: "line-through", opacity: 0 }}>{`${currencyFormater.format(niemYet.toNumber())}`}</Typography>
                                 <Typography color={"error"} variant={"h6"}>
                                     Hết hàng
                                 </Typography>

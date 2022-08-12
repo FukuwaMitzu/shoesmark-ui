@@ -92,7 +92,7 @@ const DetailColorPage: CustomNextPage = () => {
                 </Link>
                 <Typography color="text.primary">Chi tiết</Typography>
             </Breadcrumbs>
-            <Typography variant="h4" sx={{ fontWeight: "bold", marginBottom: "25px" }}>Thông tin Màu sắc</Typography>
+            <Typography variant="h4" sx={{ fontWeight: "bold", textTransform:"uppercase", marginBottom: "25px" }}>Thông tin Màu sắc</Typography>
             <form onSubmit={editColorForm.handleSubmit(handleFormSubmit)}>
                 <Stack direction={"column"} spacing={3} width={"475px"}>
                     <Controller

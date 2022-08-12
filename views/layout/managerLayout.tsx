@@ -102,8 +102,8 @@ export const ManagerLayout: React.FC<ManagerLayoutProps> = ({ children }) => {
                             </AccordionSummary>
                             <AccordionDetails>
                                 <List>
+                                    <CustomListItemButton href="/admin/don-hang">Đơn hàng</CustomListItemButton>
                                     <CustomListItemButton href="/admin/hoa-don-nhap">Hoá đơn nhập</CustomListItemButton>
-                                    <CustomListItemButton href="/admin/hoa-don-xuat">Hoá đơn xuất</CustomListItemButton>
                                 </List>
                             </AccordionDetails>
                         </Accordion>

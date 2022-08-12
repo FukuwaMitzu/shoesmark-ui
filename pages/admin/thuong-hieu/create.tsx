@@ -61,7 +61,7 @@ const CreateBrandPage: CustomNextPage = () => {
                 </Link>
                 <Typography color="text.primary">Thêm Thương hiệu</Typography>
             </Breadcrumbs>
-            <Typography variant="h4" sx={{ fontWeight: "bold", marginBottom: "25px" }}>Thêm Thương hiệu</Typography>
+            <Typography variant="h4" sx={{ fontWeight: "bold", textTransform:"uppercase", marginBottom: "25px" }}>Thêm Thương hiệu</Typography>
             <form onSubmit={createBrandForm.handleSubmit(handleFormSubmit)}>
                 <Stack direction={"column"} spacing={3} width={"475px"}>
                     <FormControl>

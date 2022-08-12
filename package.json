@@ -9,20 +9,24 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@date-io/dayjs": "^2.14.0",
     "@emotion/react": "^11.9.3",
     "@emotion/styled": "^11.9.3",
     "@mui/icons-material": "^5.8.4",
     "@mui/lab": "^5.0.0-alpha.92",
     "@mui/material": "^5.9.2",
     "@mui/x-data-grid": "^5.15.0",
+    "@mui/x-date-pickers": "^5.0.0-beta.4",
     "@rehooks/local-storage": "^2.4.4",
     "@tanstack/react-query": "^4.0.10",
     "@types/axios": "^0.14.0",
+    "@types/big.js": "^6.1.5",
     "@types/jsonwebtoken": "^8.5.8",
     "@types/qs": "^6.9.7",
     "@types/react-color": "^3.0.6",
     "@types/uuid": "^8.3.4",
     "axios": "^0.27.2",
+    "big.js": "^6.2.1",
     "class-validator": "^0.13.2",
     "dayjs": "^1.11.4",
     "framer-motion": "^6.5.1",
@@ -36,6 +40,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.34.0",
     "reflect-metadata": "^0.1.13",
+    "sharp": "^0.30.7",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
@@ -45,5 +50,6 @@
     "eslint": "8.20.0",
     "eslint-config-next": "12.2.3",
     "typescript": "4.7.4"
-  }
+  },
+  "packageManager": "yarn@3.2.2"
 }

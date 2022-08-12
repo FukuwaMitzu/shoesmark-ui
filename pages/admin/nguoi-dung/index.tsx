@@ -124,7 +124,7 @@ const UserPage: CustomNextPage = ()=>{
                 </Link>
                 <Typography color="text.primary">Người dùng</Typography>
             </Breadcrumbs>
-            <Typography variant="h4" sx={{ fontWeight: "bold", marginBottom: "25px" }}>Quản lý Người dùng</Typography>
+            <Typography variant="h4" sx={{ fontWeight: "bold", textTransform:"uppercase", marginBottom: "25px" }}>Quản lý Người dùng</Typography>
             <form onSubmit={searchForm.handleSubmit(handleSearchForm)}>
                 <Stack direction={"column"} spacing={2} width={"475px"}>
                     <TextField fullWidth label="Tên người dùng" variant="outlined" {...searchForm.register("fullName")}></TextField>

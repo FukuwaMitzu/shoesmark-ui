@@ -64,7 +64,7 @@ const CreateCategoryPage: CustomNextPage = () => {
                 </Link>
                 <Typography color="text.primary">Thêm Thể loại</Typography>
             </Breadcrumbs>
-            <Typography variant="h4" sx={{ fontWeight: "bold", marginBottom: "25px" }}>Thêm Thể loại</Typography>
+            <Typography variant="h4" sx={{ fontWeight: "bold", textTransform:"uppercase", marginBottom: "25px" }}>Thêm Thể loại</Typography>
             <form onSubmit={createBrandForm.handleSubmit(handleFormSubmit)}>
                 <Stack direction={"column"} spacing={3} width={"475px"}>
                     <FormControl>

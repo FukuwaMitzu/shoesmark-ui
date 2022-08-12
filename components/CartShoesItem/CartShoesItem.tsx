@@ -12,6 +12,8 @@ import useLocalStorage from "@rehooks/local-storage";
 import { CartLocalStorge } from "../../interfaces/CartLocalStorge";
 import { Category } from "../../api/category/category";
 import Chip from "@mui/material/Chip";
+import { Brand } from "../../api/brand/brand";
+import Big from "big.js";
 
 interface CartShoesItemProps {
     shoesId: string,
@@ -23,6 +25,7 @@ interface CartShoesItemProps {
     buyQuantity: number,
     price: number,
     sale: number,
+    brand?: Brand,
     categories?: Category[],
 }
 
@@ -40,8 +43,12 @@ const CartShoesItem: React.FC<CartShoesItemProps> = (data) => {
         currency: 'VND',
     });
 
-    const niemYet = data.price * buyQuantity;
-    const khuyenMai = data.price * buyQuantity * (100 - data.sale) / 100;
+    const price = new Big(data.price);
+    const buy = new Big(buyQuantity);
+    const sale = new Big(data.sale);
+
+    const niemYet =  price.mul(buyQuantity);
+    const khuyenMai = price.mul(buyQuantity).mul((new Big(100)).minus(sale).div(100));
 
 
     const handleQuantityInput: ChangeEventHandler<HTMLInputElement | HTMLTextAreaElement> = (e) => {
@@ -74,6 +81,7 @@ const CartShoesItem: React.FC<CartShoesItemProps> = (data) => {
                 <Stack sx={{ flex: 1 }}>
                     <Typography>{data.shoesName}</Typography>
                     <Subheader direction={"row"} gap={2}>
+                        <Typography>{data.brand?.brandName}</Typography>
                         <Typography>Size: {data.size}</Typography>
                         {
                             data.color &&
@@ -94,10 +102,10 @@ const CartShoesItem: React.FC<CartShoesItemProps> = (data) => {
                     <Box sx={{ marginTop: "5px" }}>
                         {
                             data.sale > 0 &&
-                            <Typography color="GrayText" sx={{ textDecorationLine: "line-through" }}>{`${formatter.format(niemYet)}`}</Typography>
+                            <Typography color="GrayText" sx={{ textDecorationLine: "line-through" }}>{`${formatter.format(niemYet.toNumber())}`}</Typography>
                         }
                         <Typography color={"error"} variant={"h6"}>
-                            {formatter.format(khuyenMai)}
+                            {formatter.format(khuyenMai.toNumber())}
                         </Typography>
                     </Box>
                     <Box sx={{ flex: 1 }}></Box>

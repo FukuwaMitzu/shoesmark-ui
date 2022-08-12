@@ -13,7 +13,7 @@ import { CartLocalStorge } from "../../../interfaces/CartLocalStorge";
 const CartCustomize: React.FC = (data) => {
     const [cart, setCart] = useLocalStorage<CartLocalStorge>("cart", []);
 
-    const stepper = useStepper("CartCustomize");
+    const currentStep = useStepper("CartCustomize");
 
     //=======Queries==========
     const getAllShoes = useQuery([GetAllShoesQueryKey, cart.length], () => getAllShoesRequest({
@@ -22,12 +22,13 @@ const CartCustomize: React.FC = (data) => {
         select: ({ data }) => data.data,
         enabled: cart.length > 0,
         onSuccess: (data) => {
-            stepper.Update(cart);
+            currentStep.updateData(cart);
         }
     });
 
     useEffect(()=>{
-        if(cart.length==0)stepper.Reset();
+        if(cart.length==0)currentStep.changeStepStatus("invalid");
+        else if (currentStep.context?.status=="invalid") currentStep.changeStepStatus("valid");
     }, [cart.length]);
     
     return (

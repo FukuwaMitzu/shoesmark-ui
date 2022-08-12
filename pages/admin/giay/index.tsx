@@ -25,6 +25,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import Autocomplete from "@mui/material/Autocomplete";
 import getAllCategoryRequest from "../../../api/category/getAllCategoryRequest";
 import getAllColorRequest, { GetAllColorQueryKey } from "../../../api/color/getAllColorRequest";
+import currencyFormater from "../../../util/currencyFormater";
 
 const columns: GridColDef[] = [
     {
@@ -58,7 +59,7 @@ const columns: GridColDef[] = [
         headerName: "Đơn giá bán",
         width: 150,
         renderCell: (params: GridRenderCellParams<string>) => (
-            <Typography>{new Intl.NumberFormat("vi", { style: "currency", currency: "VND" }).format(parseFloat(params.value ?? ""))}</Typography>
+            <Typography>{currencyFormater.format(parseFloat(params.value ?? ""))}</Typography>
         )
     },
     {
@@ -161,7 +162,7 @@ const ShoesPage: CustomNextPage = () => {
                 </Link>
                 <Typography color="text.primary">Giày</Typography>
             </Breadcrumbs>
-            <Typography variant="h4" sx={{ fontWeight: "bold", marginBottom: "25px" }}>Quản lý Giày</Typography>
+            <Typography variant="h4" sx={{ fontWeight: "bold", textTransform:"uppercase", marginBottom: "25px" }}>Quản lý Giày</Typography>
             <form onSubmit={searchForm.handleSubmit(handleSearchForm)}>
                 <Stack direction={"column"} spacing={2} width={"475px"}>
                     <TextField fullWidth label="Tên giày" variant="outlined" {...searchForm.register("shoesName")}></TextField>

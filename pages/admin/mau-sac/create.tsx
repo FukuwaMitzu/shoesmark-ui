@@ -70,7 +70,7 @@ const CreateColorPage: CustomNextPage = () => {
                 </Link>
                 <Typography color="text.primary">Thêm Màu</Typography>
             </Breadcrumbs>
-            <Typography variant="h4" sx={{ fontWeight: "bold", marginBottom: "25px" }}>Thêm Màu sắc</Typography>
+            <Typography variant="h4" sx={{ fontWeight: "bold", textTransform:"uppercase", marginBottom: "25px" }}>Thêm Màu sắc</Typography>
             <form onSubmit={createColorForm.handleSubmit(handleFormSubmit)}>
                 <Stack direction={"column"} spacing={3} width={"475px"}>
                     <Controller

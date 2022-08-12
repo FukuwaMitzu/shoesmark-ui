@@ -91,7 +91,7 @@ const BrandPage: CustomNextPage = ()=>{
                 </Link>
                 <Typography color="text.primary">Thương hiệu</Typography>
             </Breadcrumbs>
-            <Typography variant="h4" sx={{ fontWeight: "bold", marginBottom: "25px" }}>Quản lý Thương hiệu</Typography>
+            <Typography variant="h4" sx={{ fontWeight: "bold", textTransform:"uppercase", marginBottom: "25px" }}>Quản lý Thương hiệu</Typography>
             <form onSubmit={searchForm.handleSubmit(handleSearchForm)}>
                 <Stack direction={"column"} spacing={2} width={"475px"}>
                     <TextField fullWidth label="Tên thương hiệu" variant="outlined" {...searchForm.register("brandName")}></TextField>

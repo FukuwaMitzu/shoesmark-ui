@@ -104,7 +104,7 @@ const CreateShoesPage: CustomNextPage = () => {
                 </Link>
                 <Typography color="text.primary">Thêm Giày</Typography>
             </Breadcrumbs>
-            <Typography variant="h4" sx={{ fontWeight: "bold", marginBottom: "25px" }}>Thêm Giày</Typography>
+            <Typography variant="h4" sx={{ fontWeight: "bold", textTransform:"uppercase", marginBottom: "25px" }}>Thêm Giày</Typography>
             <form onSubmit={createShoesForm.handleSubmit(handleCreateShoes)}>
                 <Stack direction={"row"} spacing={4} sx={{ marginBottom: "50px" }}>
                     <Stack spacing={2}>
@@ -243,7 +243,7 @@ const CreateShoesPage: CustomNextPage = () => {
                     </Stack>
                 </Stack>
                 <Box>
-                    <Typography variant="h4" sx={{ fontWeight: "bold", marginBottom: "25px" }}>Mô tả</Typography>
+                    <Typography variant="h4" sx={{ fontWeight: "bold", textTransform:"uppercase", marginBottom: "25px" }}>Mô tả</Typography>
                     <TextField
                         fullWidth
                         multiline

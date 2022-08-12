@@ -8,7 +8,8 @@ import CartItem from "./CartItem/cartItem";
 import Button from "@mui/material/Button";
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import Stack from "@mui/material/Stack";
-import { Divider } from "@mui/material";
+import Divider from "@mui/material/Divider";
+
 interface CartButtonProps {
 
 }
