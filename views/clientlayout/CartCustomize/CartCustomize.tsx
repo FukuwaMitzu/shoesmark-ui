@@ -29,7 +29,7 @@ const CartCustomize: React.FC = (data) => {
     useEffect(()=>{
         if(cart.length==0)currentStep.changeStepStatus("invalid");
         else if (currentStep.context?.status=="invalid") currentStep.changeStepStatus("valid");
-    }, [cart.length, currentStep]);
+    }, [cart.length]);
     
     return (
         <>

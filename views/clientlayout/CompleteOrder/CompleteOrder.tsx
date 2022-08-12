@@ -96,14 +96,14 @@ const CompleteOrder: React.FC = (data) => {
   }, [currentStep, loading]);
 
   useEffect(() => {
-    if (session.status == "authenticated") {
+    if (session.status == "authenticated" && !createMyOrder.isSuccess) {
       createMyOrder.mutate({
         postCode: createOrderStep.context?.data.postCode,
         note: createOrderStep.context?.data.note,
         orderFirstName: createOrderStep.context?.data.orderFirstName,
         orderLastName: createOrderStep.context?.data.orderLastName,
         orderPhoneNumber: createOrderStep.context?.data.orderPhoneNumber,
-        orderEmail: createOrderStep.context?.data.orderEmail,
+        orderEmail: createOrderStep.context?.data.orderEmail != "" ? createOrderStep.context?.data.orderEmail: undefined,
         orderGender: createOrderStep.context?.data.orderGender,
         orderCity: createOrderStep.context?.data.orderCity,
         orderDistrict: createOrderStep.context?.data.orderDistrict,
@@ -112,14 +112,14 @@ const CompleteOrder: React.FC = (data) => {
         onlinePaymentId: paymentStep.context?.data.onlinePaymentId,
         accessToken: session.data.user?.accessToken,
       });
-    } else if (session.status == "unauthenticated") {
+    } else if (session.status == "unauthenticated" && !createAnonymousOrder.isSuccess) {
       createAnonymousOrder.mutate({
         postCode: createOrderStep.context?.data.postCode,
         note: createOrderStep.context?.data.note,
         orderFirstName: createOrderStep.context?.data.orderFirstName,
         orderLastName: createOrderStep.context?.data.orderLastName,
         orderPhoneNumber: createOrderStep.context?.data.orderPhoneNumber,
-        orderEmail: createOrderStep.context?.data.orderEmail,
+        orderEmail: createOrderStep.context?.data.orderEmail !=""? createOrderStep.context?.data.orderEmail: undefined,
         orderGender: createOrderStep.context?.data.orderGender,
         orderCity: createOrderStep.context?.data.orderCity,
         orderDistrict: createOrderStep.context?.data.orderDistrict,
