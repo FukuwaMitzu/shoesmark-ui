@@ -27,6 +27,9 @@ import RadioGroup from "@mui/material/RadioGroup";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useState } from "react";
 import Divider from "@mui/material/Divider";
+import orderStatusList from "../../../../util/orderStatusList";
+import currencyFormater from "../../../../util/currencyFormater";
+import { OrderDetail } from "../../../../api/order/orderDetail";
 
 interface OrderFormInputs {
   firstName: string;
@@ -56,6 +59,8 @@ const OrderDetailPage: CustomNextPage = () => {
   const session = useSession();
 
   const [editing, setEditing] = useState(false);
+  
+  const [temporaryDetailOrder, setTemporaryDetailOrder] = useState<OrderDetail[]>([]);
 
   const orderForm = useForm<OrderFormInputs>({
     defaultValues: {
@@ -70,6 +75,7 @@ const OrderDetailPage: CustomNextPage = () => {
       orderDistrict: "",
       paymentMethod: "pay_on_receive",
       note: "",
+      status: orderStatusList[0].value,
       onlinePaymentId: "",
     },
   });
@@ -83,12 +89,14 @@ const OrderDetailPage: CustomNextPage = () => {
         accessToken: session.data?.user?.accessToken,
       }),
     {
+      refetchOnWindowFocus: false,
       select: ({ data }) => data.data,
       onSuccess: (data) => {
         orderForm.reset({
           ...data,
           ownerId: data.owner?.userId,
         });
+        setTemporaryDetailOrder([...data.details]);
       },
     }
   );
@@ -136,7 +144,11 @@ const OrderDetailPage: CustomNextPage = () => {
       </Breadcrumbs>
       <Typography
         variant="h4"
-        sx={{ fontWeight: "bold", textTransform:"uppercase", marginBottom: "25px" }}
+        sx={{
+          fontWeight: "bold",
+          textTransform: "uppercase",
+          marginBottom: "25px",
+        }}
       >
         Thông tin đơn hàng
       </Typography>
@@ -384,19 +396,41 @@ const OrderDetailPage: CustomNextPage = () => {
             </Box>
           </Stack>
         </Stack>
-        <Divider sx={{marginY:"50px"}}/>
+        <Divider sx={{ marginY: "50px" }} />
         <Box>
-            <Typography
-                variant="h5"
-                fontWeight={"bold"}
-                textTransform={"uppercase"}
-                sx={{ marginBottom: "25px" }}
-                >
-                Chi tiết đơn hàng
-            </Typography>
-            <Box>
-
+          <Typography
+            variant="h5"
+            fontWeight={"bold"}
+            textTransform={"uppercase"}
+            sx={{ marginBottom: "25px" }}
+          >
+            Chi tiết đơn hàng
+          </Typography>
+          <Box>
+            <Box sx={{marginBottom: "15px"}}>
+              <Typography>Giá trị đơn hàng: {currencyFormater.format(orderForm.getValues("totalPrice"))}</Typography>
+              <Typography>Tổng số sản phẩm: {getOrderQuery.data?.details.reduce((pre, current)=> current.quantity + pre, 0)}</Typography>
             </Box>
+            <Controller
+              name="status"
+              control={orderForm.control}
+              render={({ field }) => (
+                <FormControl disabled={!editing} fullWidth>
+                  <InputLabel>Trạng thái đơn hàng</InputLabel>
+                  <Select {...field} label="Trạng thái đơn hàng">
+                    {orderStatusList.map((status) => (
+                      <MenuItem key={status.id} value={status.value}>
+                        <Typography>{status.title}</Typography>
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              )}
+            /> 
+            <Box>
+                
+            </Box>       
+          </Box>
         </Box>
       </form>
     </Box>

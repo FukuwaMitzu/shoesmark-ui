@@ -917,6 +917,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/big.js@npm:^6.1.5":
+  version: 6.1.5
+  resolution: "@types/big.js@npm:6.1.5"
+  checksum: 5eb1472c1fb05fef37971aed449aa8dbe485fde1ca1c316911ae8cbd437ecd1f3a56964fc7d439bdcbe8e2585ec3febabc205d291177d5a0119bafaf872604b8
+  languageName: node
+  linkType: hard
+
 "@types/json5@npm:^0.0.29":
   version: 0.0.29
   resolution: "@types/json5@npm:0.0.29"
@@ -1331,6 +1338,13 @@ __metadata:
   version: 1.5.1
   resolution: "base64-js@npm:1.5.1"
   checksum: 669632eb3745404c2f822a18fc3a0122d2f9a7a13f7fb8b5823ee19d1d2ff9ee5b52c53367176ea4ad093c332fd5ab4bd0ebae5a8e27917a4105a4cfc86b1005
+  languageName: node
+  linkType: hard
+
+"big.js@npm:^6.2.1":
+  version: 6.2.1
+  resolution: "big.js@npm:6.2.1"
+  checksum: 0b234a2fd56c52bed2798ed2020bcab6fef5e9523b99a05406ad071d1aed6ee97ada9fb8de9576092da74c68825c276e19015743b8d1baea269b60a5c666b0cd
   languageName: node
   linkType: hard
 
@@ -4285,6 +4299,7 @@ __metadata:
     "@rehooks/local-storage": ^2.4.4
     "@tanstack/react-query": ^4.0.10
     "@types/axios": ^0.14.0
+    "@types/big.js": ^6.1.5
     "@types/jsonwebtoken": ^8.5.8
     "@types/node": 18.6.1
     "@types/qs": ^6.9.7
@@ -4293,6 +4308,7 @@ __metadata:
     "@types/react-dom": 18.0.6
     "@types/uuid": ^8.3.4
     axios: ^0.27.2
+    big.js: ^6.2.1
     class-validator: ^0.13.2
     dayjs: ^1.11.4
     eslint: 8.20.0
