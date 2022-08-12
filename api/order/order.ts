@@ -3,7 +3,7 @@ import { OrderDetail } from "./orderDetail";
 
 export interface Order{
   orderId: string;
-  owner: User;
+  owner?: User;
   status: string;
   totalPrice: number;
   postCode: string;

@@ -107,7 +107,7 @@ const PaymentForm: React.FC<PaymentFormProps> = (data) => {
             <Typography variant="h4" fontWeight={"bold"} textTransform={"uppercase"} color="text.primary">Thanh toán</Typography>
             <Box marginTop="25px">
                 <FormControl>
-                    <FormLabel>Hình thức thanh toán</FormLabel>
+                    <FormLabel>Phương thức thanh toán</FormLabel>
                     <Controller
                         name="paymentMethod"
                         control={paymentForm.control}

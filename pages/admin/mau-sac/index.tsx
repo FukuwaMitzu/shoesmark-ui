@@ -101,7 +101,7 @@ const ColorPage: CustomNextPage = () => {
                 </Link>
                 <Typography color="text.primary">Màu sắc</Typography>
             </Breadcrumbs>
-            <Typography variant="h4" sx={{ fontWeight: "bold", marginBottom: "25px" }}>Quản lý Màu sắc</Typography>
+            <Typography variant="h4" sx={{ fontWeight: "bold", textTransform:"uppercase", marginBottom: "25px" }}>Quản lý Màu sắc</Typography>
             <form onSubmit={searchForm.handleSubmit(handleSearchForm)}>
                 <Stack direction={"column"} spacing={2} width={"475px"}>
                     <TextField fullWidth label="Tên màu" variant="outlined" {...searchForm.register("colorName")}></TextField>

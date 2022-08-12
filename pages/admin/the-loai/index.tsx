@@ -105,7 +105,7 @@ const CategoryPage: CustomNextPage = ()=>{
                 </Link>
                 <Typography color="text.primary">Thể loại</Typography>
             </Breadcrumbs>
-            <Typography variant="h4" sx={{ fontWeight: "bold", marginBottom: "25px" }}>Quản lý Thể loại</Typography>
+            <Typography variant="h4" sx={{ fontWeight: "bold", textTransform:"uppercase", marginBottom: "25px" }}>Quản lý Thể loại</Typography>
             <form onSubmit={searchForm.handleSubmit(handleSearchForm)}>
                 <Stack direction={"column"} spacing={2} width={"475px"}>
                     <TextField fullWidth label="Tên thể loại" variant="outlined" {...searchForm.register("categoryName")}></TextField>

@@ -150,7 +150,7 @@ const DetailShoesPage: CustomNextPage = () => {
                 </Link>
                 <Typography color="text.primary">Chi tiết Giày</Typography>
             </Breadcrumbs>
-            <Typography variant="h4" sx={{ fontWeight: "bold", marginBottom: "25px" }}>Chi tiết Giày</Typography>
+            <Typography variant="h4" sx={{ fontWeight: "bold", textTransform:"uppercase", marginBottom: "25px" }}>Chi tiết Giày</Typography>
             <form onSubmit={editShoesForm.handleSubmit(handleEditShoes)}>
                 <Stack direction={"row"} spacing={4}>
                     <Stack spacing={2}>

@@ -137,7 +137,7 @@ const CreateUserPage: CustomNextPage = () => {
                 </Link>
                 <Typography color="text.primary">Thêm Người dùng</Typography>
             </Breadcrumbs>
-            <Typography variant="h4" sx={{ fontWeight: "bold", marginBottom: "25px" }}>Thêm Người dùng</Typography>
+            <Typography variant="h4" sx={{ fontWeight: "bold", textTransform:"uppercase", marginBottom: "25px" }}>Thêm Người dùng</Typography>
             <form onSubmit={createUserForm.handleSubmit(handleFormSubmit)}>
                 <Stack spacing={2} width={"450px"}>
                     <TextField

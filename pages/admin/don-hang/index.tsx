@@ -243,7 +243,7 @@ const ImportOrderPage: CustomNextPage = () => {
       </Breadcrumbs>
       <Typography
         variant="h4"
-        sx={{ fontWeight: "bold", marginBottom: "25px" }}
+        sx={{ fontWeight: "bold", textTransform:"uppercase", marginBottom: "25px" }}
       >
         Quản lý Đơn hàng
       </Typography>
