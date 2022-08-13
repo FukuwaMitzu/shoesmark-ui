@@ -127,6 +127,7 @@ const ShoesCard: React.FC<ShoesCardProps> = (shoes) => {
                     height={"75px"}
                     objectFit={"cover"}
                     src={`${SHOESMARK_API_DOMAIN}/${shoes.shoesImage}`}
+                    alt={shoes.shoesName}
                 />
                 <CardContent>
                     {

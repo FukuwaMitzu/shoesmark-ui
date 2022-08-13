@@ -16,6 +16,7 @@ interface GetAllShoesParam extends RequestWithPagination{
         from: number,
         to?: number
     }
+    SKU?:string
 }
 
 

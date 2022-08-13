@@ -10,7 +10,7 @@ import getOrderRequest, {
 } from "../../../../api/order/getOrderRequest";
 import { useSession } from "next-auth/react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -29,11 +29,33 @@ import { useState } from "react";
 import Divider from "@mui/material/Divider";
 import orderStatusList from "../../../../util/orderStatusList";
 import currencyFormater from "../../../../util/currencyFormater";
-import { OrderDetail } from "../../../../api/order/orderDetail";
+import DetailOrderItem from "../../../../components/DetailOrderItem/DetailOrderItem";
+import Big from "big.js";
+import EditIcon from "@mui/icons-material/Edit";
+import SaveIcon from "@mui/icons-material/Save";
+import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
+import OptionDial, {
+  OptionDialItem,
+} from "../../../../components/OptionDial/OptionDial";
+import Button from "@mui/material/Button";
+import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
+import ShoesSearchDialog from "../../../../components/ShoesSearchDialog/ShoesSearchDialog";
+import { Shoes } from "../../../../api/shoes/shoes";
+import extractDiff from "../../../../util/extractDiff";
+import { isNotEmptyObject } from "class-validator";
+import editOrderDetailRequest from "../../../../api/order/editOrderDetail";
+import deleteOrderDetailRequest from "../../../../api/order/deleteOrderDetail";
+import createOrderDetailRequest from "../../../../api/order/createOrderDetail";
+import editOrderRequest from "../../../../api/order/editOrder";
 
+type QueueTransaction = {
+  order?: any;
+  deleteQueue?: TemporaryOrderDetail[];
+  updateQueue?: TemporaryOrderDetail[];
+  addQueue?: TemporaryOrderDetail[];
+};
 interface OrderFormInputs {
-  firstName: string;
-  lastName: string;
+  orderId: string;
   ownerId: string;
   status: string;
   totalPrice: number;
@@ -53,14 +75,23 @@ interface OrderFormInputs {
   onlinePaymentId?: string;
   datePurchased?: string;
 }
-
+interface TemporaryOrderDetail {
+  orderId: string;
+  shoesId: string;
+  shoes: Shoes;
+  quantity: number;
+  price: number;
+  sale: number;
+}
 const OrderDetailPage: CustomNextPage = () => {
   const router = useRouter();
   const session = useSession();
 
   const [editing, setEditing] = useState(false);
-  
-  const [temporaryDetailOrder, setTemporaryDetailOrder] = useState<OrderDetail[]>([]);
+  const [openShoesSearchDialog, setOpenShoesSearchDialog] = useState(false);
+  const [temporaryDetailOrder, setTemporaryDetailOrder] = useState<
+    TemporaryOrderDetail[]
+  >([]);
 
   const orderForm = useForm<OrderFormInputs>({
     defaultValues: {
@@ -92,11 +123,31 @@ const OrderDetailPage: CustomNextPage = () => {
       refetchOnWindowFocus: false,
       select: ({ data }) => data.data,
       onSuccess: (data) => {
-        orderForm.reset({
-          ...data,
-          ownerId: data.owner?.userId,
-        });
-        setTemporaryDetailOrder([...data.details]);
+        orderForm.reset(
+          {
+            orderId: data.orderId,
+            orderCity: data.orderCity,
+            orderFirstName: data.orderFirstName,
+            orderLastName: data.orderLastName,
+            datePurchased: data.datePurchased,
+            note: data.note,
+            onlinePaymentId: data.onlinePaymentId,
+            orderAddress: data.orderAddress,
+            orderDistrict: data.orderDistrict,
+            orderEmail: data.orderEmail,
+            orderGender: data.orderGender,
+            orderPhoneNumber: data.orderPhoneNumber,
+            paymentMethod: data.paymentMethod,
+            postCode: data.postCode,
+            status: data.status,
+            totalPrice: data.totalPrice,
+            ownerId: data.owner?.userId,
+          },
+          { keepDefaultValues: true }
+        );
+        setTemporaryDetailOrder(
+          JSON.parse(JSON.stringify(data.details)) as TemporaryOrderDetail[]
+        );
       },
     }
   );
@@ -125,10 +176,172 @@ const OrderDetailPage: CustomNextPage = () => {
       enabled: !!orderForm.watch("city"),
     }
   );
+
+  const updateOrderDetail = useMutation(
+    (data: QueueTransaction) => {
+      const updateOrder = isNotEmptyObject(data.order)
+        ? [
+            editOrderRequest({
+              ...data.order,
+              orderId: getOrderQuery.data?.orderId,
+              accessToken: session.data?.user?.accessToken,
+            }),
+          ]
+        : [];
+      const deleteQueue = data.deleteQueue
+        ? data.deleteQueue.map((queue) => {
+            return deleteOrderDetailRequest({
+              ...queue,
+              accessToken: session.data?.user?.accessToken,
+            });
+          })
+        : [];
+      const updateQueue = data.updateQueue
+        ? data.updateQueue.map((queue) => {
+            return editOrderDetailRequest({
+              ...queue,
+              accessToken: session.data?.user?.accessToken,
+            });
+          })
+        : [];
+      const addQueue = data.addQueue
+        ? data.addQueue.map((queue) => {
+            return createOrderDetailRequest({
+              ...queue,
+              accessToken: session.data?.user?.accessToken,
+            });
+          })
+        : [];
+      return Promise.all([
+        ...deleteQueue,
+        ...addQueue,
+        ...updateQueue,
+        ...updateOrder,
+      ]);
+    },
+    {
+      onSuccess: () => {
+        getOrderQuery.refetch();
+      },
+    }
+  );
+
   //========Callbacks===========
   const handleSubmit: SubmitHandler<OrderFormInputs> = (data) => {};
+  const handleChange = (shoesId: string, quantity: number) => {
+    const detail = temporaryDetailOrder.find(
+      (detail) => detail.shoesId == shoesId
+    );
+    if (detail) {
+      detail.quantity = quantity;
+      setTemporaryDetailOrder([...temporaryDetailOrder]);
+    }
+  };
+  const handleDelete = (shoesId: string) => {
+    const filter = temporaryDetailOrder.filter(
+      (shoes) => shoes.shoesId != shoesId
+    );
+    setTemporaryDetailOrder(filter);
+  };
+  const handleOpenShoesSearchDialog = () => {
+    setOpenShoesSearchDialog(true);
+  };
+  const handleCloseShoesSearchDialog = () => {
+    setOpenShoesSearchDialog(false);
+  };
+  const handleAddShoes = (shoes: Shoes) => {
+    const index = temporaryDetailOrder.findIndex(
+      (temp) => temp.shoesId == shoes.shoesId
+    );
+    if (index > -1) {
+      let temp = temporaryDetailOrder[index];
+      temporaryDetailOrder[index] = temporaryDetailOrder[0];
+      temporaryDetailOrder[0] = temp;
+      temp.price = shoes.price;
+      temp.sale = shoes.sale;
+    } else if (index == -1) {
+      temporaryDetailOrder.unshift({
+        orderId: orderForm.getValues("orderId"),
+        shoesId: shoes.shoesId,
+        quantity: 1,
+        shoes,
+        price: shoes.price,
+        sale: shoes.sale,
+      });
+      setTemporaryDetailOrder([...temporaryDetailOrder]);
+    }
+    handleCloseShoesSearchDialog();
+  };
+
+  const handleCompleteUpdate = () => {
+    const orderDiff = extractDiff(getOrderQuery.data, orderForm.getValues());
+
+    const details = getOrderQuery.data?.details;
+
+    const deleteQueue = details?.filter((data, index) => {
+      const tempIndex = temporaryDetailOrder.findIndex(
+        (temp) => temp.shoesId == data.shoesId
+      );
+      if (tempIndex == -1) {
+        details.splice(index, 1);
+      }
+      return tempIndex == -1;
+    });
+    const addQueue = temporaryDetailOrder.filter((temp, index) => {
+      const detailIndex = details?.findIndex(
+        (data) => data.shoesId == temp.shoesId
+      );
+      if (detailIndex == -1) {
+        temporaryDetailOrder.splice(index, 1);
+      }
+      return detailIndex == -1;
+    });
+
+    const updateQueue = temporaryDetailOrder.filter((data) => {
+      const detail = details?.find((e) => e.shoesId == data.shoesId);
+      if (detail) return isNotEmptyObject(extractDiff(data, detail));
+      else return false;
+    });
+
+    updateOrderDetail.mutate({
+      order: orderDiff,
+      addQueue,
+      deleteQueue,
+      updateQueue,
+    });
+  };
+
+  //Options dial
+  const options: OptionDialItem[] = [
+    {
+      icon: <EditIcon></EditIcon>,
+      title: "Sửa",
+      enabled: !editing,
+      onClick: () => {
+        setEditing(true);
+      },
+    },
+    {
+      icon: <ClearOutlinedIcon></ClearOutlinedIcon>,
+      title: "Huỷ",
+      enabled: editing,
+      onClick: () => {
+        setEditing(false);
+        getOrderQuery.refetch();
+      },
+    },
+    {
+      icon: <SaveIcon></SaveIcon>,
+      title: "Lưu",
+      enabled: editing,
+      onClick: () => {
+        setEditing(false);
+        handleCompleteUpdate();
+      },
+    },
+  ];
   return (
-    <Box>
+    <Box paddingBottom={"125px"}>
       <Breadcrumbs sx={{ marginBottom: "15px" }}>
         <Link href="/admin/dashboard" passHref>
           <MuiLink underline="hover" color="inherit">
@@ -293,7 +506,7 @@ const OrderDetailPage: CustomNextPage = () => {
                     disabled={!editing}
                     label="Ghi chú"
                     fullWidth
-                    {...orderForm.register("note")}
+                    {...field}
                   ></TextField>
                 )}
               />
@@ -368,18 +581,20 @@ const OrderDetailPage: CustomNextPage = () => {
                     )}
                   />
                 </FormControl>
-                <Controller
-                  name="onlinePaymentId"
-                  control={orderForm.control}
-                  render={({ field }) => (
-                    <TextField
-                      disabled={!editing}
-                      {...field}
-                      required
-                      label={"Mã giao dịch"}
-                    ></TextField>
-                  )}
-                />
+                {orderForm.watch("paymentMethod") == "credit_card" && (
+                  <Controller
+                    name="onlinePaymentId"
+                    control={orderForm.control}
+                    render={({ field }) => (
+                      <TextField
+                        disabled={!editing}
+                        {...field}
+                        required
+                        label={"Mã giao dịch"}
+                      ></TextField>
+                    )}
+                  />
+                )}
                 <Controller
                   name="datePurchased"
                   control={orderForm.control}
@@ -407,9 +622,32 @@ const OrderDetailPage: CustomNextPage = () => {
             Chi tiết đơn hàng
           </Typography>
           <Box>
-            <Box sx={{marginBottom: "15px"}}>
-              <Typography>Giá trị đơn hàng: {currencyFormater.format(orderForm.getValues("totalPrice"))}</Typography>
-              <Typography>Tổng số sản phẩm: {getOrderQuery.data?.details.reduce((pre, current)=> current.quantity + pre, 0)}</Typography>
+            <Box sx={{ marginBottom: "15px" }}>
+              <Typography>
+                Giá trị đơn hàng:{" "}
+                {currencyFormater.format(
+                  temporaryDetailOrder.length > 0
+                    ? temporaryDetailOrder
+                        .reduce((pre, current) => {
+                          const price = new Big(current.price);
+                          const quantity = new Big(current.quantity);
+                          const sale = new Big(current.sale);
+                          const khuyenMai = price
+                            .mul(quantity)
+                            .mul(new Big(100).minus(sale).div(100));
+                          return pre.plus(khuyenMai);
+                        }, new Big(0))
+                        .toNumber()
+                    : orderForm.getValues("totalPrice")
+                )}
+              </Typography>
+              <Typography>
+                Tổng số sản phẩm:{" "}
+                {temporaryDetailOrder.reduce(
+                  (pre, current) => current.quantity + pre,
+                  0
+                )}
+              </Typography>
             </Box>
             <Controller
               name="status"
@@ -426,12 +664,40 @@ const OrderDetailPage: CustomNextPage = () => {
                   </Select>
                 </FormControl>
               )}
-            /> 
-            <Box>
-                
-            </Box>       
+            />
+            <Box sx={{ marginY: "25px" }}>
+              <Button
+                sx={{ opacity: editing ? 1 : 0 }}
+                variant="outlined"
+                startIcon={<AddOutlinedIcon />}
+                onClick={handleOpenShoesSearchDialog}
+              >
+                Thêm mới
+              </Button>
+              <ShoesSearchDialog
+                open={openShoesSearchDialog}
+                onClose={handleCloseShoesSearchDialog}
+                onItemSelected={handleAddShoes}
+              ></ShoesSearchDialog>
+            </Box>
+            <Stack sx={{ marginY: "25px", minHeight: "275px" }} gap={5}>
+              {!getOrderQuery.isLoading &&
+                temporaryDetailOrder.map((detail) => (
+                  <DetailOrderItem
+                    key={detail.shoesId}
+                    {...detail.shoes}
+                    price={detail.price}
+                    sale={detail.sale}
+                    buyQuantity={detail.quantity}
+                    disabled={!editing}
+                    onChange={handleChange}
+                    onDelete={handleDelete}
+                  />
+                ))}
+            </Stack>
           </Box>
         </Box>
+        <OptionDial ariaLabel="Tuỳ chọn" options={options} />
       </form>
     </Box>
   );

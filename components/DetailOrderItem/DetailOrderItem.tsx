@@ -18,7 +18,7 @@ import Chip from "@mui/material/Chip";
 import { Brand } from "../../api/brand/brand";
 import currencyFormater from "../../util/currencyFormater";
 import Big from "big.js";
-
+import stringToColor from "../../util/stringToColor";
 interface DetailOrderItemProps {
   shoesId: string;
   shoesImage: string;
@@ -31,6 +31,7 @@ interface DetailOrderItemProps {
   sale: number;
   brand?: Brand;
   categories?: Category[];
+  disabled?: boolean;
   onChange?: (shoesId: string, quantity: number) => void;
   onDelete?: (shoesId: string) => void;
 }
@@ -40,31 +41,37 @@ const Subheader = styled(Stack)(({ theme }) => ({
   color: theme.palette.text.primary,
 }));
 
-const DetailOrderItem: React.FC<DetailOrderItemProps> = (data) => {
-  const [buyQuantity, setQuantity] = useState(data.buyQuantity);
+const DetailOrderItem: React.FC<DetailOrderItemProps> = (props) => {
+  const [buyQuantity, setQuantity] = useState(props.buyQuantity);
 
-  const price = new Big(data.price);
+  
+
+  const price = new Big(props.price);
   const buy = new Big(buyQuantity);
-  const sale = new Big(data.sale);
+  const sale = new Big(props.sale);
 
   const niemYet = price.mul(buy);
 
-  const khuyenMai = price.mul(buy.mul((new Big(100)).minus(sale)).div(100));
+  const khuyenMai = price.mul(buy.mul(new Big(100).minus(sale)).div(100));
 
   const handleQuantityInput: ChangeEventHandler<
     HTMLInputElement | HTMLTextAreaElement
   > = (e) => {
     const number = Number.parseInt(e.target.value);
     if (isNaN(number)) return;
-    setQuantity(Math.min(Math.max(number, 1), data.quantity));
+    setQuantity(Math.min(Math.max(number, 1), props.quantity));
   };
 
+  useEffect(()=>{
+    setQuantity(props.buyQuantity);
+  }, [props.buyQuantity]);
+
   useEffect(() => {
-    if (data.onChange) data.onChange(data.shoesId, data.quantity);
-  }, [data.quantity]);
+    if (props.onChange) props.onChange(props.shoesId, buyQuantity);
+  }, [buyQuantity]);
 
   const handleDeleteShoes: MouseEventHandler<HTMLButtonElement> = (e) => {
-    if (data.onDelete) data.onDelete(data.shoesId);
+    if (props.onDelete) props.onDelete(props.shoesId);
   };
 
   return (
@@ -74,23 +81,24 @@ const DetailOrderItem: React.FC<DetailOrderItemProps> = (data) => {
           <Image
             height={"150px"}
             width={"150px"}
-            src={`${SHOESMARK_API_DOMAIN}/${data.shoesImage}`}
+            src={`${SHOESMARK_API_DOMAIN}/${props.shoesImage}`}
+            alt={props.shoesName}
           ></Image>
         </Box>
         <Stack sx={{ flex: 1 }}>
-          <Typography>{data.shoesName}</Typography>
+          <Typography>{props.shoesName}</Typography>
           <Subheader direction={"row"} gap={2}>
-            <Typography>Size: {data.size}</Typography>
-            {data.color && (
+            <Typography>Size: {props.size}</Typography>
+            {props.color && (
               <Stack direction={"row"} alignItems="center" gap={1}>
                 <Box
                   sx={{
-                    backgroundColor: data.color?.colorHex,
+                    backgroundColor: props.color?.colorHex,
                     width: "15px",
                     height: "15px",
                   }}
                 ></Box>
-                <Typography>{data.color?.colorName}</Typography>
+                <Typography>{props.color?.colorName}</Typography>
               </Stack>
             )}
           </Subheader>
@@ -100,7 +108,17 @@ const DetailOrderItem: React.FC<DetailOrderItemProps> = (data) => {
             marginTop={"7px"}
             marginBottom={"7px"}
           >
-            {data.categories?.map((category) => (
+            {props.brand && (
+              <Chip
+                sx={{
+                  bgcolor: stringToColor(props.brand?.brandName),
+                  color: "white",
+                }}
+                label={props.brand?.brandName}
+                size="small"
+              />
+            )}
+            {props.categories?.map((category) => (
               <Chip
                 key={category.categoryId}
                 label={category.categoryName}
@@ -109,10 +127,10 @@ const DetailOrderItem: React.FC<DetailOrderItemProps> = (data) => {
             ))}
           </Stack>
           <Typography sx={{ marginY: "5px" }} color="GrayText">
-            Còn {data.quantity - buyQuantity} sản phẩm
+            Còn {props.quantity - buyQuantity} sản phẩm
           </Typography>
           <Box sx={{ marginTop: "5px" }}>
-            {data.sale > 0 && (
+            {props.sale > 0 && (
               <Typography
                 color="GrayText"
                 sx={{ textDecorationLine: "line-through" }}
@@ -130,6 +148,7 @@ const DetailOrderItem: React.FC<DetailOrderItemProps> = (data) => {
             alignItems={"center"}
           >
             <TextField
+              disabled={props.disabled}
               label="Số lượng"
               type={"number"}
               size="small"
@@ -138,9 +157,12 @@ const DetailOrderItem: React.FC<DetailOrderItemProps> = (data) => {
               onChange={handleQuantityInput}
             ></TextField>
             <Box sx={{ flex: 1 }}></Box>
-            <Button color="error" onClick={handleDeleteShoes}>
-              Xoá
+            {
+              !props.disabled &&
+              <Button color="error" onClick={handleDeleteShoes}>
+                Xoá
             </Button>
+            }
           </Stack>
         </Stack>
       </Stack>
