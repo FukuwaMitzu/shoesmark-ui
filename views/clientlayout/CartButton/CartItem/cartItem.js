@@ -11,7 +11,7 @@ export default function CartItem(data) {
   return (
     <Box sx={{ display: "flex" }}>
       <Image width={"100%"} height={"75px"} src={`${data.image}`} />
-      <Box sx={{ display: "flex", flexDirection: "column", flex: 1 }}>
+      <Box sx={{ display: "flex", flexDirection: "column", flex: 1}}>
         <CardContent sx={{ flex: "1 0 auto" }}>
           <Typography width={'250px'} noWrap="true">
             Chuck 70 Canvas
