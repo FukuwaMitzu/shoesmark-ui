@@ -5,7 +5,7 @@ export interface OrderDetail{
     orderId: string;
     shoesId: string;
     order: Partial<Order>;
-    shoes: Partial<Shoes>;
+    shoes: Shoes;
     quantity: number;
     price: number;
     sale: number;
