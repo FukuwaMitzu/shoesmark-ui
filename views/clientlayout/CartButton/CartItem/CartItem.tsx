@@ -69,14 +69,16 @@ const CartItem: React.FC<CartShoesPopoverItemProps> = (props) => {
   }, [buyQuantity]);
 
   return (
-    <Box sx={{ display: "flex" }}>
-      <Image
-        width={"120px"}
-        height={"120px"}
-        src={`${SHOESMARK_API_DOMAIN}/${props.shoesImage}`}
-        objectFit="cover"
-        alt="123"
-      />
+    <Box sx={{ display: "flex", width: "100%" }}>
+      <Box display={"block"} position={"relative"} width={"125px"}>
+        <Image
+          layout="fill"
+          height={"100%"}
+          src={`${SHOESMARK_API_DOMAIN}/${props.shoesImage}`}
+          objectFit="cover"
+          alt={props.shoesName}
+        />
+      </Box>
       <Box sx={{ display: "flex", flexDirection: "column", flex: 1 }}>
         <CardContent sx={{ flex: "1 0 auto" }}>
           <Typography width="175px" noWrap>
@@ -117,7 +119,9 @@ const CartItem: React.FC<CartShoesPopoverItemProps> = (props) => {
             {currencyFormater.format(khuyenMai.toNumber())}
           </Typography>
         </CardContent>
-        <Box sx={{ display: "flex", alignItems: "center", flex:1, pl: 9, pb: 1 }}>
+        <Box
+          sx={{ display: "flex", alignItems: "center", flex: 1, pl: 9, pb: 1 }}
+        >
           <Tooltip title="Xoá">
             <IconButton aria-label="delete" onClick={handleDeleteShoes}>
               <DeleteIcon color="error" />

@@ -56,7 +56,7 @@ const CartButton: React.FC<CartButtonProps> = (data) => {
         open={Boolean(cartAnchor)}
         anchorOrigin={{
           vertical: "bottom",
-          horizontal: "left",
+          horizontal: "right",
         }}
         onClose={handleClose}
       >
