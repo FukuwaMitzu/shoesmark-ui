@@ -1,75 +1,112 @@
 import IconButton from "@mui/material/IconButton";
-import LocalMallIcon from '@mui/icons-material/LocalMall';
+import LocalMallIcon from "@mui/icons-material/LocalMall";
 import Badge from "@mui/material/Badge";
 import Popover from "@mui/material/Popover";
 import { useState } from "react";
 import Box from "@mui/material/Box";
-import CartItem from "./CartItem/cartItem";
+import CartItem from "./CartItem/CartItem";
 import Button from "@mui/material/Button";
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import ArrowRightIcon from "@mui/icons-material/ArrowRight";
 import Stack from "@mui/material/Stack";
 import Divider from "@mui/material/Divider";
+import useLocalStorage from "@rehooks/local-storage";
+import { CartLocalStorge } from "../../../interfaces/CartLocalStorge";
+import Link from "next/link";
+import { useQuery } from "@tanstack/react-query";
+import getAllShoesRequest, {
+  GetAllShoesQueryKey,
+} from "../../../api/shoes/getAllShoesRequest";
+import Typography from "@mui/material/Typography";
 
-interface CartButtonProps {
-
-}
+interface CartButtonProps {}
 
 const CartButton: React.FC<CartButtonProps> = (data) => {
-    const [cartAnchor, setCartAnchor] = useState<null | HTMLElement>(null);
+  const [cart, setCart] = useLocalStorage<CartLocalStorge>("cart", []);
+  const [cartAnchor, setCartAnchor] = useState<null | HTMLElement>(null);
 
-    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-        setCartAnchor(event.currentTarget);
+  //=======Queries==========
+  const getAllShoes = useQuery(
+    [GetAllShoesQueryKey, cart.length],
+    () =>
+      getAllShoesRequest({
+        ids: cart.length > 0 ? cart.map((data) => data.shoesId) : undefined,
+      }),
+    {
+      select: ({ data }) => data.data,
+      enabled: cart.length > 0,
     }
-    const handleClose = () => {
-        setCartAnchor(null);
-    }
+  );
 
-    return (
-        <Box>
-            <IconButton
-                color="inherit"
-                onClick={handleClick}
-            >
-                <Badge badgeContent={10} color={"error"}>
-                    <LocalMallIcon></LocalMallIcon>
-                </Badge>
-            </IconButton>
-            <Popover
-                anchorEl={cartAnchor}
-                open={Boolean(cartAnchor)}
-                anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setCartAnchor(event.currentTarget);
+  };
+  const handleClose = () => {
+    setCartAnchor(null);
+  };
+
+  return (
+    <Box>
+      <IconButton color="inherit" onClick={handleClick}>
+        <Badge badgeContent={cart.length} color={"error"}>
+          <LocalMallIcon></LocalMallIcon>
+        </Badge>
+      </IconButton>
+      <Popover
+        anchorEl={cartAnchor}
+        open={Boolean(cartAnchor)}
+        anchorOrigin={{
+          vertical: "bottom",
+          horizontal: "left",
+        }}
+        onClose={handleClose}
+      >
+        <Box sx={{ width: "100%" }}>
+          <Stack direction="column" divider={<Divider></Divider>}>
+            {cart.length > 0 ? (
+              getAllShoes?.data?.map((shoes) => (
+                <CartItem
+                  key={shoes.shoesId}
+                  {...shoes}
+                  buyQuantity={
+                    cart.find((data) => data.shoesId == shoes.shoesId)
+                      ?.quantity ?? 1
+                  }
+                ></CartItem>
+              ))
+            ) : (
+              <Box
+                width="350px"
+                height="250px"
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
-                onClose={handleClose}
-            >
-            {//TODO: Thêm giao diện giỏ hàng
-            }
-            <Box sx={{ width: "100%" }}>
-            <Stack direction="column" divider={<Divider></Divider>}>
-                <CartItem image="https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/2f3b27f9624241c3a13cac0000cb69ba_9366/TOP_TEN_HI_STAR_WARS_mau_xanh_la_FZ3465_01_standard.jpg">
-                
-                </CartItem>
-
-                <CartItem image="https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/2f3b27f9624241c3a13cac0000cb69ba_9366/TOP_TEN_HI_STAR_WARS_mau_xanh_la_FZ3465_01_standard.jpg">
-                
-                </CartItem>
-                <CartItem image="https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/2f3b27f9624241c3a13cac0000cb69ba_9366/TOP_TEN_HI_STAR_WARS_mau_xanh_la_FZ3465_01_standard.jpg">
-                
-                </CartItem>
-                
-                
-            </Stack>
-            </Box>
-           
-            <Box sx={{display:"flex", flexDirection:"row-reverse", position:"sticky", bottom: 0, backgroundColor:"background.paper", paddingY: 1}}>
-                <Button variant="text">
-                    Xem tất cả
-                    <ArrowRightIcon fontSize="large"/>
-                </Button>
-            </Box>
-            </Popover>
+              >
+                <Typography variant="subtitle1">Giỏ hàng trống</Typography>
+              </Box>
+            )}
+          </Stack>
         </Box>
-    )
-}
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row-reverse",
+            position: "sticky",
+            bottom: 0,
+            backgroundColor: "background.paper",
+            paddingY: 1,
+          }}
+        >
+          <Link href={"/cart"}>
+            <Button variant="text" onClick={handleClose}>
+              Xem tất cả
+              <ArrowRightIcon fontSize="large" />
+            </Button>
+          </Link>
+        </Box>
+      </Popover>
+    </Box>
+  );
+};
 export default CartButton;

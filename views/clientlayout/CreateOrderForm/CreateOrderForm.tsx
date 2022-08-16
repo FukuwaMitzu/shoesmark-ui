@@ -105,7 +105,14 @@ const CreateOrderForm: React.FC = (data) => {
         }, 150);
         return () => clearTimeout(delay);
     }, [
-        createForm.watch(),
+        createForm.watch("orderFirstName"),
+        createForm.watch("orderLastName"),
+        createForm.watch("orderGender"),
+        createForm.watch("orderDistrict"),
+        createForm.watch("orderCity"),
+        createForm.watch("orderAddress"),
+        createForm.watch("postCode"),
+        createForm.watch("orderPhoneNumber")
     ]);
 
     return (

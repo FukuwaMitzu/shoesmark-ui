@@ -22,7 +22,7 @@ interface ManagerLayoutProps extends React.PropsWithChildren{
 
 const drawerWidth = 280;
 
-export const ManagerLayout: React.FC<ManagerLayoutProps> = ({ children }) => {
+const ManagerLayout: React.FC<ManagerLayoutProps> = ({ children }) => {
     return (
         <Box sx={{ display: "flex" }}>
             <CssBaseline></CssBaseline>
@@ -44,6 +44,9 @@ export const ManagerLayout: React.FC<ManagerLayoutProps> = ({ children }) => {
 
             >
                 <List sx={{ width: "100%" }}>
+                    <ListItem disablePadding>
+                    <CustomListItemButton href="/admin/dashboard">Dashboard</CustomListItemButton>
+                    </ListItem>
                     <ListItem disablePadding>
                         <Accordion
                             defaultExpanded
@@ -149,3 +152,5 @@ export const ManagerLayout: React.FC<ManagerLayoutProps> = ({ children }) => {
         </Box>
     )
 }
+
+export default ManagerLayout;

@@ -6,7 +6,6 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import MuiLink from "@mui/material/Link";
 import Link from "next/link";
-import CustomDataGrid from "../../../views/layout/CustomDataGrid/CustomDataGrid";
 import { CustomNextPage } from "../../_app";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -21,6 +20,7 @@ import getAllUserRequest from "../../../api/user/getAllUserRequest";
 import dayjs from "dayjs";
 import deleteManyUserRequest from "../../../api/user/deleteManyUserRequest";
 import { ApiRequestError } from "../../../interfaces/ApiRequestError";
+import CustomLazyDataGrid from "../../../views/layout/CustomDataGrid/CustomLazyDataGrid";
 
 const columns: GridColDef[] = [
     {
@@ -135,7 +135,7 @@ const UserPage: CustomNextPage = ()=>{
                 </Stack>
             </form>
             <Box sx={{marginTop:"55px"}}>
-                <CustomDataGrid
+                <CustomLazyDataGrid
                     columns={columns}
                     rows={getAllUserQuery.data?.data ?? []}
                     pagination={pagination}

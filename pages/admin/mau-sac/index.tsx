@@ -8,7 +8,6 @@ import MuiLink from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
 import IconButton from "@mui/material/IconButton";
 import LaunchOutlinedIcon from '@mui/icons-material/LaunchOutlined';
-
 import { GridColDef, GridRenderCellParams, GridRowId } from "@mui/x-data-grid";
 import React from "react";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -16,11 +15,11 @@ import { useSession } from "next-auth/react";
 import useCustomPagination from "../../../components/CustomPagination/hooks/useCustomPagination";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { SubmitHandler, useForm } from "react-hook-form";
-import CustomDataGrid from "../../../views/layout/CustomDataGrid/CustomDataGrid";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import getAllColorRequest, { GetAllColorQueryKey } from "../../../api/color/getAllColorRequest";
 import deleteManyColorRequest from "../../../api/color/deleteManyColorRequest";
+import CustomLazyDataGrid from "../../../views/layout/CustomDataGrid/CustomLazyDataGrid";
 
 const columns: GridColDef[] = [
     {
@@ -112,7 +111,7 @@ const ColorPage: CustomNextPage = () => {
                 </Stack>
             </form>
             <Box sx={{marginTop:"55px"}}>
-                <CustomDataGrid
+                <CustomLazyDataGrid
                     columns={columns}
                     rows={getAllColorQuery.data?.data ?? []}
                     pagination={pagination}

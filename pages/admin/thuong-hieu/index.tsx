@@ -6,7 +6,6 @@ import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
 import MuiLink from "@mui/material/Link";
 import Link from "next/link";
-import CustomDataGrid from "../../../views/layout/CustomDataGrid/CustomDataGrid";
 import { CustomNextPage } from "../../_app";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
@@ -19,6 +18,7 @@ import deleteManyBrandRequest from "../../../api/brand/deleteManyBrandRequest";
 import { GridColDef, GridRenderCellParams, GridRowId } from "@mui/x-data-grid";
 import IconButton from "@mui/material/IconButton";
 import LaunchOutlinedIcon from "@mui/icons-material/LaunchOutlined";
+import CustomLazyDataGrid from "../../../views/layout/CustomDataGrid/CustomLazyDataGrid";
 
 const columns: GridColDef[] = [
     {
@@ -102,7 +102,7 @@ const BrandPage: CustomNextPage = ()=>{
                 </Stack>
             </form>
             <Box sx={{marginTop:"55px"}}>
-                <CustomDataGrid
+                <CustomLazyDataGrid
                     columns={columns}
                     rows={getAllBrandQuery.data?.data ?? []}
                     pagination={pagination}

@@ -4,40 +4,41 @@ import Typography from "@mui/material/Typography";
 import Link from "next/link";
 import { CustomNextPage } from "../_app";
 import MuiLink from "@mui/material/Link";
-import CustomStepper, { StepItem } from "../../components/CustomStepper/CustomStepper";
-import CartCustomize from "../../views/clientlayout/CartCustomize/CartCustomize";
-import CreateOrderForm from "../../views/clientlayout/CreateOrderForm/CreateOrderForm";
-import PaymentForm from "../../views/clientlayout/PaymentForm/PaymentForm";
-import CompleteOrder from "../../views/clientlayout/CompleteOrder/CompleteOrder";
+import LazyPaymentForm from "../../views/clientlayout/PaymentForm/LazyPaymentForm";
 import { useRouter } from "next/router";
+import LazyCustomStepper from "../../components/CustomStepper/LazyCustomStepper";
+import { StepItem } from "../../components/CustomStepper/CustomStepper";
+import LazyCartCustomize from "../../views/clientlayout/CartCustomize/LazyCartCustomize";
+import LazyCompleteOrder from "../../views/clientlayout/CompleteOrder/LazyCompleteOrder";
+import LazyCreateOrderForm from "../../views/clientlayout/CreateOrderForm/LazyCreateOrderForm";
 
 const steps:StepItem[] = [
     {
         name: "CartCustomize",
         label: "Tuỳ chỉnh giỏ hàng",
         renderContent: ()=>(
-            <CartCustomize/>
+            <LazyCartCustomize/>
         )
     },
     {
         name: "CreateOrder",
         label: "Tạo đơn hàng",
         renderContent: ()=>(
-            <CreateOrderForm/>
+            <LazyCreateOrderForm/>
         )
     },
     {
         name: "Payment",
         label: "Thanh toán",
         renderContent: ()=>(
-            <PaymentForm/>
+            <LazyPaymentForm/>
         )
     },
     {
         name: "Complete",
         label: "Hoàn tất",
         renderContent: ()=>(
-            <CompleteOrder/>
+            <LazyCompleteOrder/>
         )
     }
 ];
@@ -53,7 +54,7 @@ const CartPage: CustomNextPage = () => {
                 <Typography color="text.primary">Giỏ hàng</Typography>
             </Breadcrumbs>
             <Typography variant="h4" fontWeight={"bold"} textTransform={"uppercase"} color="text.primary">Giỏ hàng</Typography>
-            <CustomStepper
+            <LazyCustomStepper
                 steps={steps}
                 sticky
                 onComplete={()=>{

@@ -29,7 +29,6 @@ import { useState } from "react";
 import Divider from "@mui/material/Divider";
 import orderStatusList from "../../../../util/orderStatusList";
 import currencyFormater from "../../../../util/currencyFormater";
-import DetailOrderItem from "../../../../components/DetailOrderItem/DetailOrderItem";
 import Big from "big.js";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
@@ -47,6 +46,8 @@ import editOrderDetailRequest from "../../../../api/order/editOrderDetail";
 import deleteOrderDetailRequest from "../../../../api/order/deleteOrderDetail";
 import createOrderDetailRequest from "../../../../api/order/createOrderDetail";
 import editOrderRequest from "../../../../api/order/editOrder";
+import LazyDetailOrderItem from "../../../../components/DetailOrderItem/LazyDetailOrderItem";
+import { useSnackbar } from "notistack";
 
 type QueueTransaction = {
   order?: any;
@@ -87,6 +88,7 @@ const OrderDetailPage: CustomNextPage = () => {
   const router = useRouter();
   const session = useSession();
 
+  const { enqueueSnackbar } = useSnackbar();
   const [editing, setEditing] = useState(false);
   const [openShoesSearchDialog, setOpenShoesSearchDialog] = useState(false);
   const [temporaryDetailOrder, setTemporaryDetailOrder] = useState<
@@ -134,7 +136,7 @@ const OrderDetailPage: CustomNextPage = () => {
             onlinePaymentId: data.onlinePaymentId,
             orderAddress: data.orderAddress,
             orderDistrict: data.orderDistrict,
-            orderEmail: data.orderEmail,
+            orderEmail: data.orderEmail ?? "",
             orderGender: data.orderGender,
             orderPhoneNumber: data.orderPhoneNumber,
             paymentMethod: data.paymentMethod,
@@ -222,6 +224,11 @@ const OrderDetailPage: CustomNextPage = () => {
     {
       onSuccess: () => {
         getOrderQuery.refetch();
+        enqueueSnackbar("Cập nhật thành công", { variant: "success" });
+      },
+      onError: () => {
+        getOrderQuery.refetch();
+        enqueueSnackbar("Đã xảy ra lỗi", { variant: "error" });
       },
     }
   );
@@ -276,28 +283,37 @@ const OrderDetailPage: CustomNextPage = () => {
   const handleCompleteUpdate = () => {
     const orderDiff = extractDiff(getOrderQuery.data, orderForm.getValues());
 
-    const details = getOrderQuery.data?.details;
-
-    const deleteQueue = details?.filter((data, index) => {
-      const tempIndex = temporaryDetailOrder.findIndex(
+    let details = getOrderQuery.data?.details;
+    let tempDetails = temporaryDetailOrder;
+    //Filter delete elements
+    let flags: number[] = [];
+    let deleteQueue = details?.filter((data, index) => {
+      const tempIndex = tempDetails.findIndex(
         (temp) => temp.shoesId == data.shoesId
       );
       if (tempIndex == -1) {
-        details.splice(index, 1);
+        flags.push(index);
       }
       return tempIndex == -1;
     });
-    const addQueue = temporaryDetailOrder.filter((temp, index) => {
+    details = details?.filter((data, index) => flags.indexOf(index) == -1);
+
+    //Filter addition elements
+    flags = [];
+    const addQueue = tempDetails.filter((temp, index) => {
       const detailIndex = details?.findIndex(
         (data) => data.shoesId == temp.shoesId
       );
       if (detailIndex == -1) {
-        temporaryDetailOrder.splice(index, 1);
+        flags.push(index);
       }
       return detailIndex == -1;
     });
+    tempDetails = tempDetails.filter(
+      (data, index) => flags.indexOf(index) == -1
+    );
 
-    const updateQueue = temporaryDetailOrder.filter((data) => {
+    const updateQueue = tempDetails.filter((data) => {
       const detail = details?.find((e) => e.shoesId == data.shoesId);
       if (detail) return isNotEmptyObject(extractDiff(data, detail));
       else return false;
@@ -683,7 +699,7 @@ const OrderDetailPage: CustomNextPage = () => {
             <Stack sx={{ marginY: "25px", minHeight: "275px" }} gap={5}>
               {!getOrderQuery.isLoading &&
                 temporaryDetailOrder.map((detail) => (
-                  <DetailOrderItem
+                  <LazyDetailOrderItem
                     key={detail.shoesId}
                     {...detail.shoes}
                     price={detail.price}

@@ -17,6 +17,11 @@ const orderStatusList = [
   },
   {
     id: uuidv4(),
+    title: "Giao hàng thành công",
+    value: "received",
+  },
+  {
+    id: uuidv4(),
     title: "Bị huỷ",
     value: "canceled",
   },

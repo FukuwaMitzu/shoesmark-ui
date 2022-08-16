@@ -19,9 +19,9 @@ import getAllCategoryRequest, { GetAllCategoryQueryKey } from '../../api/categor
 import LoadingButton from '@mui/lab/LoadingButton'
 import getAllShoesRequest, { GetAllShoesQueryKey } from '../../api/shoes/getAllShoesRequest'
 import Button from '@mui/material/Button'
-import ShoesCard from '../../components/ShoesCard/ShoesCard'
 import useCustomPagination from '../../components/CustomPagination/hooks/useCustomPagination'
 import CustomPagination from '../../components/CustomPagination/CustomPagination'
+import LazyShoesCard from '../../components/ShoesCard/LazyShoesCard'
 
 
 
@@ -181,7 +181,7 @@ const ShoesHome: NextPage = () => {
                     {
                         !getAllShoesQuery.isLoading && getAllShoesQuery.data &&
                         getAllShoesQuery.data.data.map((shoes) => (
-                            <ShoesCard key={shoes.shoesId} {...shoes}></ShoesCard>
+                            <LazyShoesCard key={shoes.shoesId} {...shoes}/>
                         ))
                     }
                 </Stack>

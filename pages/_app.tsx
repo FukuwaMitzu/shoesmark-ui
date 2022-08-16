@@ -5,11 +5,9 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { SessionProvider } from 'next-auth/react';
 import { NextPage } from 'next';
 import { ThemeProvider } from '@emotion/react';
-import { ManagerLayout } from '../views/layout/managerLayout';
 import Auth, { AuthOptions } from '../components/Auth';
 import { createTheme } from '@mui/material/styles';
 import { SnackbarProvider } from 'notistack';
-import ClientLayout from '../views/clientlayout/ClientLayout';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import {AdapterDayjs} from "@mui/x-date-pickers/AdapterDayjs";
 //Day js setup
@@ -17,6 +15,7 @@ import dayjs from "dayjs";
 import "dayjs/locale/vi";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
+import dynamic from 'next/dynamic';
 dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);
 dayjs.locale('vi');
@@ -34,9 +33,17 @@ type CustomAppProps = AppProps & {
   Component: CustomNextPage
 }
 
+const LazyClientLayout = dynamic(()=>import('../views/clientlayout/ClientLayout'));
+const LazyAdminLayout = dynamic(()=>import('../views/layout/managerLayout'));
 
 const theme = createTheme();
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions:{
+    queries:{
+      keepPreviousData: true
+    }
+  }
+});
 
 function MyApp({ Component, pageProps: { session, ...pageProps } }: CustomAppProps) {
   return (
@@ -52,15 +59,15 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: CustomAppPro
             {
               Component.layout == "manager" ?
                 <Auth auth={Component.auth}>
-                  <ManagerLayout>
+                  <LazyAdminLayout>
                     <Component {...pageProps} />
-                  </ManagerLayout>
+                  </LazyAdminLayout>
                 </Auth>
                 :
                 <Auth auth={Component.auth}>
-                  <ClientLayout>
+                  <LazyClientLayout>
                     <Component {...pageProps} />
-                  </ClientLayout>
+                  </LazyClientLayout>
                 </Auth>
             }
           </SnackbarProvider>

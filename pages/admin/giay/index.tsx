@@ -4,7 +4,6 @@ import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Link from "next/link";
 import { CustomNextPage } from "../../_app";
 import Typography from "@mui/material/Typography";
-import CustomDataGrid from "../../../views/layout/CustomDataGrid/CustomDataGrid";
 import { GridColDef, GridRenderCellParams, GridRowId } from "@mui/x-data-grid";
 import Stack from "@mui/material/Stack";
 import IconButton from "@mui/material/IconButton";
@@ -26,6 +25,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import getAllCategoryRequest from "../../../api/category/getAllCategoryRequest";
 import getAllColorRequest, { GetAllColorQueryKey } from "../../../api/color/getAllColorRequest";
 import currencyFormater from "../../../util/currencyFormater";
+import CustomLazyDataGrid from "../../../views/layout/CustomDataGrid/CustomLazyDataGrid";
 
 const columns: GridColDef[] = [
     {
@@ -222,7 +222,7 @@ const ShoesPage: CustomNextPage = () => {
             </form>
 
             <Box sx={{ marginTop: "55px" }}>
-                <CustomDataGrid
+                <CustomLazyDataGrid
                     columns={columns}
                     rows={getAllShoesQuery.data?.data ?? []}
                     pagination={pagination}

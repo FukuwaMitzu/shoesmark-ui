@@ -15,9 +15,9 @@ import MenuItem from '@mui/material/MenuItem'
 import WatchLaterIcon from '@mui/icons-material/WatchLater';
 import ListItemIcon from '@mui/material/ListItemIcon'
 import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
-import CartModal from '../CartModal/CartModal'
 import Big from 'big.js'
 import currencyFormater from '../../util/currencyFormater'
+import LazyCartModel from '../CartModal/LazyCartModal'
 
 interface ShoesCardProps {
     shoesId: string,
@@ -149,7 +149,7 @@ const ShoesCard: React.FC<ShoesCardProps> = (shoes) => {
                 </CardContent>
 
             </Card>
-            <CartModal
+            <LazyCartModel
                 {...shoes}
                 open={addingCart}
                 onClose={closeAddToCart}

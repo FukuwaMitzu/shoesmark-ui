@@ -22,7 +22,6 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import getManyOrderRequest from "../../../api/order/getManyOrderRequest";
 import getAllUserRequest from "../../../api/user/getAllUserRequest";
 import { useEffect } from "react";
-import CustomDataGrid from "../../../views/layout/CustomDataGrid/CustomDataGrid";
 import {
   GridColDef,
   GridRenderCellParams,
@@ -36,6 +35,7 @@ import stringAvatar from "../../../util/stringAvatar";
 import dayjs from "dayjs";
 import currencyFormater from "../../../util/currencyFormater";
 import deleteManyOrderRequest from "../../../api/order/deleteManyOrderRequest";
+import CustomLazyDataGrid from "../../../views/layout/CustomDataGrid/CustomLazyDataGrid";
 
 const columns: GridColDef[] = [
   {
@@ -162,7 +162,8 @@ const ImportOrderPage: CustomNextPage = () => {
         ids = searchForm.getValues("ownerIds");
       return getManyOrderRequest({
         ownerIds: ids.length > 0 ? ids : undefined,
-        onlyAnonymous: searchForm.getValues("searchFor") == "anonymous" ? true : undefined,
+        onlyAnonymous:
+          searchForm.getValues("searchFor") == "anonymous" ? true : undefined,
         fullName:
           searchForm.getValues("searchFor") == "any"
             ? searchForm.getValues("orderFullName")
@@ -174,6 +175,12 @@ const ImportOrderPage: CustomNextPage = () => {
     },
     {
       select: (data) => data.data,
+      onSuccess: (data) => {
+        setPagination({
+          ...pagination,
+          total: data.total,
+        });
+      },
     }
   );
   const getAllUserQuery = useQuery(
@@ -243,7 +250,11 @@ const ImportOrderPage: CustomNextPage = () => {
       </Breadcrumbs>
       <Typography
         variant="h4"
-        sx={{ fontWeight: "bold", textTransform:"uppercase", marginBottom: "25px" }}
+        sx={{
+          fontWeight: "bold",
+          textTransform: "uppercase",
+          marginBottom: "25px",
+        }}
       >
         Quản lý Đơn hàng
       </Typography>
@@ -339,13 +350,14 @@ const ImportOrderPage: CustomNextPage = () => {
         </Stack>
       </form>
       <Box sx={{ marginTop: "55px" }}>
-        <CustomDataGrid
+        <CustomLazyDataGrid
           columns={columns}
           rows={getManyOrderQuery.data?.data ?? []}
           pagination={pagination}
           error={getManyOrderQuery.isError}
           loading={getManyOrderQuery.isLoading}
           getRowId={(row) => row.orderId}
+          allowAdding={false}
           onPageChange={handlePagination}
           onCreate={handleCreateImportOrder}
           onDeleteConfirmed={handleDeleteOrder}

@@ -7,7 +7,6 @@ import Link from "next/link";
 import MuiLink from "@mui/material/Link";
 import { CustomNextPage } from "../../_app";
 import LoadingButton from "@mui/lab/LoadingButton";
-import CustomDataGrid from "../../../views/layout/CustomDataGrid/CustomDataGrid";
 import {
   GridColDef,
   GridRenderCellParams,
@@ -35,6 +34,7 @@ import { useRouter } from "next/router";
 import stringAvatar from "../../../util/stringAvatar";
 import deleteManyImportOrderRequest from "../../../api/importOrder/deleteManyImportOrderRequest";
 import { useSnackbar } from "notistack";
+import CustomLazyDataGrid from "../../../views/layout/CustomDataGrid/CustomLazyDataGrid";
 
 const columns: GridColDef[] = [
   {
@@ -270,7 +270,7 @@ const ImportOrderPage: CustomNextPage = () => {
         </Stack>
       </form>
       <Box sx={{ marginTop: "55px" }}>
-        <CustomDataGrid
+        <CustomLazyDataGrid
           columns={columns}
           rows={getManyImportOrderQuery.data?.data ?? []}
           pagination={pagination}
