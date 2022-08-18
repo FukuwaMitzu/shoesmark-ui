@@ -4,6 +4,8 @@ import { ApiRequestHandler} from "../../interfaces/ApiRequestHandler";
 import { JsonEntity } from "../../interfaces/JsonEntity";
 import { Shoes } from "./shoes";
 
+export const GetShoesQueryKey = "GetShoesQuery";
+
 interface GetShoesParam{
     shoesId: string
 }

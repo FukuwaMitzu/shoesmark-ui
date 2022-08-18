@@ -135,7 +135,7 @@ const DashboardPage: CustomNextPage = () => {
           </Typography>
         </Paper>
         <Paper sx={{ flex: 1, padding: 2, bgcolor: "#8C3EE9", color: "white" }}>
-          <Typography sx={{ marginBottom: "10px" }}>Khách hàng mới</Typography>
+          <Typography sx={{ marginBottom: "10px" }}>Khách hàng thành viên</Typography>
           <Typography variant="h5" fontWeight={"bold"}>
             {getGeneralStatistic.data.totalRegisterdUser}
           </Typography>
