@@ -5,11 +5,7 @@ import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import Image from "next/image";
-import { useRouter } from "next/router";
-import { useQuery } from "@tanstack/react-query";
-import getShoesRequest, {
-  GetShoesQueryKey,
-} from "../../api/shoes/getShoesRequest";
+import getShoesRequest from "../../api/shoes/getShoesRequest";
 import stringToColor from "../../util/stringToColor";
 import { SHOESMARK_API_DOMAIN } from "../../config/domain";
 import currencyFormater from "../../util/currencyFormater";
@@ -17,22 +13,59 @@ import Big from "big.js";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
 import Link from "next/link";
 import MuiLink from "@mui/material/Link";
-export default function Detail() {
-  const router = useRouter();
+import { CustomNextPage } from "../_app";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { isDefined } from "class-validator";
+import { Shoes } from "../../api/shoes/shoes";
+import { useQuery } from "@tanstack/react-query";
+import getRelatedShoesRequest, {
+  GetRelatedShoesQueryKey,
+} from "../../api/shoes/getRelatedShoesRequest";
+import RelatedShoesCard from "../../components/RelatedShoesCard/RelatedShoesCard";
+import useLocalStorage from "@rehooks/local-storage";
+import { CartLocalStorge } from "../../interfaces/CartLocalStorge";
+import LazyCartModal from "../../components/CartModal/LazyCartModal";
+import { useState } from "react";
 
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const id = (context.params?.id as string) ?? "";
+  const shoes = await getShoesRequest({ shoesId: id });
+  if (!isDefined(shoes))
+    return {
+      notFound: true,
+    };
+  return {
+    props: {
+      shoes: shoes.data.data,
+    },
+  };
+};
+
+const ShoesDetailPage: CustomNextPage = (
+  props: InferGetServerSidePropsType<typeof getServerSideProps>
+) => {
+  const shoes = props.shoes as Shoes;
+  const [cartOpen, setCartOpen] = useState(false);
   //========Queries===============
-  const getShoes = useQuery(
-    [GetShoesQueryKey],
+  const getRelatedShoes = useQuery(
+    [GetRelatedShoesQueryKey],
     () =>
-      getShoesRequest({
-        shoesId: router.query.id as string,
+      getRelatedShoesRequest({
+        limit:4,
+        shoesId: shoes.shoesId,
       }),
     {
-      select: ({ data }) => data.data,
+      select: (data) => data.data,
     }
   );
 
-  const shoes = getShoes.data;
+  //======Callbacks=============
+  const handleOnClick = ()=>{
+    setCartOpen(true);
+  }
+  const handleOnClose = ()=>{
+    setCartOpen(false);
+  }
 
   const price = new Big(shoes?.price ?? 0);
   const sale = new Big(shoes?.sale ?? 0);
@@ -43,14 +76,18 @@ export default function Detail() {
   return (
     <Stack direction={"column"} gap={4}>
       <Breadcrumbs sx={{ marginBottom: "15px" }}>
-                <Link href="/" passHref>
-                    <MuiLink underline="hover" color="inherit">Home</MuiLink>
-                </Link>
-                <Link href="/shoes" passHref>
-                    <MuiLink underline="hover" color="inherit">Giày</MuiLink>
-                </Link>
-                <Typography color="text.primary">{shoes?.shoesName}</Typography>
-            </Breadcrumbs>
+        <Link href="/" passHref>
+          <MuiLink underline="hover" color="inherit">
+            Home
+          </MuiLink>
+        </Link>
+        <Link href="/shoes" passHref>
+          <MuiLink underline="hover" color="inherit">
+            Giày
+          </MuiLink>
+        </Link>
+        <Typography color="text.primary">{shoes?.shoesName}</Typography>
+      </Breadcrumbs>
       <Stack direction={"row"} gap={2}>
         <Box>
           <Image
@@ -63,7 +100,7 @@ export default function Detail() {
         </Box>
         <Stack direction={"column"}>
           <Typography variant="h4" marginBottom={"10px"}>
-            {getShoes.data?.shoesName}
+            {shoes.shoesName}
           </Typography>
           <Stack direction="row" spacing={1}>
             {shoes?.brand && (
@@ -75,7 +112,7 @@ export default function Detail() {
                 label={shoes.brand?.brandName}
               />
             )}
-            {shoes?.categories?.map((category) => (
+            {shoes.categories.map((category) => (
               <Chip key={category.categoryId} label={category.categoryName} />
             ))}
           </Stack>
@@ -85,7 +122,7 @@ export default function Detail() {
             gap={3}
             marginTop={"10px"}
           >
-            <Typography variant="subtitle1">Size: {shoes?.size}</Typography>
+            <Typography variant="subtitle1">Size: {shoes.size}</Typography>
             <Stack direction={"row"} gap={1}>
               <Box
                 width="25px"
@@ -96,7 +133,7 @@ export default function Detail() {
             </Stack>
           </Stack>
           <Box marginTop={"55px"}>
-            {shoes?.quantity && shoes?.quantity > 0 ? (
+            {shoes.quantity > 0 ? (
               <>
                 <Typography
                   color="GrayText"
@@ -126,6 +163,7 @@ export default function Detail() {
             variant="contained"
             sx={{ width: "250px", marginTop: "25px" }}
             endIcon={<ShoppingCartCheckoutIcon />}
+            onClick={handleOnClick}
           >
             Thêm vào giỏ hàng
           </Button>
@@ -150,43 +188,21 @@ export default function Detail() {
       <Stack gap={1}>
         <Typography variant="h5">Các sản phẩm liên quan</Typography>
         <Stack direction={"row"} gap={1}>
-          <img
-            width={"100%"}
-            height={"120px"}
-            src="https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/2f3b27f9624241c3a13cac0000cb69ba_9366/TOP_TEN_HI_STAR_WARS_mau_xanh_la_FZ3465_01_standard.jpg"
-          />
-          <img
-            width={"100%"}
-            height={"120px"}
-            src="https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/2f3b27f9624241c3a13cac0000cb69ba_9366/TOP_TEN_HI_STAR_WARS_mau_xanh_la_FZ3465_01_standard.jpg"
-          />
-          <img
-            width={"100%"}
-            height={"120px"}
-            src="https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/2f3b27f9624241c3a13cac0000cb69ba_9366/TOP_TEN_HI_STAR_WARS_mau_xanh_la_FZ3465_01_standard.jpg"
-          />
-          <img
-            width={"100%"}
-            height={"120px"}
-            src="https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/2f3b27f9624241c3a13cac0000cb69ba_9366/TOP_TEN_HI_STAR_WARS_mau_xanh_la_FZ3465_01_standard.jpg"
-          />
-          <img
-            width={"100%"}
-            height={"120px"}
-            src="https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/2f3b27f9624241c3a13cac0000cb69ba_9366/TOP_TEN_HI_STAR_WARS_mau_xanh_la_FZ3465_01_standard.jpg"
-          />
-          <img
-            width={"100%"}
-            height={"120px"}
-            src="https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/2f3b27f9624241c3a13cac0000cb69ba_9366/TOP_TEN_HI_STAR_WARS_mau_xanh_la_FZ3465_01_standard.jpg"
-          />
-          <img
-            width={"100%"}
-            height={"120px"}
-            src="https://assets.adidas.com/images/h_840,f_auto,q_auto,fl_lossy,c_fill,g_auto/2f3b27f9624241c3a13cac0000cb69ba_9366/TOP_TEN_HI_STAR_WARS_mau_xanh_la_FZ3465_01_standard.jpg"
-          />
+          {getRelatedShoes.data &&
+            getRelatedShoes.data?.data.map((related) => (
+              <RelatedShoesCard
+                key={related.shoesId}
+                {...related}
+              ></RelatedShoesCard>
+            ))}
         </Stack>
       </Stack>
+      <LazyCartModal
+      open={cartOpen}
+      {...shoes}
+      onClose={handleOnClose}
+      />
     </Stack>
   );
-}
+};
+export default ShoesDetailPage;

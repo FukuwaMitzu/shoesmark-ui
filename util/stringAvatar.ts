@@ -1,11 +1,12 @@
 import stringToColor from "./stringToColor";
 
 function stringAvatar(name: string) {
+    const nameArr = name.split(' ');
     return {
         sx: {
             bgcolor: stringToColor(name),
         },
-        children: `${name.split(' ')[0][0].charAt(0)}${name.split(' ')[1][0].charAt(0)}`,
+        children: `${nameArr[0].charAt(0)}${nameArr[nameArr.length-1].charAt(0)}`,
     };
 }
 

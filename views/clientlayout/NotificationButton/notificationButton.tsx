@@ -9,7 +9,7 @@ interface NotificationButtonProps{
 const NotificationButton: React.FC<NotificationButtonProps> = (props)=>{
     return (
         <IconButton color="inherit">
-            <Badge badgeContent={10} color={"error"}>
+            <Badge badgeContent={0} color={"error"}>
                 <NotificationsIcon></NotificationsIcon>
             </Badge>
         </IconButton>

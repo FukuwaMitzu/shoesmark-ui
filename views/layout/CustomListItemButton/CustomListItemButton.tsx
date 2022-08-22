@@ -2,7 +2,6 @@ import ListItemButton from "@mui/material/ListItemButton";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { ListItemActiveStyle } from "./style";
 
 interface CustomListItemButtonProps {
     href?: string
@@ -22,7 +21,7 @@ const CustomListItemButton: React.FC<CustomListItemButtonProps> = ({ href, child
     return (
         href?
         <Link href={href} passHref>
-            <ListItemButton sx={isActive? ListItemActiveStyle: null}>{children}</ListItemButton>
+            <ListItemButton selected={isActive}>{children}</ListItemButton>
         </Link>
         :
         <ListItemButton>{children}</ListItemButton>

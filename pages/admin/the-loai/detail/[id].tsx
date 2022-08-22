@@ -80,7 +80,7 @@ const DetailCategoryPage: CustomNextPage = () => {
     }
     const handleFormSubmit: SubmitHandler<EditCateogryFormInputs> = (formData) => {
         if (getCategoryQuery.data) {
-            const data = extractDiff(getCategoryQuery.data.data, { categoryName: formData.categoryName });
+            const data = extractDiff(getCategoryQuery.data.data, formData);
             editCategoryQuery.mutate({ ...data, categoryId: getCategoryQuery.data.data.categoryId });
         }
     }

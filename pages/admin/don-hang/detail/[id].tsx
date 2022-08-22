@@ -145,7 +145,6 @@ const OrderDetailPage: CustomNextPage = () => {
             totalPrice: data.totalPrice,
             ownerId: data.owner?.userId,
           },
-          { keepDefaultValues: true }
         );
         setTemporaryDetailOrder(
           JSON.parse(JSON.stringify(data.details)) as TemporaryOrderDetail[]

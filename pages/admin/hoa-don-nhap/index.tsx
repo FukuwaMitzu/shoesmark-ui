@@ -165,7 +165,9 @@ const ImportOrderPage: CustomNextPage = () => {
   const handleSearchForm: SubmitHandler<ImportOrderFormInputs> = (data) => {
     getManyImportOrderQuery.refetch();
   };
-  const handleCreateImportOrder = () => {};
+  const handleCreateImportOrder = () => {
+    router.push(router.pathname+"/create");
+  };
   const handleDeleteImportOrder = (
     e: React.MouseEvent<HTMLButtonElement>,
     selectedRows: Array<GridRowId>
@@ -187,13 +189,17 @@ const ImportOrderPage: CustomNextPage = () => {
             Dashboard
           </MuiLink>
         </Link>
-        <Typography color="text.primary">Đơn nhập</Typography>
+        <Typography color="text.primary">Hoá đơn nhập</Typography>
       </Breadcrumbs>
       <Typography
         variant="h4"
-        sx={{ fontWeight: "bold", textTransform:"uppercase", marginBottom: "25px" }}
+        sx={{
+          fontWeight: "bold",
+          textTransform: "uppercase",
+          marginBottom: "25px",
+        }}
       >
-        Quản lý Đơn nhập
+        Quản lý Hoá đơn nhập
       </Typography>
       <form onSubmit={searchForm.handleSubmit(handleSearchForm)}>
         <Stack direction={"column"} spacing={2} width={"475px"}>
@@ -202,7 +208,7 @@ const ImportOrderPage: CustomNextPage = () => {
             control={searchForm.control}
             render={({ field }) => (
               <FormControl>
-                <FormLabel>Tìm kiếm đơn nhập:</FormLabel>
+                <FormLabel>Đối tượng tìm kiếm:</FormLabel>
                 <RadioGroup
                   defaultValue="others"
                   name="radio-buttons-group"
@@ -216,7 +222,7 @@ const ImportOrderPage: CustomNextPage = () => {
                   <FormControlLabel
                     value="others"
                     control={<Radio />}
-                    label={"Của người khác"}
+                    label={"Của nhóm người"}
                   />
                 </RadioGroup>
               </FormControl>

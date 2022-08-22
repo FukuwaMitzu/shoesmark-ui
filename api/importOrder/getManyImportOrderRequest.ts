@@ -8,12 +8,12 @@ interface GetManyImportOrderParam extends RequestWithPagination, RequestWithAuth
     creatorIds?: string[]
 }
 
-const getManyImportOrderRequest: ApiRequestHandler<GetManyImportOrderParam, JsonCollection<ImportOrder>> = (data) => axios.get(SHOESMARK_API_DOMAIN + "/importOrder", {
+const getManyImportOrderRequest: ApiRequestHandler<GetManyImportOrderParam, JsonCollection<ImportOrder>> = ({accessToken,...data}) => axios.get(SHOESMARK_API_DOMAIN + "/importOrder", {
     params:{
         ...data
     },
     headers: {
-        "Authorization": `Bearer ${data.accessToken}`
+        "Authorization": `Bearer ${accessToken}`
     }  
 });
 

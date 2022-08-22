@@ -36,6 +36,10 @@ import dayjs from "dayjs";
 import currencyFormater from "../../../util/currencyFormater";
 import deleteManyOrderRequest from "../../../api/order/deleteManyOrderRequest";
 import CustomLazyDataGrid from "../../../views/layout/CustomDataGrid/CustomLazyDataGrid";
+import orderStatusList from "../../../util/orderStatusList";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+import InputLabel from "@mui/material/InputLabel";
 
 const columns: GridColDef[] = [
   {
@@ -51,6 +55,17 @@ const columns: GridColDef[] = [
         <Typography>{params.value}</Typography>
       </Stack>
     ),
+  },
+  {
+    field: "status",
+    headerName: "Trạng thái đơn hàng",
+    width: 200,
+    valueGetter: (data: GridValueGetterParams) => {
+      const status = orderStatusList.find(
+        (status) => status.value == data.value
+      );
+      return status?.title;
+    },
   },
   {
     field: "paymentMethod",
@@ -130,6 +145,7 @@ interface OrderFormInputs {
   searchFor: string;
   fullName: string;
   orderFullName: string;
+  status: string;
 }
 
 const ImportOrderPage: CustomNextPage = () => {
@@ -148,6 +164,7 @@ const ImportOrderPage: CustomNextPage = () => {
       fullName: "",
       searchFor: "any",
       orderFullName: "",
+      status: "any",
     },
   });
 
@@ -155,11 +172,15 @@ const ImportOrderPage: CustomNextPage = () => {
   const getManyOrderQuery = useQuery(
     ["getManyOrder", { limit, offset }, searchForm.getValues("searchFor")],
     () => {
+      
       let ids: string[] = [];
       if (searchForm.getValues("searchFor") == "me")
         ids.push(session.data?.user?.id ?? "");
       else if (searchForm.getValues("searchFor") == "others")
         ids = searchForm.getValues("ownerIds");
+
+
+      let status= searchForm.getValues("status");
       return getManyOrderRequest({
         ownerIds: ids.length > 0 ? ids : undefined,
         onlyAnonymous:
@@ -171,6 +192,11 @@ const ImportOrderPage: CustomNextPage = () => {
         limit: pagination.limit,
         offset: pagination.offset,
         accessToken: session.data?.user?.accessToken,
+        status: status=="any"? undefined : status,
+        sortBy: {
+          dateUpdated: "DESC",
+          dateCreated: "DESC",
+        },
       });
     },
     {
@@ -259,95 +285,117 @@ const ImportOrderPage: CustomNextPage = () => {
         Quản lý Đơn hàng
       </Typography>
       <form onSubmit={searchForm.handleSubmit(handleSearchForm)}>
-        <Stack direction={"column"} spacing={2} width={"475px"}>
+        <Stack direction={"row"} gap={5}>
+          <Stack direction={"column"} spacing={2} width={"475px"} sx={{flexShrink:0}}>
+            <Controller
+              name="searchFor"
+              control={searchForm.control}
+              render={({ field }) => (
+                <FormControl>
+                  <FormLabel>Đối tượng tìm kiếm:</FormLabel>
+                  <RadioGroup
+                    defaultValue="any"
+                    name="radio-buttons-group"
+                    onChange={(data, value) => field.onChange(value)}
+                  >
+                    <FormControlLabel
+                      value="me"
+                      control={<Radio />}
+                      label={"Chỉ mình tôi"}
+                    />
+                    <FormControlLabel
+                      value="anonymous"
+                      control={<Radio />}
+                      label={"Không là thành viên"}
+                    />
+                    <FormControlLabel
+                      value="others"
+                      control={<Radio />}
+                      label={"Của nhóm người"}
+                    />
+                    <FormControlLabel
+                      value="any"
+                      control={<Radio />}
+                      label={"Bất kỳ"}
+                    />
+                  </RadioGroup>
+                </FormControl>
+              )}
+            />
+            {searchForm.watch("searchFor") == "others" && (
+              <Controller
+                name="ownerIds"
+                control={searchForm.control}
+                render={({ field }) => (
+                  <Autocomplete
+                    multiple
+                    getOptionLabel={(option: any) =>
+                      `${option.lastName}  ${option.firstName}`
+                    }
+                    filterSelectedOptions
+                    filterOptions={(x, value) => {
+                      const regex = new RegExp(`${value.inputValue}`, "i");
+                      return x.filter((y) => {
+                        return regex.test(`${y.lastName} ${y.firstName}`);
+                      });
+                    }}
+                    options={getAllUserQuery.data?.data ?? []}
+                    renderInput={(params) => (
+                      <Controller
+                        name="fullName"
+                        control={searchForm.control}
+                        render={({ field }) => (
+                          <TextField
+                            {...params}
+                            {...field}
+                            label="Nhóm người dùng"
+                          />
+                        )}
+                      />
+                    )}
+                    onChange={(e, data) =>
+                      field.onChange(data.map((a) => a.userId))
+                    }
+                  />
+                )}
+              />
+            )}
+            {searchForm.watch("searchFor") == "any" && (
+              <Controller
+                name="orderFullName"
+                control={searchForm.control}
+                render={({ field }) => <TextField {...field} label="Tên" />}
+              />
+            )}
+          </Stack>
+          <Stack width={"475px"}>
           <Controller
-            name="searchFor"
+            name="status"
             control={searchForm.control}
             render={({ field }) => (
-              <FormControl>
-                <FormLabel>Đối tượng tìm kiếm:</FormLabel>
-                <RadioGroup
-                  defaultValue="any"
-                  name="radio-buttons-group"
-                  onChange={(data, value) => field.onChange(value)}
-                >
-                  <FormControlLabel
-                    value="me"
-                    control={<Radio />}
-                    label={"Chỉ mình tôi"}
-                  />
-                  <FormControlLabel
-                    value="anonymous"
-                    control={<Radio />}
-                    label={"Không là thành viên"}
-                  />
-                  <FormControlLabel
-                    value="others"
-                    control={<Radio />}
-                    label={"Của nhóm người"}
-                  />
-                  <FormControlLabel
-                    value="any"
-                    control={<Radio />}
-                    label={"Bất kỳ"}
-                  />
-                </RadioGroup>
+              <FormControl fullWidth>
+                <InputLabel>Trạng thái đơn hàng</InputLabel>
+                <Select {...field} label={"Trạng thái đơn hàng"}>
+                  <MenuItem value="any">Tất cả</MenuItem>
+                  {orderStatusList.map((status) => (
+                    <MenuItem key={status.id} value={status.value}>
+                      {status.title}
+                    </MenuItem>
+                  ))}
+                </Select>
               </FormControl>
             )}
           />
-          {searchForm.watch("searchFor") == "others" && (
-            <Controller
-              name="ownerIds"
-              control={searchForm.control}
-              render={({ field }) => (
-                <Autocomplete
-                  multiple
-                  getOptionLabel={(option: any) =>
-                    `${option.lastName}  ${option.firstName}`
-                  }
-                  filterSelectedOptions
-                  filterOptions={(x, value) => {
-                    const regex = new RegExp(`${value.inputValue}`, "i");
-                    return x.filter((y) => {
-                      return regex.test(`${y.lastName} ${y.firstName}`);
-                    });
-                  }}
-                  options={getAllUserQuery.data?.data ?? []}
-                  renderInput={(params) => (
-                    <Controller
-                      name="fullName"
-                      control={searchForm.control}
-                      render={({ field }) => (
-                        <TextField
-                          {...params}
-                          {...field}
-                          label="Nhóm người dùng"
-                        />
-                      )}
-                    />
-                  )}
-                  onChange={(e, data) =>
-                    field.onChange(data.map((a) => a.userId))
-                  }
-                />
-              )}
-            />
-          )}
-          {searchForm.watch("searchFor") == "any" && (
-            <Controller
-              name="orderFullName"
-              control={searchForm.control}
-              render={({ field }) => <TextField {...field} label="Tên" />}
-            />
-          )}
-          <LoadingButton
-            loading={getManyOrderQuery.isLoading}
-            variant="contained"
-            type="submit"
-          >
-            Tìm kiếm
-          </LoadingButton>
+          </Stack>
         </Stack>
+        <LoadingButton
+          loading={getManyOrderQuery.isLoading}
+          variant="contained"
+          type="submit"
+          sx={{width:"475px", marginTop: "15px"}}
+        >
+          Tìm kiếm
+        </LoadingButton>
       </form>
       <Box sx={{ marginTop: "55px" }}>
         <CustomLazyDataGrid

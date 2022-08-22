@@ -21,6 +21,7 @@ import dayjs from "dayjs";
 import deleteManyUserRequest from "../../../api/user/deleteManyUserRequest";
 import { ApiRequestError } from "../../../interfaces/ApiRequestError";
 import CustomLazyDataGrid from "../../../views/layout/CustomDataGrid/CustomLazyDataGrid";
+import genderList from "../../../util/genderList";
 
 const columns: GridColDef[] = [
     {
@@ -36,6 +37,9 @@ const columns: GridColDef[] = [
     {
         field: "gender",
         headerName: "Giới tính",
+        renderCell: (params: GridRenderCellParams<string>)=>(
+          genderList.find((filter)=>filter.value==params.value)?.title
+        ),
         width: 100
     },
     {

@@ -11,22 +11,24 @@ import getAllShoesRequest, {
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import CardActionArea from "@mui/material/CardActionArea";
-import ShoesSearchDialogItem from "./ShoesSearchDialogItem";
+import ImportShoesSearchDialogItem from "./ImportShoesSearchDialogItem";
 import { Shoes } from "../../api/shoes/shoes";
 import Box from "@mui/material/Box";
 import { useEffect } from "react";
 
-interface ShoesSearchDialogProps {
+interface ImportShoesSearchDialogProps {
   open: boolean;
   onItemSelected?: (shoes: Shoes) => void;
   onClose?: () => void;
 }
 
-interface SearchShoesFormInputs {
+interface ImportSearchShoesFormInputs {
   SKU: string;
 }
-const ShoesSearchDialog: React.FC<ShoesSearchDialogProps> = (props) => {
-  const searchForm = useForm<SearchShoesFormInputs>({
+const ImportShoesSearchDialog: React.FC<ImportShoesSearchDialogProps> = (
+  props
+) => {
+  const searchForm = useForm<ImportSearchShoesFormInputs>({
     defaultValues: {
       SKU: "",
     },
@@ -58,7 +60,7 @@ const ShoesSearchDialog: React.FC<ShoesSearchDialogProps> = (props) => {
   const handleSelect = (shoes: Shoes) => {
     if (props.onItemSelected) props.onItemSelected(shoes);
   };
-  const handleSubmit: SubmitHandler<SearchShoesFormInputs> = (data) => {
+  const handleSubmit: SubmitHandler<ImportSearchShoesFormInputs> = (data) => {
     getShoesQuery.refetch();
   };
   return (
@@ -99,15 +101,11 @@ const ShoesSearchDialog: React.FC<ShoesSearchDialogProps> = (props) => {
                   key={shoes.shoesId}
                   sx={{ maxWidth: "250px", width: "100%" }}
                 >
-                  {shoes.quantity > 0 ? (
-                    <CardActionArea onClick={() => handleSelect(shoes)}>
-                      <ShoesSearchDialogItem {...shoes}></ShoesSearchDialogItem>
-                    </CardActionArea>
-                  ) : (
-                    <Box sx={{filter:"brightness(80%) grayscale(60%)"}}>
-                        <ShoesSearchDialogItem {...shoes}></ShoesSearchDialogItem>
-                    </Box>
-                  )}
+                  <CardActionArea onClick={() => handleSelect(shoes)}>
+                    <ImportShoesSearchDialogItem
+                      {...shoes}
+                    ></ImportShoesSearchDialogItem>
+                  </CardActionArea>
                 </Box>
               ))}
           </Stack>
@@ -121,4 +119,4 @@ const ShoesSearchDialog: React.FC<ShoesSearchDialogProps> = (props) => {
     </Dialog>
   );
 };
-export default ShoesSearchDialog;
+export default ImportShoesSearchDialog;
