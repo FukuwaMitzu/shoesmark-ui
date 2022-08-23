@@ -22,8 +22,6 @@ import getRelatedShoesRequest, {
   GetRelatedShoesQueryKey,
 } from "../../api/shoes/getRelatedShoesRequest";
 import RelatedShoesCard from "../../components/RelatedShoesCard/RelatedShoesCard";
-import useLocalStorage from "@rehooks/local-storage";
-import { CartLocalStorge } from "../../interfaces/CartLocalStorge";
 import LazyCartModal from "../../components/CartModal/LazyCartModal";
 import { useState } from "react";
 
@@ -78,7 +76,7 @@ const ShoesDetailPage: CustomNextPage = (
       <Breadcrumbs sx={{ marginBottom: "15px" }}>
         <Link href="/" passHref>
           <MuiLink underline="hover" color="inherit">
-            Home
+            Trang chủ
           </MuiLink>
         </Link>
         <Link href="/shoes" passHref>
@@ -161,6 +159,7 @@ const ShoesDetailPage: CustomNextPage = (
           </Box>
           <Button
             variant="contained"
+            disabled={shoes.quantity==0}
             sx={{ width: "250px", marginTop: "25px" }}
             endIcon={<ShoppingCartCheckoutIcon />}
             onClick={handleOnClick}

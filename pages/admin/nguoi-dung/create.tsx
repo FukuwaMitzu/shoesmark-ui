@@ -200,17 +200,20 @@ const CreateUserPage: CustomNextPage = () => {
           ></TextField>
           <TextField
             label="Mật khẩu"
+            required
             type={"password"}
             {...createUserForm.register("password")}
           ></TextField>
           <Stack direction={"row"} spacing={2}>
             <TextField
               label="Tên đệm"
+              required
               {...createUserForm.register("lastName")}
               fullWidth
             ></TextField>
             <TextField
               label="Tên"
+              required
               {...createUserForm.register("firstName")}
               fullWidth
             ></TextField>
@@ -302,7 +305,11 @@ const CreateUserPage: CustomNextPage = () => {
               />
             )}
           />
-          <TextField label="Địa chỉ" {...createUserForm.register("address")} />
+          <TextField
+            label="Địa chỉ"
+            required
+            {...createUserForm.register("address")}
+          />
           <FormControlLabel
             control={
               <Switch defaultChecked {...createUserForm.register("isActive")} />

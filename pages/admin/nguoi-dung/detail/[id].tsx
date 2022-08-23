@@ -382,6 +382,7 @@ const EditUserPage: CustomNextPage = () => {
                     {...params}
                     value={field.value}
                     required
+                    onChange={(e)=>editUserForm.setValue("city", e.target.value)}
                     label="Tỉnh / Thành phố"
                   />
                 )}
@@ -410,6 +411,7 @@ const EditUserPage: CustomNextPage = () => {
                   <TextField
                     {...params}
                     value={field.value}
+                    onChange={(e)=>editUserForm.setValue("district", e.target.value)}
                     required
                     label="Quận / Huyện"
                   />

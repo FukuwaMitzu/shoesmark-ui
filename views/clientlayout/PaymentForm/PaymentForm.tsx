@@ -144,7 +144,7 @@ const PaymentForm: React.FC<PaymentFormProps> = (data) => {
                                 name="cardExpiredDate"
                                 control={paymentForm.control}
                                 render={({ field }) => (
-                                    <DatePicker {...field} label="Hạn sử dụng" renderInput={(params) => <TextField required {...params} />}></DatePicker>
+                                    <DatePicker {...field} label="Hạn thẻ" renderInput={(params) => <TextField required {...params} />}></DatePicker>
                                 )}
                             />
                             <Controller

@@ -20,6 +20,8 @@ import Chip from "@mui/material/Chip";
 import { Brand } from "../../api/brand/brand";
 import Big from "big.js";
 import stringToColor from "../../util/stringToColor";
+import Link from "next/link";
+import { CardActionArea, Tooltip } from "@mui/material";
 interface CartShoesItemProps {
   shoesId: string;
   shoesImage: string;
@@ -84,12 +86,18 @@ const CartShoesItem: React.FC<CartShoesItemProps> = (props) => {
     <Box>
       <Stack direction={"row"} gap={2}>
         <Box>
-          <Image
-            height={"150px"}
-            width={"150px"}
-            src={`${SHOESMARK_API_DOMAIN}/${props.shoesImage}`}
-            alt={props.shoesName}
-          ></Image>
+          <Link href={"/shoes/" + props.shoesId}>
+            <Tooltip title={"Bấm để sang trang sản phẩm"}>
+              <CardActionArea>
+                <Image
+                  height={"150px"}
+                  width={"150px"}
+                  src={`${SHOESMARK_API_DOMAIN}/${props.shoesImage}`}
+                  alt={props.shoesName}
+                ></Image>
+              </CardActionArea>
+            </Tooltip>
+          </Link>
         </Box>
         <Stack sx={{ flex: 1 }}>
           <Typography>{props.shoesName}</Typography>

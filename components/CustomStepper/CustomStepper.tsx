@@ -7,6 +7,7 @@ import Stepper from "@mui/material/Stepper";
 import { createContext, ReactNode, useEffect, useState } from "react";
 import TabPanel from "@mui/lab/TabPanel";
 import TabsContext from "@mui/lab/TabContext";
+import { isDefined } from "class-validator";
 
 interface StepItem {
   name: string;
@@ -40,9 +41,8 @@ interface CustomStepperContextProps {
   onlyBackWhen: (contextName: string, value: boolean | null) => void;
   onlyNextWhen: (contextName: string, value: boolean | null) => void;
   getContext: (
-    contextName: string,
-    defaultContext?: StepContext
-  ) => StepContext | undefined;
+    contextName: string
+  ) => StepContext;
   onContextUpdate: (contextName: string, data: any) => void;
   setStepStatus: (contextName: string, status: StepStatus) => void;
   onBackRequest: (contextName: string, callback: StepRequestCallBack) => void;
@@ -75,11 +75,15 @@ const CustomStepper: React.FC<CustomStepperProps> = (data) => {
   const [requestCallBack, setRequestCallBack] = useState<StepRequest[]>(
     data.steps.map((step) => ({ next: () => {}, back: () => {} }))
   );
-  const getContext = (contextName: string, defaultContext?: StepContext) => {
-    return (
-      initialContext.find((context) => context.name == contextName) ??
-      defaultContext
-    );
+  const getContext = (contextName: string) => {
+    let context:any = initialContext.find((context) => context.name == contextName);
+    if(!isDefined(context)){
+      context = {
+        name: contextName,
+        status: "invalid",
+      }
+    }
+    return context;
   };
   //Check nextList condition
   useEffect(() => {

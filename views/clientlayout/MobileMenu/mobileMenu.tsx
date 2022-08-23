@@ -48,7 +48,7 @@ const MobileMenu: React.FC = (props) => {
   //=====Effects============
   useEffect(() => {
     setOpen(false);
-  }, [router.pathname]);
+  }, [router.query]);
 
   const getAllCategory = useQuery(
     [GetAllCategoryQueryKey],
@@ -59,19 +59,24 @@ const MobileMenu: React.FC = (props) => {
   );
 
   const category = getAllCategory.data;
-
   return (
     <>
       <IconButton color="inherit" onClick={tougleMenu}>
         <MenuIcon></MenuIcon>
       </IconButton>
-      <MobileDrawer anchor="right" open={open} onClose={tougleMenu}>
+      <MobileDrawer
+        keepMounted
+        variant="temporary"
+        anchor="right"
+        open={open}
+        onClose={tougleMenu}
+      >
         <List>
           {session.status == "authenticated" && (
             <>
               <ListItem disablePadding>
                 <Link href={"/profile"} passHref>
-                  <ListItemButton>
+                  <ListItemButton selected={router.pathname == "/profile"}>
                     <ListItemIcon>
                       <AccountCircleIcon />
                     </ListItemIcon>
@@ -79,12 +84,11 @@ const MobileMenu: React.FC = (props) => {
                   </ListItemButton>
                 </Link>
               </ListItem>
-              <Divider />
             </>
           )}
           <ListItem disablePadding>
             <Link href={"/cart"} passHref>
-              <ListItemButton>
+              <ListItemButton selected={router.pathname == "/cart"}>
                 <ListItemIcon>
                   <LocalMallIcon />
                 </ListItemIcon>
@@ -112,10 +116,9 @@ const MobileMenu: React.FC = (props) => {
               </ListItem>
             </>
           )}
-          <Divider />
           <ListItem disablePadding>
             <Link href={"/shoes"} passHref>
-              <ListItemButton>
+              <ListItemButton selected={router.pathname == "/shoes"}>
                 <ListItemIcon>
                   <SearchIcon />
                 </ListItemIcon>
@@ -134,7 +137,7 @@ const MobileMenu: React.FC = (props) => {
                 <ListItemIcon></ListItemIcon>
                 <Typography>Danh mục</Typography>
               </AccordionSummary>
-              <AccordionDetails>
+              <AccordionDetails sx={{ fontFamily: "Roboto" }}>
                 <List>
                   {category &&
                     category.data.map((row) => (
@@ -143,17 +146,22 @@ const MobileMenu: React.FC = (props) => {
                         href={`/category/${row.categoryId}`}
                         passHref
                       >
-                        <ListItemButton>{row.categoryName}</ListItemButton>
+                        <ListItemButton
+                          selected={
+                            router.asPath == `/category/${row.categoryId}`
+                          }
+                        >
+                          {row.categoryName}
+                        </ListItemButton>
                       </Link>
                     ))}
                 </List>
               </AccordionDetails>
             </Accordion>
           </ListItem>
-          <Divider />
           {session.status == "authenticated" ? (
             <ListItem disablePadding>
-              <ListItemButton onClick={() => signOut()}>
+              <ListItemButton onClick={() => signOut({ redirect: false })}>
                 <ListItemIcon>
                   <LogoutIcon />
                 </ListItemIcon>
@@ -169,10 +177,12 @@ const MobileMenu: React.FC = (props) => {
                 </ListItemButton>
               </ListItem>
               <ListItem disablePadding>
-                <ListItemButton>
-                  <ListItemIcon></ListItemIcon>
-                  <ListItemText>Đăng ký</ListItemText>
-                </ListItemButton>
+                <Link href={"/auth/signUp"} passHref>
+                  <ListItemButton>
+                    <ListItemIcon></ListItemIcon>
+                    <ListItemText>Đăng ký</ListItemText>
+                  </ListItemButton>
+                </Link>
               </ListItem>
             </>
           )}

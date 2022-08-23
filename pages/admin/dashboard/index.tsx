@@ -135,7 +135,9 @@ const DashboardPage: CustomNextPage = () => {
           </Typography>
         </Paper>
         <Paper sx={{ flex: 1, padding: 2, bgcolor: "#8C3EE9", color: "white" }}>
-          <Typography sx={{ marginBottom: "10px" }}>Khách hàng thành viên</Typography>
+          <Typography sx={{ marginBottom: "10px" }}>
+            Khách hàng thành viên
+          </Typography>
           <Typography variant="h5" fontWeight={"bold"}>
             {getGeneralStatistic.data.totalRegisterdUser}
           </Typography>
@@ -151,7 +153,16 @@ const DashboardPage: CustomNextPage = () => {
           >
             Doanh thu
           </Typography>
-          <LineChart data={lineData}/>
+          <LineChart
+            data={lineData}
+            options={{
+              scales: {
+                y: {
+                  min: 0,
+                },
+              },
+            }}
+          />
         </Box>
         <Box sx={{ flexShrink: 0 }}>
           <Typography
