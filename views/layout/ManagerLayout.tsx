@@ -16,7 +16,7 @@ import SignalCellularAltOutlinedIcon from "@mui/icons-material/SignalCellularAlt
 import ListItem from "@mui/material/ListItem";
 import Container from "@mui/material/Container";
 import DashboardIcon from "@mui/icons-material/Dashboard";
-import dayjs from "dayjs";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 interface ManagerLayoutProps extends React.PropsWithChildren {}
 
@@ -133,6 +133,21 @@ const ManagerLayout: React.FC<ManagerLayoutProps> = ({ children }) => {
                   </CustomListItemButton>
                   <CustomListItemButton href="/admin/hoa-don-nhap">
                     Hoá đơn nhập
+                  </CustomListItemButton>
+                  <CustomListItemButton
+                    href="https://dashboard.tawk.to/#/dashboard/62c680b27b967b1179986c23"
+                    target="_blank"
+                  >
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 1,
+                      }}
+                    >
+                      <Typography sx={{ flex: 1 }}> Tư vấn sản phẩm</Typography>
+                      <OpenInNewIcon />
+                    </Box>
                   </CustomListItemButton>
                 </List>
               </AccordionDetails>

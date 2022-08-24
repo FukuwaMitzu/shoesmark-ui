@@ -917,6 +917,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tawk.to/tawk-messenger-react@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "@tawk.to/tawk-messenger-react@npm:2.0.1"
+  peerDependencies:
+    react: ^18.1.0
+    react-dom: ^18.1.0
+    react-scripts: ^5.0.1
+  checksum: 48554e861fbf7dce9d7da727c25a20d759a40684bccc3f2ab4221d201e7a4b945d65963e8ab80e0d9413c7f479073af1d3588f104dc61950b5feef4c92bdfcd3
+  languageName: node
+  linkType: hard
+
 "@tootallnate/once@npm:2":
   version: 2.0.0
   resolution: "@tootallnate/once@npm:2.0.0"
@@ -4378,6 +4389,7 @@ __metadata:
     "@next/bundle-analyzer": ^12.2.5
     "@rehooks/local-storage": ^2.4.4
     "@tanstack/react-query": ^4.0.10
+    "@tawk.to/tawk-messenger-react": ^2.0.1
     "@types/axios": ^0.14.0
     "@types/big.js": ^6.1.5
     "@types/jsonwebtoken": ^8.5.8

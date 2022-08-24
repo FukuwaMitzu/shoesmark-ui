@@ -1,14 +1,15 @@
 import ListItemButton from "@mui/material/ListItemButton";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { HTMLAttributeAnchorTarget, useEffect, useState } from "react";
 
-interface CustomListItemButtonProps {
+interface CustomListItemButtonProps extends React.PropsWithChildren {
   href?: string;
-  children?: React.ReactNode;
+  target?: HTMLAttributeAnchorTarget;
 }
 const CustomListItemButton: React.FC<CustomListItemButtonProps> = ({
   href,
+  target,
   children,
 }) => {
   const router = useRouter();
@@ -23,7 +24,9 @@ const CustomListItemButton: React.FC<CustomListItemButtonProps> = ({
 
   return href ? (
     <Link href={href} passHref>
-      <ListItemButton selected={isActive}>{children}</ListItemButton>
+      <a target={target} style={{ width: "100%" }}>
+        <ListItemButton selected={isActive}>{children}</ListItemButton>
+      </a>
     </Link>
   ) : (
     <ListItemButton>{children}</ListItemButton>

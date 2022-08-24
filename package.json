@@ -20,6 +20,7 @@
     "@next/bundle-analyzer": "^12.2.5",
     "@rehooks/local-storage": "^2.4.4",
     "@tanstack/react-query": "^4.0.10",
+    "@tawk.to/tawk-messenger-react": "^2.0.1",
     "@types/axios": "^0.14.0",
     "@types/big.js": "^6.1.5",
     "@types/jsonwebtoken": "^8.5.8",

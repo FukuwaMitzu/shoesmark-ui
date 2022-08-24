@@ -44,6 +44,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@next/bundle-analyzer", "npm:12.2.5"],\
             ["@rehooks/local-storage", "virtual:4c5034b83796bb934637eb164f58e9f2941d66a4c944b0e735df53bea9d1870eccd35d7d74cda93eacaa51fbce19864245c324fcda7061608fef0fe2f1e9e857#npm:2.4.4"],\
             ["@tanstack/react-query", "virtual:4c5034b83796bb934637eb164f58e9f2941d66a4c944b0e735df53bea9d1870eccd35d7d74cda93eacaa51fbce19864245c324fcda7061608fef0fe2f1e9e857#npm:4.0.10"],\
+            ["@tawk.to/tawk-messenger-react", "virtual:4c5034b83796bb934637eb164f58e9f2941d66a4c944b0e735df53bea9d1870eccd35d7d74cda93eacaa51fbce19864245c324fcda7061608fef0fe2f1e9e857#npm:2.0.1"],\
             ["@types/axios", "npm:0.14.0"],\
             ["@types/big.js", "npm:6.1.5"],\
             ["@types/jsonwebtoken", "npm:8.5.8"],\
@@ -1340,6 +1341,36 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             "@types/react",\
             "react-dom",\
             "react-native",\
+            "react"\
+          ],\
+          "linkType": "HARD"\
+        }]\
+      ]],\
+      ["@tawk.to/tawk-messenger-react", [\
+        ["npm:2.0.1", {\
+          "packageLocation": "./.yarn/cache/@tawk.to-tawk-messenger-react-npm-2.0.1-45ac6cb0a2-48554e861f.zip/node_modules/@tawk.to/tawk-messenger-react/",\
+          "packageDependencies": [\
+            ["@tawk.to/tawk-messenger-react", "npm:2.0.1"]\
+          ],\
+          "linkType": "SOFT"\
+        }],\
+        ["virtual:4c5034b83796bb934637eb164f58e9f2941d66a4c944b0e735df53bea9d1870eccd35d7d74cda93eacaa51fbce19864245c324fcda7061608fef0fe2f1e9e857#npm:2.0.1", {\
+          "packageLocation": "./.yarn/__virtual__/@tawk.to-tawk-messenger-react-virtual-6fd9a7b81e/0/cache/@tawk.to-tawk-messenger-react-npm-2.0.1-45ac6cb0a2-48554e861f.zip/node_modules/@tawk.to/tawk-messenger-react/",\
+          "packageDependencies": [\
+            ["@tawk.to/tawk-messenger-react", "virtual:4c5034b83796bb934637eb164f58e9f2941d66a4c944b0e735df53bea9d1870eccd35d7d74cda93eacaa51fbce19864245c324fcda7061608fef0fe2f1e9e857#npm:2.0.1"],\
+            ["@types/react", "npm:18.0.15"],\
+            ["@types/react-dom", "npm:18.0.6"],\
+            ["@types/react-scripts", null],\
+            ["react", "npm:18.2.0"],\
+            ["react-dom", "virtual:4c5034b83796bb934637eb164f58e9f2941d66a4c944b0e735df53bea9d1870eccd35d7d74cda93eacaa51fbce19864245c324fcda7061608fef0fe2f1e9e857#npm:18.2.0"],\
+            ["react-scripts", null]\
+          ],\
+          "packagePeers": [\
+            "@types/react-dom",\
+            "@types/react-scripts",\
+            "@types/react",\
+            "react-dom",\
+            "react-scripts",\
             "react"\
           ],\
           "linkType": "HARD"\
@@ -5570,6 +5601,7 @@ function $$SETUP_STATE(hydrateRuntimeState, basePath) {
             ["@next/bundle-analyzer", "npm:12.2.5"],\
             ["@rehooks/local-storage", "virtual:4c5034b83796bb934637eb164f58e9f2941d66a4c944b0e735df53bea9d1870eccd35d7d74cda93eacaa51fbce19864245c324fcda7061608fef0fe2f1e9e857#npm:2.4.4"],\
             ["@tanstack/react-query", "virtual:4c5034b83796bb934637eb164f58e9f2941d66a4c944b0e735df53bea9d1870eccd35d7d74cda93eacaa51fbce19864245c324fcda7061608fef0fe2f1e9e857#npm:4.0.10"],\
+            ["@tawk.to/tawk-messenger-react", "virtual:4c5034b83796bb934637eb164f58e9f2941d66a4c944b0e735df53bea9d1870eccd35d7d74cda93eacaa51fbce19864245c324fcda7061608fef0fe2f1e9e857#npm:2.0.1"],\
             ["@types/axios", "npm:0.14.0"],\
             ["@types/big.js", "npm:6.1.5"],\
             ["@types/jsonwebtoken", "npm:8.5.8"],\

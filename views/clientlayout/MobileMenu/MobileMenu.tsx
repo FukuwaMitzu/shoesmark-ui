@@ -27,7 +27,7 @@ import getAllCategoryRequest, {
   GetAllCategoryQueryKey,
 } from "../../../apiRequests/category/getAllCategoryRequest";
 import AccordionDetails from "@mui/material/AccordionDetails";
-
+import CategoryIcon from "@mui/icons-material/Category";
 const MobileDrawer = styled(Drawer)(({ theme }) => ({
   "& .MuiDrawer-paper": {
     width: "100%",
@@ -134,7 +134,9 @@ const MobileMenu: React.FC = (props) => {
               }}
             >
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <ListItemIcon></ListItemIcon>
+                <ListItemIcon>
+                  <CategoryIcon />
+                </ListItemIcon>
                 <Typography>Danh mục</Typography>
               </AccordionSummary>
               <AccordionDetails sx={{ fontFamily: "Roboto" }}>
