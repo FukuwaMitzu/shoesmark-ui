@@ -14,7 +14,7 @@ import axios from "axios";
 import { isNotEmpty } from "class-validator";
 import { useEffect } from "react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import getUserExistRequest from "../../../api/user/getUserExistRequest";
+import getUserExistRequest from "../../../apiRequests/user/getUserExistRequest";
 import useStepper from "../../../components/CustomStepper/hooks/useStepperContext";
 import genderList from "../../../util/genderList";
 

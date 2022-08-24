@@ -12,7 +12,7 @@ import Box from "@mui/material/Box";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import Autocomplete from "@mui/material/Autocomplete";
-import getMeRequest, { GetMeQueryKey } from "../../../api/user/getMeRequest";
+import getMeRequest, { GetMeQueryKey } from "../../../apiRequests/user/getMeRequest";
 import { useEffect } from "react";
 import { isDefined, isNotEmpty } from "class-validator";
 import useStepper from "../../../components/CustomStepper/hooks/useStepperContext";

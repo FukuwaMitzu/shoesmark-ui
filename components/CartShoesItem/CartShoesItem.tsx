@@ -4,7 +4,7 @@ import Stack from "@mui/material/Stack";
 import Image from "next/image";
 import { SHOESMARK_API_DOMAIN } from "../../config/domain";
 import { styled } from "@mui/material/styles";
-import { Color } from "../../api/color/color";
+import { Color } from "../../apiRequests/color/color";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
 import {
@@ -15,9 +15,9 @@ import {
 } from "react";
 import useLocalStorage from "@rehooks/local-storage";
 import { CartLocalStorge } from "../../interfaces/CartLocalStorge";
-import { Category } from "../../api/category/category";
+import { Category } from "../../apiRequests/category/category";
 import Chip from "@mui/material/Chip";
-import { Brand } from "../../api/brand/brand";
+import { Brand } from "../../apiRequests/brand/brand";
 import Big from "big.js";
 import stringToColor from "../../util/stringToColor";
 import Link from "next/link";

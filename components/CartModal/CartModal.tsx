@@ -4,7 +4,7 @@ import Modal from "@mui/material/Modal"
 import Stack from "@mui/material/Stack";
 import { styled } from "@mui/material/styles";
 import Image from "next/image";
-import { Color } from "../../api/color/color";
+import { Color } from "../../apiRequests/color/color";
 import { SHOESMARK_API_DOMAIN } from "../../config/domain";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";

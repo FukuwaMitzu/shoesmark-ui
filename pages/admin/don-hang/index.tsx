@@ -19,8 +19,8 @@ import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import getManyOrderRequest from "../../../api/order/getManyOrderRequest";
-import getAllUserRequest from "../../../api/user/getAllUserRequest";
+import getManyOrderRequest from "../../../apiRequests/order/getManyOrderRequest";
+import getAllUserRequest from "../../../apiRequests/user/getAllUserRequest";
 import { useEffect } from "react";
 import {
   GridColDef,
@@ -34,7 +34,7 @@ import LaunchOutlinedIcon from "@mui/icons-material/LaunchOutlined";
 import stringAvatar from "../../../util/stringAvatar";
 import dayjs from "dayjs";
 import currencyFormater from "../../../util/currencyFormater";
-import deleteManyOrderRequest from "../../../api/order/deleteManyOrderRequest";
+import deleteManyOrderRequest from "../../../apiRequests/order/deleteManyOrderRequest";
 import CustomLazyDataGrid from "../../../views/layout/CustomDataGrid/CustomLazyDataGrid";
 import orderStatusList from "../../../util/orderStatusList";
 import Select from "@mui/material/Select";

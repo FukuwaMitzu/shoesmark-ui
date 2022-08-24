@@ -18,8 +18,8 @@ import Button from "@mui/material/Button";
 import { ApiRequestError } from "../../../../interfaces/ApiRequestError";
 import extractDiff from "../../../../util/extractDiff";
 import FormLabel from "@mui/material/FormLabel";
-import editCategoryRequest from "../../../../api/category/editCategoryRequest";
-import getCategoryRequest from "../../../../api/category/getCategoryRequest";
+import editCategoryRequest from "../../../../apiRequests/category/editCategoryRequest";
+import getCategoryRequest from "../../../../apiRequests/category/getCategoryRequest";
 
 type EditCateogryFormInputs = {
     categoryName: string,

@@ -20,7 +20,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import axios, { AxiosResponse } from "axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import LoadingButton from "@mui/lab/LoadingButton";
-import getUserExistRequest from "../../../../api/user/getUserExistRequest";
+import getUserExistRequest from "../../../../apiRequests/user/getUserExistRequest";
 import { useEffect, useState } from "react";
 import { ApiRequestError } from "../../../../interfaces/ApiRequestError";
 import genderList from "../../../../util/genderList";
@@ -32,8 +32,8 @@ import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import SaveIcon from "@mui/icons-material/Save";
 import getUserRequest, {
   GetUserQueryKey,
-} from "../../../../api/user/getUserRequest";
-import editUserRequest from "../../../../api/user/editUserRequest";
+} from "../../../../apiRequests/user/getUserRequest";
+import editUserRequest from "../../../../apiRequests/user/editUserRequest";
 import extractDiff from "../../../../util/extractDiff";
 
 type EditUserFormInputs = {

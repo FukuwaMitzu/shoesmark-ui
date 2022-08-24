@@ -8,7 +8,7 @@ import Big from "big.js";
 import { useEffect } from "react";
 import getAllShoesRequest, {
   GetAllShoesQueryKey,
-} from "../../../api/shoes/getAllShoesRequest";
+} from "../../../apiRequests/shoes/getAllShoesRequest";
 import CartShoesItem from "../../../components/CartShoesItem/CartShoesItem";
 import useStepper from "../../../components/CustomStepper/hooks/useStepperContext";
 import { CartLocalStorge } from "../../../interfaces/CartLocalStorge";

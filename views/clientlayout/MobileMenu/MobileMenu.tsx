@@ -25,7 +25,7 @@ import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import getAllCategoryRequest, {
   GetAllCategoryQueryKey,
-} from "../../../api/category/getAllCategoryRequest";
+} from "../../../apiRequests/category/getAllCategoryRequest";
 import AccordionDetails from "@mui/material/AccordionDetails";
 
 const MobileDrawer = styled(Drawer)(({ theme }) => ({

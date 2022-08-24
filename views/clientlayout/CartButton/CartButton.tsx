@@ -15,7 +15,7 @@ import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import getAllShoesRequest, {
   GetAllShoesQueryKey,
-} from "../../../api/shoes/getAllShoesRequest";
+} from "../../../apiRequests/shoes/getAllShoesRequest";
 import Typography from "@mui/material/Typography";
 
 interface CartButtonProps {}

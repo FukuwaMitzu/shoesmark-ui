@@ -8,16 +8,16 @@ import { useSession } from "next-auth/react";
 import { useMutation } from "@tanstack/react-query";
 import createAnonymousOrderRequest, {
   CreateAnonymousOrderParam,
-} from "../../../api/order/createAnonymousOrderRequest";
+} from "../../../apiRequests/order/createAnonymousOrderRequest";
 import createMyOrderRequest, {
   CreateMyOrderParam,
-} from "../../../api/order/createMyOrderRequest";
+} from "../../../apiRequests/order/createMyOrderRequest";
 import createAnonymousOrderDetailRequest, {
   CreateAnonymousOrderDetailParam,
-} from "../../../api/order/createAnonymousOrderDetailRequest";
+} from "../../../apiRequests/order/createAnonymousOrderDetailRequest";
 import createMyOrderDetailRequest, {
   CreateMyOrderDetailParam,
-} from "../../../api/order/createMyOrderDetailRequest";
+} from "../../../apiRequests/order/createMyOrderDetailRequest";
 import { CartLocalStorge } from "../../../interfaces/CartLocalStorge";
 import useLocalStorage from "@rehooks/local-storage";
 

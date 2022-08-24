@@ -6,7 +6,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import Box from "@mui/material/Box";
-import { Color } from "../../api/color/color";
+import { Color } from "../../apiRequests/color/color";
 import { SHOESMARK_API_DOMAIN } from "../../config/domain";
 import Image from "next/image";
 import { MouseEventHandler, useState } from "react";

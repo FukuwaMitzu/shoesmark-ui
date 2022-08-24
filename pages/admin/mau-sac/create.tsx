@@ -15,7 +15,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import { ApiRequestError } from "../../../interfaces/ApiRequestError";
-import createColorRequest from "../../../api/color/createColorRequest";
+import createColorRequest from "../../../apiRequests/color/createColorRequest";
 
 
 type CreateColorFormInputs = {

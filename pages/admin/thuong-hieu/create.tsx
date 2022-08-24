@@ -14,7 +14,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import { ApiRequestError } from "../../../interfaces/ApiRequestError";
-import createBrandRequest from "../../../api/brand/createBrandRequest";
+import createBrandRequest from "../../../apiRequests/brand/createBrandRequest";
 
 type CreateBrandFormInputs = {
     brandName: string,

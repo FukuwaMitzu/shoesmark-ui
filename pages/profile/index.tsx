@@ -6,7 +6,7 @@ import MuiLink from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import { Avatar, Button, Stack } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import getMeRequest, { GetMeQueryKey } from "../../api/user/getMeRequest";
+import getMeRequest, { GetMeQueryKey } from "../../apiRequests/user/getMeRequest";
 import { useSession } from "next-auth/react";
 import stringAvatar from "../../util/stringAvatar";
 import dayjs from "dayjs";

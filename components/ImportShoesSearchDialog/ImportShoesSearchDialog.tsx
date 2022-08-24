@@ -7,12 +7,12 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useQuery } from "@tanstack/react-query";
 import getAllShoesRequest, {
   GetAllShoesQueryKey,
-} from "../../api/shoes/getAllShoesRequest";
+} from "../../apiRequests/shoes/getAllShoesRequest";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import CardActionArea from "@mui/material/CardActionArea";
 import ImportShoesSearchDialogItem from "./ImportShoesSearchDialogItem";
-import { Shoes } from "../../api/shoes/shoes";
+import { Shoes } from "../../apiRequests/shoes/shoes";
 import Box from "@mui/material/Box";
 import { useEffect } from "react";
 

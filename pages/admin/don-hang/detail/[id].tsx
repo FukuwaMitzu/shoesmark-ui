@@ -7,7 +7,7 @@ import Typography from "@mui/material/Typography";
 import { useRouter } from "next/router";
 import getOrderRequest, {
   GetOrderQueryKey,
-} from "../../../../api/order/getOrderRequest";
+} from "../../../../apiRequests/order/getOrderRequest";
 import { useSession } from "next-auth/react";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -39,13 +39,13 @@ import OptionDial, {
 import Button from "@mui/material/Button";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import ShoesSearchDialog from "../../../../components/ShoesSearchDialog/ShoesSearchDialog";
-import { Shoes } from "../../../../api/shoes/shoes";
+import { Shoes } from "../../../../apiRequests/shoes/shoes";
 import extractDiff from "../../../../util/extractDiff";
 import { isNotEmptyObject } from "class-validator";
-import editOrderDetailRequest from "../../../../api/order/editOrderDetail";
-import deleteOrderDetailRequest from "../../../../api/order/deleteOrderDetail";
-import createOrderDetailRequest from "../../../../api/order/createOrderDetail";
-import editOrderRequest from "../../../../api/order/editOrder";
+import editOrderDetailRequest from "../../../../apiRequests/order/editOrderDetail";
+import deleteOrderDetailRequest from "../../../../apiRequests/order/deleteOrderDetail";
+import createOrderDetailRequest from "../../../../apiRequests/order/createOrderDetail";
+import editOrderRequest from "../../../../apiRequests/order/editOrder";
 import LazyDetailOrderItem from "../../../../components/DetailOrderItem/LazyDetailOrderItem";
 import { useSnackbar } from "notistack";
 

@@ -16,8 +16,8 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { GridColDef, GridRenderCellParams, GridRowId } from "@mui/x-data-grid";
 import IconButton from "@mui/material/IconButton";
 import LaunchOutlinedIcon from "@mui/icons-material/LaunchOutlined";
-import getAllCategoryRequest from "../../../api/category/getAllCategoryRequest";
-import deleteManyCategoryRequest from "../../../api/category/deleteManyCategoryRequest";
+import getAllCategoryRequest from "../../../apiRequests/category/getAllCategoryRequest";
+import deleteManyCategoryRequest from "../../../apiRequests/category/deleteManyCategoryRequest";
 import dayjs from "dayjs";
 import CustomLazyDataGrid from "../../../views/layout/CustomDataGrid/CustomLazyDataGrid";
 const columns: GridColDef[] = [

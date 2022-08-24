@@ -9,11 +9,11 @@ import { useQuery } from "@tanstack/react-query";
 import { isDefined } from "class-validator";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import Link from "next/link";
-import { Category } from "../../api/category/category";
-import getCategoryRequest from "../../api/category/getCategoryRequest";
+import { Category } from "../../apiRequests/category/category";
+import getCategoryRequest from "../../apiRequests/category/getCategoryRequest";
 import getAllShoesRequest, {
   GetAllShoesQueryKey,
-} from "../../api/shoes/getAllShoesRequest";
+} from "../../apiRequests/shoes/getAllShoesRequest";
 import CustomPagination from "../../components/CustomPagination/CustomPagination";
 import useCustomPagination from "../../components/CustomPagination/hooks/useCustomPagination";
 import LazyShoesCard from "../../components/ShoesCard/LazyShoesCard";

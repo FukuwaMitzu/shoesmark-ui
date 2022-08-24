@@ -16,7 +16,7 @@ import {
 import useLocalStorage from "@rehooks/local-storage";
 import { CartLocalStorge } from "../../../../interfaces/CartLocalStorge";
 import Big from "big.js";
-import { Color } from "../../../../api/color/color";
+import { Color } from "../../../../apiRequests/color/color";
 import currencyFormater from "../../../../util/currencyFormater";
 import Tooltip from "@mui/material/Tooltip";
 

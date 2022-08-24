@@ -4,7 +4,7 @@ import CardHeader from "@mui/material/CardHeader";
 import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import Big from "big.js";
-import { Color } from "../../api/color/color";
+import { Color } from "../../apiRequests/color/color";
 import currencyFormater from "../../util/currencyFormater";
 import Image from "next/image";
 import { SHOESMARK_API_DOMAIN } from "../../config/domain";

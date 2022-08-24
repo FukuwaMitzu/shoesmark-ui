@@ -11,20 +11,20 @@ import LaunchOutlinedIcon from "@mui/icons-material/LaunchOutlined";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import useCustomPagination from "../../../components/CustomPagination/hooks/useCustomPagination";
-import getAllShoesRequest from "../../../api/shoes/getAllShoesRequest";
+import getAllShoesRequest from "../../../apiRequests/shoes/getAllShoesRequest";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import Image from "next/image";
 import dayjs from "dayjs";
-import deleteManyShoesRequest from "../../../api/shoes/deleteManyShoesRequest";
+import deleteManyShoesRequest from "../../../apiRequests/shoes/deleteManyShoesRequest";
 import { useSnackbar } from "notistack";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import TextField from "@mui/material/TextField";
 import LoadingButton from "@mui/lab/LoadingButton";
 import Autocomplete from "@mui/material/Autocomplete";
-import getAllCategoryRequest from "../../../api/category/getAllCategoryRequest";
+import getAllCategoryRequest from "../../../apiRequests/category/getAllCategoryRequest";
 import getAllColorRequest, {
   GetAllColorQueryKey,
-} from "../../../api/color/getAllColorRequest";
+} from "../../../apiRequests/color/getAllColorRequest";
 import currencyFormater from "../../../util/currencyFormater";
 import CustomLazyDataGrid from "../../../views/layout/CustomDataGrid/CustomLazyDataGrid";
 

@@ -20,11 +20,11 @@ import Autocomplete from "@mui/material/Autocomplete";
 import axios, { AxiosResponse } from "axios";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import LoadingButton from "@mui/lab/LoadingButton";
-import getUserExistRequest from "../../../api/user/getUserExistRequest";
+import getUserExistRequest from "../../../apiRequests/user/getUserExistRequest";
 import { useEffect } from "react";
 import createUserRequest, {
   CreateUserParam,
-} from "../../../api/user/createUserRequest";
+} from "../../../apiRequests/user/createUserRequest";
 import { ApiRequestError } from "../../../interfaces/ApiRequestError";
 import genderList from "../../../util/genderList";
 

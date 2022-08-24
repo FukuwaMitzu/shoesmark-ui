@@ -15,9 +15,9 @@ import TextField from "@mui/material/TextField";
 import { ChromePicker } from "react-color";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import getColorRequest from "../../../../api/color/getColorRequest";
+import getColorRequest from "../../../../apiRequests/color/getColorRequest";
 import Button from "@mui/material/Button";
-import editColorRequest from "../../../../api/color/editColorRequest";
+import editColorRequest from "../../../../apiRequests/color/editColorRequest";
 import { ApiRequestError } from "../../../../interfaces/ApiRequestError";
 import extractDiff from "../../../../util/extractDiff";
 

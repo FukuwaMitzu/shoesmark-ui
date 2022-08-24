@@ -14,7 +14,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 import { ApiRequestError } from "../../../interfaces/ApiRequestError";
-import createCategoryRequest from "../../../api/category/createCategoryRequest";
+import createCategoryRequest from "../../../apiRequests/category/createCategoryRequest";
 import FormLabel from "@mui/material/FormLabel";
 
 type CreateCateogryFormInputs = {

@@ -17,8 +17,8 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import Button from "@mui/material/Button";
 import { ApiRequestError } from "../../../../interfaces/ApiRequestError";
 import extractDiff from "../../../../util/extractDiff";
-import getBrandRequest from "../../../../api/brand/getBrandRequest";
-import editBrandRequest from "../../../../api/brand/editBrandRequest";
+import getBrandRequest from "../../../../apiRequests/brand/getBrandRequest";
+import editBrandRequest from "../../../../apiRequests/brand/editBrandRequest";
 
 type EditBrandFormInputs = {
     brandName: string,

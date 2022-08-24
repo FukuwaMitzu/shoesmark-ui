@@ -15,7 +15,7 @@ import Link from "next/link";
 import { Controller, useForm } from "react-hook-form";
 import GetRenevueReportRequest, {
   GetRenevueReportQueryKey,
-} from "../../../api/statistic/getRenevueReportRequest";
+} from "../../../apiRequests/statistic/getRenevueReportRequest";
 import currencyFormater from "../../../util/currencyFormater";
 import { CustomNextPage } from "../../_app";
 

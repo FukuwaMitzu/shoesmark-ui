@@ -5,7 +5,7 @@ import Button from "@mui/material/Button";
 import Chip from "@mui/material/Chip";
 import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import Image from "next/image";
-import getShoesRequest from "../../api/shoes/getShoesRequest";
+import getShoesRequest from "../../apiRequests/shoes/getShoesRequest";
 import stringToColor from "../../util/stringToColor";
 import { SHOESMARK_API_DOMAIN } from "../../config/domain";
 import currencyFormater from "../../util/currencyFormater";
@@ -16,11 +16,11 @@ import MuiLink from "@mui/material/Link";
 import { CustomNextPage } from "../_app";
 import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 import { isDefined } from "class-validator";
-import { Shoes } from "../../api/shoes/shoes";
+import { Shoes } from "../../apiRequests/shoes/shoes";
 import { useQuery } from "@tanstack/react-query";
 import getRelatedShoesRequest, {
   GetRelatedShoesQueryKey,
-} from "../../api/shoes/getRelatedShoesRequest";
+} from "../../apiRequests/shoes/getRelatedShoesRequest";
 import RelatedShoesCard from "../../components/RelatedShoesCard/RelatedShoesCard";
 import LazyCartModal from "../../components/CartModal/LazyCartModal";
 import { useState } from "react";

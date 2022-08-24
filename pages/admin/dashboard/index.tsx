@@ -7,7 +7,7 @@ import GetGeneralStatisticRequest, {
   GeneralStatistic,
   GeneralStatisticDuration,
   GetGeneralStatisticQueryKey,
-} from "../../../api/statistic/getGeneralStatisticRequest";
+} from "../../../apiRequests/statistic/getGeneralStatisticRequest";
 import { useSession } from "next-auth/react";
 import dayjs from "dayjs";
 import currencyFormater from "../../../util/currencyFormater";

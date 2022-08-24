@@ -17,23 +17,23 @@ import Button from "@mui/material/Button";
 import OptionDial, {
   OptionDialItem,
 } from "../../../../components/OptionDial/OptionDial";
-import createImportOrderDetailRequest from "../../../../api/importOrder/createImportOrderDetailRequest";
-import deleteImportOrderDetailRequest from "../../../../api/importOrder/deleteImportOrderDetailRequest";
-import editImportOrderDetailRequest from "../../../../api/importOrder/editImportOrderDetailRequest";
-import { Shoes } from "../../../../api/shoes/shoes";
+import createImportOrderDetailRequest from "../../../../apiRequests/importOrder/createImportOrderDetailRequest";
+import deleteImportOrderDetailRequest from "../../../../apiRequests/importOrder/deleteImportOrderDetailRequest";
+import editImportOrderDetailRequest from "../../../../apiRequests/importOrder/editImportOrderDetailRequest";
+import { Shoes } from "../../../../apiRequests/shoes/shoes";
 import { useSession } from "next-auth/react";
 import ImportShoesSearchDialog from "../../../../components/ImportShoesSearchDialog/ImportShoesSearchDialog";
 import LazyDetailImportOrderItem from "../../../../components/DetailImportOrderItem/LazyDetailImportOrderItem";
 import currencyFormater from "../../../../util/currencyFormater";
 import getImportOrderRequest, {
   GetImportOrderQueryKey,
-} from "../../../../api/importOrder/getImportOrderRequest";
+} from "../../../../apiRequests/importOrder/getImportOrderRequest";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import ClearOutlinedIcon from "@mui/icons-material/ClearOutlined";
 import extractDiff from "../../../../util/extractDiff";
 import { isNotEmptyObject } from "class-validator";
-import editImportOrderRequest from "../../../../api/importOrder/editImportOrderRequest";
+import editImportOrderRequest from "../../../../apiRequests/importOrder/editImportOrderRequest";
 
 type QueueTransaction = {
   importOrder: any;

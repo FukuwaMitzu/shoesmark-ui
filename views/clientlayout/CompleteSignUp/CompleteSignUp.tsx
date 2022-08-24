@@ -2,7 +2,7 @@ import { CircularProgress, Stack, Typography } from "@mui/material";
 import Box from "@mui/material/Box";
 import { useMutation } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import signUpRequest from "../../../api/auth/signUpRequest";
+import signUpRequest from "../../../apiRequests/auth/signUpRequest";
 import useStepper from "../../../components/CustomStepper/hooks/useStepperContext";
 
 const CompleteSignUp: React.FC = () => {

@@ -5,7 +5,7 @@ import { CustomNextPage } from "../../_app";
 import MuiLink from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
 import { useState } from "react";
-import { Shoes } from "../../../api/shoes/shoes";
+import { Shoes } from "../../../apiRequests/shoes/shoes";
 import Stack from "@mui/material/Stack";
 import AddOutlinedIcon from "@mui/icons-material/AddOutlined";
 import LazyDetailImportOrderItem from "../../../components/DetailImportOrderItem/LazyDetailImportOrderItem";
@@ -17,11 +17,11 @@ import { useForm } from "react-hook-form";
 import { useMutation } from "@tanstack/react-query";
 import createImportOrderRequest, {
   CreateImportOrderParam,
-} from "../../../api/importOrder/createImportOrderRequest";
+} from "../../../apiRequests/importOrder/createImportOrderRequest";
 import { useSession } from "next-auth/react";
 import createImportOrderDetailRequest, {
   CreateImportOrderDetailParam,
-} from "../../../api/importOrder/createImportOrderDetailRequest";
+} from "../../../apiRequests/importOrder/createImportOrderDetailRequest";
 import { useSnackbar } from "notistack";
 import { useRouter } from "next/router";
 import LoadingButton from "@mui/lab/LoadingButton";

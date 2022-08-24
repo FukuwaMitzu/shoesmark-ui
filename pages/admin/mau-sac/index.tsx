@@ -17,8 +17,8 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
-import getAllColorRequest, { GetAllColorQueryKey } from "../../../api/color/getAllColorRequest";
-import deleteManyColorRequest from "../../../api/color/deleteManyColorRequest";
+import getAllColorRequest, { GetAllColorQueryKey } from "../../../apiRequests/color/getAllColorRequest";
+import deleteManyColorRequest from "../../../apiRequests/color/deleteManyColorRequest";
 import CustomLazyDataGrid from "../../../views/layout/CustomDataGrid/CustomLazyDataGrid";
 
 const columns: GridColDef[] = [

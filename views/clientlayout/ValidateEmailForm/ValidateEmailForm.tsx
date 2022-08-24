@@ -5,11 +5,11 @@ import { useEffect, useState } from "react";
 import useStepper from "../../../components/CustomStepper/hooks/useStepperContext";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import sendOtpRequest from "../../../api/auth/sendOtpRequest";
+import sendOtpRequest from "../../../apiRequests/auth/sendOtpRequest";
 import { isDefined, isEmpty } from "class-validator";
 import getAccessCodeRequest, {
   GetAccessCodeQueryKey,
-} from "../../../api/auth/getAccessCodeRequest";
+} from "../../../apiRequests/auth/getAccessCodeRequest";
 
 type ValidateEmailFormInputs = {
   accessCode: string;
