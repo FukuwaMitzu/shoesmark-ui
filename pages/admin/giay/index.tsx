@@ -39,7 +39,7 @@ const columns: GridColDef[] = [
     headerName: "Ảnh giày",
     width: 100,
     renderCell: (params: GridRenderCellParams<string>) => (
-      <Image width={150} height={150} src={params.value}></Image>
+      <Image width={150} height={150} src={params.value ?? ""}></Image>
     ),
   },
   {
