@@ -7,7 +7,6 @@ import ShoppingCartCheckoutIcon from "@mui/icons-material/ShoppingCartCheckout";
 import Image from "next/image";
 import getShoesRequest from "../../apiRequests/shoes/getShoesRequest";
 import stringToColor from "../../util/stringToColor";
-import { SHOESMARK_API_DOMAIN } from "../../config/domain";
 import currencyFormater from "../../util/currencyFormater";
 import Big from "big.js";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
@@ -46,7 +45,7 @@ const ShoesDetailPage: CustomNextPage = (
   const [cartOpen, setCartOpen] = useState(false);
   //========Queries===============
   const getRelatedShoes = useQuery(
-    [GetRelatedShoesQueryKey],
+    [GetRelatedShoesQueryKey, props],
     () =>
       getRelatedShoesRequest({
         limit:4,

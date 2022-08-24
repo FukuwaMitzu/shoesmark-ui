@@ -33,7 +33,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
   };
 };
 
-const ShoesDetailPage: CustomNextPage = (
+const CategoryPage: CustomNextPage = (
   props: InferGetServerSidePropsType<typeof getServerSideProps>
 ) => {
   const category = props.category as Category;
@@ -110,4 +110,4 @@ const ShoesDetailPage: CustomNextPage = (
   );
 };
 
-export default ShoesDetailPage;
+export default CategoryPage;
