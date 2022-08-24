@@ -74,7 +74,7 @@ const DetailImportOrderItem: React.FC<DetailImportOrderItemProps> = (props) => {
           <Image
             height={"150px"}
             width={"150px"}
-            src={`${SHOESMARK_API_DOMAIN}/${props.shoesImage}`}
+            src={`${props.shoesImage}`}
             alt={props.shoesName}
           ></Image>
         </Box>

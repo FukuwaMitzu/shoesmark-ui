@@ -74,7 +74,7 @@ const CartItem: React.FC<CartShoesPopoverItemProps> = (props) => {
         <Image
           layout="fill"
           height={"100%"}
-          src={`${SHOESMARK_API_DOMAIN}/${props.shoesImage}`}
+          src={`${props.shoesImage}`}
           objectFit="cover"
           alt={props.shoesName}
         />

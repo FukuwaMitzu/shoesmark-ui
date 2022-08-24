@@ -73,7 +73,7 @@ const DetailShoesPage: CustomNextPage = () => {
       select: (data) => data.data,
       onSuccess: ({ data }) => {
         editShoesForm.reset(data);
-        imageRef.current.src = SHOESMARK_API_DOMAIN + "/" + data.shoesImage;
+        imageRef.current.src = data.shoesImage;
       },
     }
   );
@@ -129,7 +129,7 @@ const DetailShoesPage: CustomNextPage = () => {
     if (getShoesQuery.data) {
       const { data } = getShoesQuery.data;
       editShoesForm.reset();
-      imageRef.current.src = SHOESMARK_API_DOMAIN + "/" + data.shoesImage;
+      imageRef.current.src = data.shoesImage;
     }
   };
   const handleEditShoes: SubmitHandler<EditShoesFormInputs> = (data) => {
@@ -418,7 +418,7 @@ const DetailShoesPage: CustomNextPage = () => {
               control={editShoesForm.control}
               render={({ field }) => (
                 <TextField
-                  label={"Khuyến mãi"}
+                  label={"Chiết khấu"}
                   disabled={!editMode}
                   {...field}
                   InputProps={{

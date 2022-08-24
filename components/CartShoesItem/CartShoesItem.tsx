@@ -92,7 +92,7 @@ const CartShoesItem: React.FC<CartShoesItemProps> = (props) => {
                 <Image
                   height={"150px"}
                   width={"150px"}
-                  src={`${SHOESMARK_API_DOMAIN}/${props.shoesImage}`}
+                  src={`${props.shoesImage}`}
                   alt={props.shoesName}
                 ></Image>
               </CardActionArea>

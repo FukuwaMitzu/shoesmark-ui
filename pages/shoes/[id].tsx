@@ -91,7 +91,7 @@ const ShoesDetailPage: CustomNextPage = (
           <Image
             width={"450px"}
             height={"400px"}
-            src={`${SHOESMARK_API_DOMAIN}/${shoes?.shoesImage}`}
+            src={`${shoes?.shoesImage}`}
             alt={shoes?.shoesName}
             objectFit="cover"
           />

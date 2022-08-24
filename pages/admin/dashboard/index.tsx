@@ -3,11 +3,11 @@ import { CustomNextPage } from "../../_app";
 import { Line as LineChart, Pie } from "react-chartjs-2";
 import Chart, { ChartData } from "chart.js/auto";
 import { useQuery } from "@tanstack/react-query";
-import getGeneralStatisticRequest, {
+import GetGeneralStatisticRequest, {
   GeneralStatistic,
   GeneralStatisticDuration,
   GetGeneralStatisticQueryKey,
-} from "../../../api/statistic/getGeneralStatistic";
+} from "../../../api/statistic/getGeneralStatisticRequest";
 import { useSession } from "next-auth/react";
 import dayjs from "dayjs";
 import currencyFormater from "../../../util/currencyFormater";
@@ -27,7 +27,7 @@ const DashboardPage: CustomNextPage = () => {
   const getGeneralStatistic = useQuery(
     [GetGeneralStatisticQueryKey, duration],
     () =>
-      getGeneralStatisticRequest({
+      GetGeneralStatisticRequest({
         from: dayjs().toDate(),
         duration: duration,
         accessToken: session.data?.user?.accessToken,
@@ -123,7 +123,7 @@ const DashboardPage: CustomNextPage = () => {
           </Typography>
         </Paper>
         <Paper sx={{ flex: 1, padding: 2, bgcolor: "#00BD90", color: "white" }}>
-          <Typography sx={{ marginBottom: "10px" }}>Tổng doanh thu</Typography>
+          <Typography sx={{ marginBottom: "10px" }}>Doanh thu</Typography>
           <Typography variant="h5" fontWeight={"bold"}>
             {currencyFormater.format(getGeneralStatistic.data.renevue)}
           </Typography>

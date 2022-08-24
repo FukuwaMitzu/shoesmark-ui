@@ -29,7 +29,7 @@ export interface GeneralStatistic {
   }>;
 }
 
-const getGeneralStatisticRequest: ApiRequestHandler<
+const GetGeneralStatisticRequest: ApiRequestHandler<
   GetGeneralStatisticParam,
   JsonEntity<GeneralStatistic>
 > = ({ accessToken, ...data }) =>
@@ -42,4 +42,4 @@ const getGeneralStatisticRequest: ApiRequestHandler<
     },
   });
 
-export default getGeneralStatisticRequest;
+export default GetGeneralStatisticRequest;

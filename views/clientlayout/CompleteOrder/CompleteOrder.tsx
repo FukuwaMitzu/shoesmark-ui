@@ -69,7 +69,7 @@ const CompleteOrder: React.FC = (data) => {
         if (cartStep.context?.data) {
           Promise.all(
             (cartStep.context.data as CartLocalStorge).map((cart) => {
-              createAnonymousOrderDetail.mutate({
+              return createAnonymousOrderDetail.mutateAsync({
                 shoesId: cart.shoesId,
                 quantity: cart.quantity,
                 orderSessionToken: data.orderSessionToken,

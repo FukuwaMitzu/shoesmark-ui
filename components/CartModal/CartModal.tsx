@@ -77,7 +77,7 @@ const CartBackDrop: React.FC<CartModalProps> = (data) => {
             <Wrapper>
                 <Stack width={"100%"} direction={"row"} gap={2}>
                     <Box>
-                        <Image width={"175px"} height={"175px"} src={`${SHOESMARK_API_DOMAIN}/${data.shoesImage}`} />
+                        <Image width={"175px"} height={"175px"} src={`${data.shoesImage}`} />
                     </Box>
                     <Stack sx={{flex:1}}>
                         <Typography>{data.shoesName}</Typography>
