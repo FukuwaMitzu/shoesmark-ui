@@ -1,1 +1,1 @@
-export const SHOESMARK_API_DOMAIN = "http://localhost:3300";
+export const SHOESMARK_API_DOMAIN = "https://shoesmark.herokuapp.com";
