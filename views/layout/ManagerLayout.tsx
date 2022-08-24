@@ -16,6 +16,7 @@ import SignalCellularAltOutlinedIcon from "@mui/icons-material/SignalCellularAlt
 import ListItem from "@mui/material/ListItem";
 import Container from "@mui/material/Container";
 import DashboardIcon from "@mui/icons-material/Dashboard";
+import dayjs from "dayjs";
 
 interface ManagerLayoutProps extends React.PropsWithChildren {}
 
@@ -36,7 +37,6 @@ const ManagerLayout: React.FC<ManagerLayoutProps> = ({ children }) => {
         </Toolbar>
       </AppBar>
       <Drawer
-        keepMounted
         variant="permanent"
         anchor="left"
         sx={{

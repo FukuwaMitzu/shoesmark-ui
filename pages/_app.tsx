@@ -16,6 +16,7 @@ import "dayjs/locale/vi";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
 import dynamic from "next/dynamic";
+
 dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);
 dayjs.locale("vi");

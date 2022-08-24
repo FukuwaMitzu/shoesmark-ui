@@ -5,10 +5,10 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 })
 
 const nextConfig = {
-  reactStrictMode: true,
+  reactStrictMode: false,
   swcMinify: true,
   images: {
-    domains: ['localhost', 'i.ibb.co'],
+    domains: ['i.ibb.co'],
   },
   redirects: async function(){
     return [{
