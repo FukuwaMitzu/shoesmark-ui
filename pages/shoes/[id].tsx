@@ -203,4 +203,5 @@ const ShoesDetailPage: CustomNextPage = (
     </Stack>
   );
 };
+ShoesDetailPage.layout="customer"
 export default ShoesDetailPage;

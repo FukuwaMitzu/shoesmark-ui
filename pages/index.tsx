@@ -1,12 +1,12 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
-import type { NextPage } from "next";
 import getAllShoesRequest, {
   GetAllShoesQueryKey,
 } from "../apiRequests/shoes/getAllShoesRequest";
 import LazyShoesCard from "../components/ShoesCard/LazyShoesCard";
+import { CustomNextPage } from "./_app";
 
-const Home: NextPage = () => {
+const Home: CustomNextPage = () => {
   //========Queries===========
   const getAllSaleShoesQuery = useQuery(
     [GetAllShoesQueryKey + "Sale"],
@@ -42,7 +42,7 @@ const Home: NextPage = () => {
     <Stack direction={"column"} gap={10}>
       <Box>
         <Typography
-          variant="h5"
+          variant="h4"
           textTransform={"uppercase"}
           fontWeight={"bold"}
         >
@@ -58,7 +58,7 @@ const Home: NextPage = () => {
       </Box>
       <Box>
         <Typography
-          variant="h5"
+          variant="h4"
           textTransform={"uppercase"}
           fontWeight={"bold"}
         >
@@ -76,4 +76,5 @@ const Home: NextPage = () => {
   );
 };
 
+Home.layout = "customer";
 export default Home;

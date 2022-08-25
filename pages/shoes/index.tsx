@@ -1,6 +1,5 @@
 import Box from '@mui/material/Box'
 import Breadcrumbs from '@mui/material/Breadcrumbs'
-import type { NextPage } from 'next'
 import Link from 'next/link'
 import MuiLink from '@mui/material/Link'
 import Typography from '@mui/material/Typography'
@@ -22,6 +21,7 @@ import Button from '@mui/material/Button'
 import useCustomPagination from '../../components/CustomPagination/hooks/useCustomPagination'
 import CustomPagination from '../../components/CustomPagination/CustomPagination'
 import LazyShoesCard from '../../components/ShoesCard/LazyShoesCard'
+import { CustomNextPage } from '../_app'
 
 
 
@@ -33,7 +33,7 @@ type SearchFormInputs = {
     price: string,
 }
 
-const ShoesHome: NextPage = () => {
+const ShoesHome: CustomNextPage = () => {
     const searchForm = useForm<SearchFormInputs>({
         defaultValues: {
             colorId: "",
@@ -90,7 +90,7 @@ const ShoesHome: NextPage = () => {
                     <Stack direction="row" spacing={1}>
                         <TextField label="Tên sản phẩm" fullWidth {...searchForm.register("shoesName")} sx={{ flex: 4 }}></TextField>
                         <LoadingButton variant="contained" type="submit" sx={{ flex: 1 }}>Tìm kiếm</LoadingButton>
-                        <Button variant="contained" type="reset" sx={{ flex: 0.5 }}>Làm mới</Button>
+                        <Button variant="text" type="reset" sx={{ flex: 0.5 }}>Làm mới</Button>
                     </Stack>
                     <Stack direction={"row"} marginTop={"25px"} spacing={1}>
                         <Controller
@@ -200,5 +200,5 @@ const ShoesHome: NextPage = () => {
         </Box>
     )
 }
-
+ShoesHome.layout="customer";
 export default ShoesHome

@@ -17,7 +17,7 @@ const CustomListItemButton: React.FC<CustomListItemButtonProps> = ({
 
   useEffect(() => {
     if (href) {
-      if (router.pathname.startsWith(href)) setActive(true);
+      if (router.pathname==href) setActive(true);
       else setActive(false);
     }
   }, [router.asPath]);

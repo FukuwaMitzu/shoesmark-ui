@@ -6,11 +6,10 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import LocalMallIcon from "@mui/icons-material/LocalMall";
 import { styled } from "@mui/material/styles";
-import Divider from "@mui/material/Divider";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
@@ -18,6 +17,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
+import MonitorHeartOutlinedIcon from '@mui/icons-material/MonitorHeartOutlined';
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import { useRouter } from "next/router";
 import { signIn, signOut, useSession } from "next-auth/react";
 import HistoryIcon from "@mui/icons-material/History";
@@ -72,13 +73,36 @@ const MobileMenu: React.FC = (props) => {
         onClose={tougleMenu}
       >
         <List>
+          <ListItem disablePadding>
+            <Link href={"/"} passHref>
+              <ListItemButton selected={router.pathname == "/"}>
+                <ListItemIcon>
+                  <HomeOutlinedIcon />
+                </ListItemIcon>
+                <ListItemText>Trang chủ</ListItemText>
+              </ListItemButton>
+            </Link>
+            </ListItem>
+            {session.status == "authenticated" && ["admin", "employee"].some((role)=>role === session.data.user?.role)  &&(
+          <ListItem disablePadding>
+            <Link href={"/admin"} passHref>
+              <ListItemButton>
+                <ListItemIcon>
+                  <MonitorHeartOutlinedIcon />
+                </ListItemIcon>
+                <ListItemText>Quản trị</ListItemText>
+              </ListItemButton>
+            </Link>
+          </ListItem>  
+            )
+}      
           {session.status == "authenticated" && (
             <>
               <ListItem disablePadding>
                 <Link href={"/profile"} passHref>
                   <ListItemButton selected={router.pathname == "/profile"}>
                     <ListItemIcon>
-                      <AccountCircleIcon />
+                      <AccountCircleOutlinedIcon />
                     </ListItemIcon>
                     <ListItemText>Tài khoản</ListItemText>
                   </ListItemButton>

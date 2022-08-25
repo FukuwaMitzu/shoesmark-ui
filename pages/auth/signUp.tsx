@@ -1,6 +1,5 @@
-import { Box, Breadcrumbs, Link as MuiLink, Typography } from "@mui/material";
+import { Box, Container, Stack, Typography } from "@mui/material";
 import { signIn } from "next-auth/react";
-import Link from "next/link";
 import CustomStepper, {
   StepItem,
 } from "../../components/CustomStepper/CustomStepper";
@@ -8,6 +7,7 @@ import LazyCompleteSignUp from "../../views/clientlayout/CompleteSignUp/LazyComp
 import LazySignUpForm from "../../views/clientlayout/SignUpForm/LazySignUpForm";
 import LazyValidateEmailForm from "../../views/clientlayout/ValidateEmailForm/LazyValidateEmailForm";
 import { CustomNextPage } from "../_app";
+import Image from "next/image";
 
 const steps: StepItem[] = [
   {
@@ -32,27 +32,29 @@ const SignUpPage: CustomNextPage = () => {
     signIn("credentials", { callbackUrl: "/" });
   };
   return (
-    <Box>
-      <Breadcrumbs sx={{ marginBottom: "15px" }}>
-        <Link href="/" passHref>
-          <MuiLink underline="hover" color="inherit">
-            Trang chủ
-          </MuiLink>
-        </Link>
-        <Typography color="text.primary">Đăng ký</Typography>
-      </Breadcrumbs>
-      <Typography
-        variant="h4"
-        sx={{
-          fontWeight: "bold",
-          textTransform: "uppercase",
-          marginBottom: "25px",
-        }}
-      >
-        Đăng ký
-      </Typography>
-      <CustomStepper onComplete={handleComplete} steps={steps} sticky />
-    </Box>
+    <Stack direction={"row"}>
+      <Box width="225px" height={"100vh"} position="sticky" sx={{inset:0}}>
+          <Image
+            objectFit="cover"
+            alt={"Ảnh đăng ký"}
+            src={"/images/signInLeftPic.jpg"}
+            layout="fill"
+          />
+      </Box>
+      <Container sx={{ paddingY: 10 }}>
+        <Typography
+          variant="h4"
+          sx={{
+            fontWeight: "bold",
+            textTransform: "uppercase",
+            marginBottom: "25px",
+          }}
+        >
+          Đăng ký
+        </Typography>
+        <CustomStepper onComplete={handleComplete} steps={steps} sticky />
+      </Container>
+    </Stack>
   );
 };
 export default SignUpPage;

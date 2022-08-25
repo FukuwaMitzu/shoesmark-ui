@@ -49,6 +49,27 @@ function MyApp({
   Component,
   pageProps: { session, ...pageProps },
 }: CustomAppProps) {
+  let view = null;
+  switch (Component.layout) {
+    case "manager":
+      view = (
+        <LazyAdminLayout>
+          <Component {...pageProps} />
+        </LazyAdminLayout>
+      );
+      break;
+    case "customer":
+      view = (
+        <LazyClientLayout>
+          <Component {...pageProps} />
+        </LazyClientLayout>
+      );
+      break;
+    default:
+      view = <Component {...pageProps} />;
+      break;
+  }
+
   return (
     <QueryClientProvider client={queryClient}>
       <SessionProvider
@@ -59,19 +80,7 @@ function MyApp({
         <ThemeProvider theme={theme}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <SnackbarProvider>
-              {Component.layout == "manager" ? (
-                <Auth auth={Component.auth}>
-                  <LazyAdminLayout>
-                    <Component {...pageProps} />
-                  </LazyAdminLayout>
-                </Auth>
-              ) : (
-                <Auth auth={Component.auth}>
-                  <LazyClientLayout>
-                    <Component {...pageProps} />
-                  </LazyClientLayout>
-                </Auth>
-              )}
+              <Auth auth={Component.auth}>{view}</Auth>
             </SnackbarProvider>
           </LocalizationProvider>
         </ThemeProvider>

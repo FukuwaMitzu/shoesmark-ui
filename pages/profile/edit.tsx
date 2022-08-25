@@ -316,4 +316,5 @@ const EditProfilePage: CustomNextPage = () => {
 EditProfilePage.auth = {
   role: ["admin", "user", "employee"],
 };
+EditProfilePage.layout = "customer";
 export default EditProfilePage;

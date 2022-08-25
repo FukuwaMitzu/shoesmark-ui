@@ -17,6 +17,7 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import getUserExistRequest from "../../../apiRequests/user/getUserExistRequest";
 import useStepper from "../../../components/CustomStepper/hooks/useStepperContext";
 import genderList from "../../../util/genderList";
+import MuiLink from "@mui/material/Link";
 
 type SignUpFormInputs = {
   username: string;
@@ -34,7 +35,6 @@ type SignUpFormInputs = {
 };
 
 const SignUpForm: React.FC = () => {
-  
   const currentStep = useStepper("signUpForm");
 
   const signUpForm = useForm<SignUpFormInputs>({
@@ -163,7 +163,7 @@ const SignUpForm: React.FC = () => {
         sx={{
           fontWeight: "bold",
           textTransform: "uppercase",
-          marginBottom: "25px",
+          marginBottom: 4,
         }}
       >
         Thông tin đăng ký
@@ -307,6 +307,17 @@ const SignUpForm: React.FC = () => {
           />
         </Stack>
       </form>
+      <Typography sx={{ marginTop: 3 }}>
+        Đã là thành viên?{" "}
+        <MuiLink
+          href="/auth/signIn"
+          textTransform="uppercase"
+          fontWeight={"bold"}
+          sx={{ textDecoration: "none" }}
+        >
+          Đăng nhập
+        </MuiLink>
+      </Typography>
     </Box>
   );
 };

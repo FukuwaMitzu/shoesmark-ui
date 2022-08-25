@@ -109,5 +109,5 @@ const CategoryPage: CustomNextPage = (
     </Box>
   );
 };
-
+CategoryPage.layout="customer";
 export default CategoryPage;

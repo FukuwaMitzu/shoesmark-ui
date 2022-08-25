@@ -17,6 +17,7 @@ import ListItem from "@mui/material/ListItem";
 import Container from "@mui/material/Container";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import ComputerIcon from '@mui/icons-material/Computer';
 
 interface ManagerLayoutProps extends React.PropsWithChildren {}
 
@@ -59,6 +60,20 @@ const ManagerLayout: React.FC<ManagerLayoutProps> = ({ children }) => {
               >
                 <DashboardIcon />
                 <Typography>Dashboard</Typography>
+              </Box>
+            </CustomListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <CustomListItemButton href="/">
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                }}
+              >
+                <ComputerIcon />
+                <Typography>Trang khách hàng</Typography>
               </Box>
             </CustomListItemButton>
           </ListItem>

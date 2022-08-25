@@ -120,4 +120,5 @@ const ProfilePage: CustomNextPage = () => {
 ProfilePage.auth = {
   role: ["admin", "user", "employee"],
 };
+ProfilePage.layout="customer";
 export default ProfilePage;

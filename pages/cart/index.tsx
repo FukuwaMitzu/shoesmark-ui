@@ -64,5 +64,5 @@ const CartPage: CustomNextPage = () => {
         </Box>
     )
 }
-
+CartPage.layout="customer"
 export default CartPage;

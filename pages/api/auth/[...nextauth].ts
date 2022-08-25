@@ -31,6 +31,9 @@ async function refreshToken(refreshToken: string){
 
 
 export default NextAuth({
+    pages: {
+        signIn:"/auth/signIn",
+    },
     providers:[
         Credentials({
             name:"Tài khoản ShoesMark",
