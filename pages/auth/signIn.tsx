@@ -28,7 +28,7 @@ const SignInPage: CustomNextPage = () => {
       signIn("credentials", { redirect: false, ...data }),
     {
       onSuccess: (data) => {
-        if (!data?.error) {
+        if (data?.ok) {
           router.push(callbackUrl || "/");
         } else {
           setError(true);

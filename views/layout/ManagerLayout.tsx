@@ -12,12 +12,15 @@ import Typography from "@mui/material/Typography";
 import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
 import LocalOfferOutlinedIcon from "@mui/icons-material/LocalOfferOutlined";
 import CustomListItemButton from "./CustomListItemButton/CustomListItemButton";
-import SignalCellularAltOutlinedIcon from "@mui/icons-material/SignalCellularAltOutlined";
+import BarChartOutlinedIcon from "@mui/icons-material/BarChartOutlined";
 import ListItem from "@mui/material/ListItem";
 import Container from "@mui/material/Container";
-import DashboardIcon from "@mui/icons-material/Dashboard";
+import WaterfallChartOutlinedIcon from "@mui/icons-material/WaterfallChartOutlined";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import ComputerIcon from '@mui/icons-material/Computer';
+import ComputerIcon from "@mui/icons-material/Computer";
+import { signOut } from "next-auth/react";
+import ListItemButton from "@mui/material/ListItemButton";
+import LogoutIcon from "@mui/icons-material/Logout";
 
 interface ManagerLayoutProps extends React.PropsWithChildren {}
 
@@ -58,7 +61,7 @@ const ManagerLayout: React.FC<ManagerLayoutProps> = ({ children }) => {
                   gap: 1,
                 }}
               >
-                <DashboardIcon />
+                <WaterfallChartOutlinedIcon />
                 <Typography>Dashboard</Typography>
               </Box>
             </CustomListItemButton>
@@ -184,7 +187,7 @@ const ManagerLayout: React.FC<ManagerLayoutProps> = ({ children }) => {
                     gap: 1,
                   }}
                 >
-                  <SignalCellularAltOutlinedIcon></SignalCellularAltOutlinedIcon>
+                  <BarChartOutlinedIcon />
                   <Typography>Báo cáo thống kê</Typography>
                 </Box>
               </AccordionSummary>
@@ -199,6 +202,20 @@ const ManagerLayout: React.FC<ManagerLayoutProps> = ({ children }) => {
                 </List>
               </AccordionDetails>
             </Accordion>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton onClick={() => signOut()}>
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 1,
+                }}
+              >
+                <LogoutIcon />
+                <Typography>Đăng xuất</Typography>
+              </Box>
+            </ListItemButton>
           </ListItem>
         </List>
       </Drawer>

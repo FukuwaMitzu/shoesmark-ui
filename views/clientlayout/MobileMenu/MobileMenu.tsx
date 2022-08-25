@@ -6,9 +6,8 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import LocalMallIcon from "@mui/icons-material/LocalMall";
+import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
+import LocalMallOutlinedIcon from "@mui/icons-material/LocalMallOutlined";
 import { styled } from "@mui/material/styles";
 import LogoutIcon from "@mui/icons-material/Logout";
 import Accordion from "@mui/material/Accordion";
@@ -17,8 +16,8 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Typography from "@mui/material/Typography";
 import { useEffect, useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
-import MonitorHeartOutlinedIcon from '@mui/icons-material/MonitorHeartOutlined';
-import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import MonitorHeartOutlinedIcon from "@mui/icons-material/MonitorHeartOutlined";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import { useRouter } from "next/router";
 import { signIn, signOut, useSession } from "next-auth/react";
 import HistoryIcon from "@mui/icons-material/History";
@@ -28,7 +27,12 @@ import getAllCategoryRequest, {
   GetAllCategoryQueryKey,
 } from "../../../apiRequests/category/getAllCategoryRequest";
 import AccordionDetails from "@mui/material/AccordionDetails";
-import CategoryIcon from "@mui/icons-material/Category";
+import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
+import getMeRequest, {
+  GetMeQueryKey,
+} from "../../../apiRequests/user/getMeRequest";
+import { Avatar } from "@mui/material";
+import stringAvatar from "../../../util/stringAvatar";
 const MobileDrawer = styled(Drawer)(({ theme }) => ({
   "& .MuiDrawer-paper": {
     width: "100%",
@@ -41,6 +45,18 @@ const MobileMenu: React.FC = (props) => {
   const router = useRouter();
   const [open, setOpen] = useState(false);
 
+  //=========Queries======
+  const getMyProfile = useQuery(
+    [GetMeQueryKey],
+    () =>
+      getMeRequest({
+        accessToken: session.data?.user?.accessToken,
+      }),
+    {
+      select: ({ data }) => data.data,
+      enabled: session.status == "authenticated",
+    }
+  );
   //========Callbacks============
   const tougleMenu = () => {
     setOpen(!open);
@@ -73,6 +89,24 @@ const MobileMenu: React.FC = (props) => {
         onClose={tougleMenu}
       >
         <List>
+          {session.status == "authenticated" && (
+            <>
+              <ListItem disablePadding>
+                <Link href={"/profile"} passHref>
+                  <ListItemButton selected={router.pathname == "/profile"}>
+                    <ListItemIcon>
+                      <Avatar
+                        {...stringAvatar(
+                          `${getMyProfile.data?.lastName} ${getMyProfile.data?.firstName}`
+                        )}
+                      />
+                    </ListItemIcon>
+                    <ListItemText>{`${getMyProfile.data?.lastName} ${getMyProfile.data?.firstName}`}</ListItemText>
+                  </ListItemButton>
+                </Link>
+              </ListItem>
+            </>
+          )}
           <ListItem disablePadding>
             <Link href={"/"} passHref>
               <ListItemButton selected={router.pathname == "/"}>
@@ -82,39 +116,28 @@ const MobileMenu: React.FC = (props) => {
                 <ListItemText>Trang chủ</ListItemText>
               </ListItemButton>
             </Link>
-            </ListItem>
-            {session.status == "authenticated" && ["admin", "employee"].some((role)=>role === session.data.user?.role)  &&(
-          <ListItem disablePadding>
-            <Link href={"/admin"} passHref>
-              <ListItemButton>
-                <ListItemIcon>
-                  <MonitorHeartOutlinedIcon />
-                </ListItemIcon>
-                <ListItemText>Quản trị</ListItemText>
-              </ListItemButton>
-            </Link>
-          </ListItem>  
-            )
-}      
-          {session.status == "authenticated" && (
-            <>
+          </ListItem>
+          {session.status == "authenticated" &&
+            ["admin", "employee"].some(
+              (role) => role === session.data.user?.role
+            ) && (
               <ListItem disablePadding>
-                <Link href={"/profile"} passHref>
-                  <ListItemButton selected={router.pathname == "/profile"}>
+                <Link href={"/admin"} passHref>
+                  <ListItemButton>
                     <ListItemIcon>
-                      <AccountCircleOutlinedIcon />
+                      <MonitorHeartOutlinedIcon />
                     </ListItemIcon>
-                    <ListItemText>Tài khoản</ListItemText>
+                    <ListItemText>Quản trị</ListItemText>
                   </ListItemButton>
                 </Link>
               </ListItem>
-            </>
-          )}
+            )}
+
           <ListItem disablePadding>
             <Link href={"/cart"} passHref>
               <ListItemButton selected={router.pathname == "/cart"}>
                 <ListItemIcon>
-                  <LocalMallIcon />
+                  <LocalMallOutlinedIcon />
                 </ListItemIcon>
                 <ListItemText>Giỏ hàng</ListItemText>
               </ListItemButton>
@@ -125,7 +148,7 @@ const MobileMenu: React.FC = (props) => {
               <ListItem disablePadding>
                 <ListItemButton>
                   <ListItemIcon>
-                    <NotificationsIcon />
+                    <NotificationsNoneOutlinedIcon />
                   </ListItemIcon>
                   <ListItemText>Thông báo</ListItemText>
                 </ListItemButton>
@@ -159,7 +182,7 @@ const MobileMenu: React.FC = (props) => {
             >
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                 <ListItemIcon>
-                  <CategoryIcon />
+                  <CategoryOutlinedIcon />
                 </ListItemIcon>
                 <Typography>Danh mục</Typography>
               </AccordionSummary>
