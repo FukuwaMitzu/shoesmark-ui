@@ -51,7 +51,7 @@ const ManagerLayout: React.FC<ManagerLayoutProps> = ({ children }) => {
           },
         }}
       >
-        <List sx={{ width: "100%" }}>
+        <List sx={{ width: "100%", paddingBottom: 10, paddingTop: 2 }}>
           <ListItem disablePadding>
             <CustomListItemButton href="/admin/dashboard">
               <Box
@@ -76,7 +76,7 @@ const ManagerLayout: React.FC<ManagerLayoutProps> = ({ children }) => {
                 }}
               >
                 <ComputerIcon />
-                <Typography>Trang khách hàng</Typography>
+                <Typography>Trang sản phẩm</Typography>
               </Box>
             </CustomListItemButton>
           </ListItem>
@@ -219,7 +219,7 @@ const ManagerLayout: React.FC<ManagerLayoutProps> = ({ children }) => {
           </ListItem>
         </List>
       </Drawer>
-      <Box component={"main"} sx={{ flexGrow: 1, p: 3 }}>
+      <Box component={"main"} sx={{ flexGrow: 1, p: 2 }}>
         <Toolbar />
         <Container maxWidth="xl">{children}</Container>
       </Box>

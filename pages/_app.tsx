@@ -50,6 +50,7 @@ function MyApp({
   pageProps: { session, ...pageProps },
 }: CustomAppProps) {
   let view = null;
+
   switch (Component.layout) {
     case "manager":
       view = (
@@ -69,7 +70,6 @@ function MyApp({
       view = <Component {...pageProps} />;
       break;
   }
-
   return (
     <QueryClientProvider client={queryClient}>
       <SessionProvider

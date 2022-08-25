@@ -33,6 +33,8 @@ import getMeRequest, {
 } from "../../../apiRequests/user/getMeRequest";
 import { Avatar } from "@mui/material";
 import stringAvatar from "../../../util/stringAvatar";
+import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
+
 const MobileDrawer = styled(Drawer)(({ theme }) => ({
   "& .MuiDrawer-paper": {
     width: "100%",
@@ -221,17 +223,11 @@ const MobileMenu: React.FC = (props) => {
             <>
               <ListItem disablePadding>
                 <ListItemButton onClick={() => signIn()}>
-                  <ListItemIcon></ListItemIcon>
+                  <ListItemIcon>
+                    <LoginOutlinedIcon />
+                  </ListItemIcon>
                   <ListItemText>Đăng nhập</ListItemText>
                 </ListItemButton>
-              </ListItem>
-              <ListItem disablePadding>
-                <Link href={"/auth/signUp"} passHref>
-                  <ListItemButton>
-                    <ListItemIcon></ListItemIcon>
-                    <ListItemText>Đăng ký</ListItemText>
-                  </ListItemButton>
-                </Link>
               </ListItem>
             </>
           )}

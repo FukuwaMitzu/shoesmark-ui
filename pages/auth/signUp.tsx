@@ -33,13 +33,13 @@ const SignUpPage: CustomNextPage = () => {
   };
   return (
     <Stack direction={"row"}>
-      <Box width="225px" height={"100vh"} position="sticky" sx={{inset:0}}>
-          <Image
-            objectFit="cover"
-            alt={"Ảnh đăng ký"}
-            src={"/images/signInLeftPic.jpg"}
-            layout="fill"
-          />
+      <Box width="225px" height={"100vh"} position="sticky" sx={{ inset: 0 }}>
+        <Image
+          objectFit="cover"
+          alt={"Ảnh đăng ký"}
+          src={"/images/signInLeftPic.jpg"}
+          layout="fill"
+        />
       </Box>
       <Container sx={{ paddingY: 10 }}>
         <Typography
