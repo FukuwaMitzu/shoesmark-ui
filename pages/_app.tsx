@@ -16,6 +16,8 @@ import "dayjs/locale/vi";
 import localizedFormat from "dayjs/plugin/localizedFormat";
 import relativeTime from "dayjs/plugin/relativeTime";
 import dynamic from "next/dynamic";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useMemo } from "react";
 
 dayjs.extend(localizedFormat);
 dayjs.extend(relativeTime);
@@ -36,7 +38,7 @@ const LazyClientLayout = dynamic(
 );
 const LazyAdminLayout = dynamic(() => import("../views/layout/ManagerLayout"));
 
-const theme = createTheme();
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -50,6 +52,19 @@ function MyApp({
   pageProps: { session, ...pageProps },
 }: CustomAppProps) {
   let view = null;
+
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode: prefersDarkMode ? 'dark' : 'light',
+        },
+      }),
+    [prefersDarkMode],
+  );
+
 
   switch (Component.layout) {
     case "manager":
