@@ -102,7 +102,6 @@ const CartShoesItem: React.FC<CartShoesItemProps> = (props) => {
         <Stack sx={{ flex: 1 }}>
           <Typography>{props.shoesName}</Typography>
           <Subheader direction={"row"} gap={2}>
-            <Typography>{props.brand?.brandName}</Typography>
             <Typography>Size: {props.size}</Typography>
             {props.color && (
               <Stack direction={"row"} alignItems="center" gap={1}>
