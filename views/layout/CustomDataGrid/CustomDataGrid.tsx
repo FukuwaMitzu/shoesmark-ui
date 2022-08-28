@@ -100,7 +100,7 @@ const CustomDataGrid: React.FC<CustomDataGridProps> = (props) => {
       </Stack>
       {
         <DataGrid
-          autoHeight
+     
           columns={props.columns}
           rows={props.rows}
           getRowId={props.getRowId}
@@ -108,6 +108,7 @@ const CustomDataGrid: React.FC<CustomDataGridProps> = (props) => {
           checkboxSelection
           disableSelectionOnClick
           rowHeight={props.rowHeight ?? 52}
+	sx={{height:550}}
           onSelectionModelChange={handleSelectionChange}
           components={{
             Pagination: () => (
